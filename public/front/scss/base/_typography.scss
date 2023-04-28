@@ -1,0 +1,167 @@
+/* ========================================================================/
+/ !   WEB FONTS /webfonts/Roboto
+/ ========================================================================*/
+
+@font-face {
+    font-family: 'Roboto';
+    src: url('../webfonts/Roboto/Roboto-Thin.woff2') format('woff2'),
+         url('../webfonts/Roboto/Roboto-Thin.woff') format('woff');
+    font-weight: 100;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Roboto';
+    src: url('../webfonts/Roboto/Roboto-Thin-Italic.woff2') format('woff2'),
+         url('../webfonts/Roboto/Roboto-Thin-Italic.woff') format('woff');
+    font-weight: 100;
+    font-style: italic;
+}
+
+
+@font-face {
+    font-family: 'Roboto';
+    src: url('../webfonts/Roboto/Roboto-Light.woff2') format('woff2'),
+         url('../webfonts/Roboto/Roboto-Light.woff') format('woff');
+    font-weight: 300;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Roboto';
+    src: url('../webfonts/Roboto/Roboto-Roboto-Light-Italic.woff2') format('woff2'),
+         url('../webfonts/Roboto/Roboto-Roboto-Light-Italic.woff') format('woff');
+    font-weight: 300;
+    font-style: italic;
+}
+
+@font-face {
+    font-family: 'Roboto';
+    src: url('../webfonts/Roboto/Roboto.woff2') format('woff2'),
+         url('../webfonts/Roboto/Roboto.woff') format('woff');
+    font-weight: 400;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Roboto';
+    src: url('../webfonts/Roboto/Roboto-Italic.woff2') format('woff2'),
+         url('../webfonts/Roboto/Roboto-Italic.woff') format('woff');
+    font-weight: 400;
+    font-style: italic;
+}
+
+@font-face {
+    font-family: 'Roboto';
+    src: url('../webfonts/Roboto/Roboto-Medium.woff2') format('woff2'),
+         url('../webfonts/Roboto/Roboto-Medium.woff') format('woff');
+    font-weight: 500;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Roboto';
+    src: url('../webfonts/Roboto/Roboto-Medium-Italic.woff2') format('woff2'),
+         url('../webfonts/Roboto/Roboto-Medium-Italic.woff') format('woff');
+    font-weight: 500;
+    font-style: italic;
+}
+
+@font-face {
+    font-family: 'Roboto';
+    src: url('../webfonts/Roboto/Roboto-Bold.woff2') format('woff2'),
+         url('../webfonts/Roboto/Roboto-Bold.woff') format('woff');
+    font-weight: 700;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Roboto';
+    src: url('../webfonts/Roboto/Roboto-Bold-Italic.woff2') format('woff2'),
+         url('../webfonts/Roboto/Roboto-Bold-Italic.woff') format('woff');
+    font-weight: 700;
+    font-style: italic;
+}
+
+@font-face {
+    font-family: 'Roboto';
+    src: url('../webfonts/Roboto/Roboto-Black.woff2') format('woff2'),
+         url('../webfonts/Roboto/Roboto-Black.woff') format('woff');
+    font-weight: 900;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Roboto';
+    src: url('../webfonts/Roboto/Roboto-Black-Italic.woff2') format('woff2'),
+         url('../webfonts/Roboto/Roboto-Black-Italic.woff') format('woff');
+    font-weight: 900;
+    font-style: italic;
+}
+
+
+
+
+/* ========================================================================/
+/ !   TYPOGRAPHY
+/ ========================================================================*/
+
+// utilisation rem font size 1rem = 10px
+html {
+    font-size: 62.5%;
+}
+
+body, p {
+    font-family: $font-family-base; // Roboto
+    font-style: normal;
+    font-size: $font-size-base; // 16px
+    color: $secondary;
+}
+
+.la, .las {
+  font-size: 1.7rem;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    font-family: $font-family-base;
+}
+
+h1 {
+    font-size: $h1-font-size; // 4.9rem
+}
+
+h2, .subtitle {
+    font-size: $h2-font-size;
+}
+
+h3 {
+    font-size: $h3-font-size;
+}
+
+h4 {
+    font-size: $h4-font-size;
+}
+
+h5 {
+    font-size: $h5-font-size;
+}
+
+h6 {
+    font-size: $h6-font-size;
+}
+
+
+@include media-breakpoint-down(xs) {
+  h1 {
+    font-size: 2.4rem;
+  }
+  h2, .subtitle {
+    font-size: 2.2rem;
+  }
+  h3 {
+    font-size: 1.8rem;
+  }
+  body, p {
+    font-size: 1.4rem;
+  }
+}

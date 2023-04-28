@@ -1,0 +1,51 @@
+security:
+    # https://symfony.com/doc/current/security.html#where-do-users-come-from-user-providers
+    encoders:
+        App\Entity\User:
+            algorithm: auto
+    providers:
+        in_memory: { memory: ~ }
+        pdo:
+            entity:
+                class: App\Entity\User
+                property: login
+    firewalls:
+        dev:
+            pattern: ^/(_(profiler|wdt)|css|images|js|front|favicon.ico)/
+            security: false
+        main:
+            anonymous: true
+            provider: pdo
+            guard:
+                authenticators:
+                    - App\Security\LoginFormAuthenticator
+            remember_me:
+               secret:   '%kernel.secret%'
+               lifetime: 604800 # 1 week in seconds
+
+            json_login:
+                check_path: /api/security/login
+
+            logout:
+                path: /api/security/logout
+
+            # activate different ways to authenticate
+
+            # http_basic: true
+            # https://symfony.com/doc/current/security.html#a-configuring-how-your-users-will-authenticate
+
+            # form_login: true
+            # https://symfony.com/doc/current/security/form_login_setup.html
+
+    # Easy way to control access for large sections of your site
+    # Note: Only the *first* access control that matches will be used
+    access_control:
+       - { path: ^/security/login$, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+       - { path: ^/reset-password/*, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+       - { path: ^/register$, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+       - { path: ^/ajax/page/1$, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+       - { path: ^/ajax/autocomplete, roles: [ROLE_ADMIN, ROLE_OWNER, ROLE_MANAGER] }
+       - { path: ^/register/waiting-validation$, roles: ROLE_WAITING_VALIDATION }
+       - { path: ^/admin, roles: [ROLE_ADMIN, ROLE_OWNER, ROLE_MANAGER] }
+       - { path: ^/, roles: [ROLE_USER, ROLE_ADMIN] }
+        # - { path: ^/profile, roles: ROLE_USER }

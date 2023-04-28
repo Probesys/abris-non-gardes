@@ -1,0 +1,25 @@
+<div>
+    <div class="filter-container p-0 row">
+        {%   for photo in dysfonctionnement.photos%}
+{#            {{ dump(photo) }}#}
+        <div class="filtr-item col-sm-2" data-category="1" data-sort="">
+            <div>
+                <span class="btn-delete-photo">
+                    <a class="btn btn-danger btn-sm" 
+                       href="{{ path('admin_dysfonctionnement_delete_photo', {'id':photo.id }) }}?_token={{ csrf_token('delete_photo' ~ photo.id)}}" 
+                       data-action="delete" 
+                       title="{{ 'Generics.actions.remove'|trans }}" 
+                       data-container="body" 
+                       data-confirm="{{ 'Generics.messages.confirmationDeleteMessageQuestion'|trans }}" >
+                    <i class="far fa-trash-alt "></i>
+                    </a>
+                </span>
+            <a href="{{ asset('files/' ~ photo.dysfonctionnement.abris.id ~ '/' ~ photo.fileName) }}" data-toggle="lightbox" data-title="{{ photo.fileName }}">
+                <img src="{{ asset('files/' ~ photo.dysfonctionnement.abris.id ~ '/' ~ photo.fileName) }}" class="img-fluid mb-2" alt="{{ photo.fileName }}"/>
+            </a>
+            </div>
+            
+        </div>
+        {% endfor %}        
+    </div>
+</div>

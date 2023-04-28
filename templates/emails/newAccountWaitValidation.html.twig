@@ -1,0 +1,13 @@
+{% extends 'base-email.html.twig' %}
+
+{% block body %}
+{{ 'Generics.text.hello'|trans() }},
+{{ 'Security.messages.newAccountWaitValidation'|trans }} :
+{{ 'Entities.user.fields.name'|trans() }} : {{ user }}
+{{ 'Entities.user.fields.email'|trans() }} : {{ user.email }}
+{{ 'Entities.user.fields.login'|trans() }} : {{ user.login }}
+{{ 'Entities.user.fields.userType'|trans() }} : {{ user.userType }}
+
+{% endblock body %}
+
+

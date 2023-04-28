@@ -1,0 +1,83 @@
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title>{{ 'Generics.labels.appName'|trans() }} | {% block title %}{%  endblock title %}</title>
+        <link rel="manifest" href="/manifest.webmanifest">
+        <!-- Tell the browser to be responsive to screen width -->
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <!-- Font Awesome -->
+
+        <link rel="stylesheet" href="{{ asset('vendor/adminlte/plugins/fontawesome-free/css/all.min.css') }}">
+        <!-- Ionicons -->
+        <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+        <!-- icheck bootstrap -->
+        <link rel="stylesheet" href="{{ asset('vendor/adminlte/plugins/icheck-bootstrap/icheck-bootstrap.min.css') }}">
+        <!-- Theme style -->
+        <link rel="stylesheet" href="{{ asset('vendor/adminlte/dist/css/adminlte.min.css') }}">
+        <!-- Google Font: Source Sans Pro -->
+        <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
+        <link rel="stylesheet" href="{{ asset('front/css/styles.css') }}">
+        <link rel="stylesheet" href="{{ asset('css/backend.css') }}">
+        <!-- Matomo -->
+        <script type="text/javascript">
+            var _paq = window._paq = window._paq || [];
+            /* tracker methods like "setCustomDimension" should be called before "trackPageView" */
+            _paq.push(['trackPageView']);
+            _paq.push(['enableLinkTracking']);
+            (function () {
+                var u = "https://stats.probesys.com/";
+                _paq.push(['setTrackerUrl', u + 'matomo.php']);
+                _paq.push(['setSiteId', '46']);
+                var d = document, g = d.createElement('script'), s = d.getElementsByTagName('script')[0];
+                g.type = 'text/javascript';
+                g.async = true;
+                g.src = u + 'matomo.js';
+                s.parentNode.insertBefore(g, s);
+            })();
+        </script>
+        <!-- End Matomo Code -->
+    </head>
+
+    <body class="login-page" style="min-height: 512.391px;">
+        <div class="login-box">
+            <div class="login-logo">
+                <a href="{{ path('admin_index') }}">{{ 'Generics.labels.appName'|trans() }}</a>
+            </div>
+            <!-- /.login-logo -->
+            <div class="card">
+                <div class="card-body login-card-body">
+                    <img src="{{ asset('img/logo-pnrv.svg') }}" class="mx-auto d-block" height=100px" alt="Parc naturel régional du vercors"/>
+                    <br/>
+
+                    {%  block body %}
+                    {%  endblock body %}
+                </div>
+                <!-- /.login-card-body -->
+            </div>
+        </div>
+        <!-- /.login-box -->
+        <div class="modal fade" id="defaultAjaxModal" role="dialog">
+            <div class="modal-dialog modal-lg" role="document">
+                <!-- Modal content-->
+                <div class="modal-content">
+                </div>
+            </div>
+        </div>
+        {% block bottom_js %}    
+
+            <!-- jQuery -->
+            <script src="{{ asset('vendor/adminlte/plugins/jquery/jquery.min.js') }}"></script>
+            <!-- Bootstrap 4 -->
+            <script src="{{ asset('vendor/adminlte/plugins/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
+            <!-- AdminLTE App -->
+            <script src="{{ asset('vendor/adminlte/dist/js/adminlte.js') }}"></script>
+            <script src="{{ asset('vendor/select2/dist/js/select2.full.min.js')}}"></script>
+
+            <!-- probesys JqueryTools -->
+            <script src="{{ asset('js/probesysTools.js') }}"></script>
+        {% endblock bottom_js %}
+
+    </body>
+</html>

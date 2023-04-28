@@ -1,0 +1,24 @@
+.error {
+    color: rgb(185, 74, 72) !important;
+}
+
+.select2-container {
+    width: 100% !important;
+    padding: 0;
+}
+
+.btn-delete-photo{
+    position: absolute;
+    right: 0px;
+    color: red;
+    top: -15px;
+    cursor: pointer;   
+}
+
+.direct-chat-messages {
+    height: 350px;
+}
+
+.login-card-body .selection {
+    display: none;
+}

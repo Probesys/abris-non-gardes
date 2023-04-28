@@ -1,0 +1,483 @@
+App:
+   title: Abris non gardés du  Vercors
+Emails:
+   Dysfonctionnement:
+      newDysfunctionReported: Dysfonctionnement signalé
+      dysfonctionnementResolved:
+         subject: "Dyfonctionnement #%id% résolu abris %abris%"
+         body: "Le dysfonctionnement #%id% concernant l'abri %abris% que vous avez signalé a été résolu."
+      newDysfonctionnement:
+         subject: "Dyfonctionnement #%id% concernant l'abris %abris% pris en compte"
+         body: "Merci de nous avoir signalé ce dysfonctionnement concernant l'abri %abris%, nous allons le traiter dans les meilleurs délais possible. Vous pouvez suivre son traitement <a href='%url%'>ici</a>"   
+      newMessageAboutAbris:
+         subject: "Nouveau message concernant l'abri %abris%"
+         body: "Un nouveau message #%id% concernant l'abri %abris% vient d'être posté sur la plateforme."
+   Discussion:
+      newDiscussion:
+         subject: "Nouvelle discussion #%id% concernant l'abris %abris%"
+         body: "Une nouvelle discussion a été créée concernant l'abri %abris%. Vous pouvez la consulter <a href='%url%'>ici</a>."     
+Security:
+   actions:
+      logIn: Authentification
+      signIn: S'authentifier
+      resetPassword: Re-Initialiser le mot de passe
+      tryAgain: Essayez à nouveau
+      logout: Se déconnecter
+      myAccount: Mon Compte
+   labels:
+      signInToStartYourSession: Identifiez vous pour démarrer une session
+      iForgotMyPassword: Mot de passe oublié
+      resetYourPassword: Re initialiser votre mot de passe
+      sendPasswordResetEmail: Envoyer un mail de re-initialisation
+      passwordResetEmailSent: Courriel de re-initialisation de mot de passe envoyé
+      yourPasswordResetRequest: Votre demande de re-initialisation de mot de passe
+      register: Créer un compte
+      registrationWaitingValidation: Compte en attente de validation
+      showTerms: Voir les conditions d'utilisation
+   messages:
+      enterEmailtoReceiveResetPasswordEmail: Indiquer votre courriel et nous vous enverrons un lien par mail pour re-initialiser votre mot de passe
+      pleaseEnterYourEmail: Merci d'indiquer votre email.
+      anEmailHasBeenSent: Un courriel vous a été envoyé contenant un lien sur lequel vous pouvez cliquer pour re-initialiser votre mot de passe. Ce lien expira dans %duration% heure(s)
+      IfYouDontReceiveResetPasswordEmail: Si vous n'avez pas reçu de courriel, merci de vérifier dans vos indésirables ou
+      toResetYourPasswordPleaseVisit: Pour re-initialiser votre mot de passe, merci de vous rendre
+      thisLinkExpireIn: Ce lien expirera dans %duration% heure(s)
+      pleaseEnterAPassword: Merci de saisir un mot de passe
+      minLengthPasswordMessage: Le mot de passe doit être d'une longueur d'au moins {{ limit }} caractères
+      youShouldAgreeToOurTerms: Vous devez être d'accord avec les conditions d'utilisation pour pouvoir vous inscrire
+      accountCreatedAndWaitingAdminValidation: Votre compte est enregistré mais est en attente de validation de la part d'un administrateur.<br/>Dès que cette validation sera effectuée, vous recevrez un mail sur l'adresse que vous avez indiqué lors de l'inscription.
+      yourAccountisValidate: Votre compte vient d'être validé, vous pouvez désormais utiliser l'application.
+      newAccountWaitValidation: Un nouveau compte attend votre approbation.
+      newDysfunctionReported: Dysfonctionnement signalé
+      accessDeniedException: Vous ne pouvez pas accéder à ce contenu
+   fields:
+      email: Courriel
+      password: Mot de passe
+      rememberMe: Se souvenir de moi
+      agreeTerms: Je suis d'accord avec les conditions d'utilisation
+   errors:
+      noResetPasswordToken : Aucun token de re-initialisation de mot de passe n'est présent dans l'url ou en session
+      thereWasAProblemValidatingYourResetRequest: Il a eu un problème durant votre demande de re-initialisation de mot de passe
+      thereWasAProblemHandlingYourPasswordResetRequest: Il a eu un problème durant le traitement de votre demande de re-initialisation de mot de passe
+      You have already requested a reset password email. Please check your email or try again soon.: Vous avez déjà fait une demande de re-initialisation de mot de passe. Vérifiez vos courriels ou refaite une tentative plus tard.
+      The reset password link is invalid. Please try to reset your password again.: Le lien de re-initialisation de mot de passe n'est pas valide. Merci de refaire une demande de re-initialisation de mot de passe.
+   success:
+       reset_password: Votre mot de passe a été modifié avec succès
+Generics:
+    actions:
+        logIn: Authentification
+        create: Ajouter
+        report: Signaler
+        show: Voir
+        edit: Editer
+        print: Imprimer
+        remove: Supprimer
+        duplicate: Dupliquer
+        save: Enregistrer
+        clean: Effacer
+        filter: Filtrer
+        close: Fermer
+        back: Retour
+        backToTheList: Retour à la liste
+        backToAbris: Retour à la fiche abri
+        createAndContinue: Créer et continuer
+        downloadFile : Télécharger le fichier
+        load: Charger
+        enabled: Activer
+        generate: Générer
+        generatePDF: Générer le PDF
+        send: Envoyer
+        backToTheHomepage: Retour à l'accueil
+        import: Importer
+        nextStep: Etape suivante
+        prevStep: Etape précédente
+        cancel: Annuler
+        change: Changer
+    fields:
+        name: Intitulé
+        title: Titre
+        helpMessage: Message d'aide
+        coordinate: Coordonnées
+        age: Age
+        note: Note
+        birthDate: Date de naissance
+        locale: Langue
+        qty: Quantité
+        date: Date
+        today_date: Date du jour
+        duration: Durée
+        duration_min: Durée (en min)
+        frequency: fréquence
+        stop: arrêt
+        comments: Commentaires
+        createdAt: Crée(e) le
+        createdBy: Crée(e) par
+        updatedAt: Mis(e) à jour le
+        structure: Structure
+        content: Contenu
+        level: Niveau
+        created: Date de création
+        orderInList: Ordre
+        divers: Divers
+        description: Description
+    status:
+       draft: Brouillon
+    messages:
+        incorrectCredential: Paramètres de connexion invalides. Veuillez vérfier.
+        genericMsgError: Une erreur s'est produite
+        no_records_found: Aucun résultat trouvé
+        loading: Chargement
+        confirmationDeleteMessageQuestion: Etes vous certain de vouloir supprimer cet élément ?
+        confirmationDuplicateMessageQuestion: Etes vous certain de vouloir dupliquer cet élément ?
+        welcome: Bienvenue
+        formNotComplete: Veuillez renseigner les informations obligatoires
+        error_max_file_size_uploaded : Le fichier est trop volumineux
+        enter_email: Saisissez une adresse email
+        beCarefullWithFileSize: Attention à la taille totale des pièces jointes. La limite est généralement de 2Mo.
+        confirmBeforeLoadDocumentMessageAlert: Attention, le fait d'appuyer sur le bouton charger va vider et remplacer le contenu du document affiché, confirmer ?
+        navigator_compatibility_alert_message: "L'application n'est pas optimisée pour votre navigateur.<br/>Nous vous invitons à utiliser un navigateur plus récent afin de pouvoir bénéficier de toutes les fonctionalités offertes par psy4vet."
+    labels:
+        appName: Application gestion abris non gardés du Vercors
+        shortAppName: bris PNRV
+        filters: Filtres
+        item_per_page: Nombre d'éléments par page
+        lastModificationOn: Dernières modification le
+        of_type: de type
+        childOf: Enfant de
+        actions: Actions
+        report: rapport
+        homepage: Accueil
+        logs: Historique des actions/notes
+        type: -- Sélectionner un élément --
+        keywords : Mot(s) clé
+        version: Version
+    text:
+       on: le
+       by: par
+       or: ou
+       and: et
+       yes: oui
+       no: non
+       during: pendant
+       none: Aucun
+       of: du
+       of2: de
+       hello: bonjour
+       here: ici
+    batch:
+        labels:
+            for_selection: Pour la selection
+            choose_action: Choisir une action
+        flash:
+            deleteSuccess: La suppression en masse a été effectuée avec succès !
+            noSelectedItemError: Vous devez sélectionner au moins un item pour réaliser cette opération !
+    toast:
+      defaultTitle: Information
+      titleNewMail: Nouveaux messages
+      contentNewMail: Vous avez reçu %nbNewMail% nouveau(x) message(s)
+    flash:
+        savingData: Sauvegarde en cours
+        updateSuccess: La mise à jour a été effectuée avec succès
+        editSuccess: La mise à jour a été effectuée avec succès
+        deleteSuccess: Suppression effectuée avec succès !
+        deleteFailure: Une erreur est survenue lors de la suppression !
+        regenerateSuccess: Régéneration effectuée avec succès !
+        regenerateFailure: Une erreur est survenue lors de la régéneration !
+        deleteMassiveSuccess: Suppression en masse effectuée avec succès !
+        addSuccess: Ajout effectué avec succès !
+        addFailure: Une erreur est survenue lors d'ajout !
+        errorLoadingContent: Une erreur s'est produite lors du chargement
+        forbiddenAction: Action non permise !
+        sendingEmailSuccess: Envoi du/des email(s) réalisé avec succés !
+        sendingEmailFailure: Une erreur est survenue durant l'envoi du/des email(s) !
+        genericFailure: Une erreur est survenvenue lors de l'action !
+        accessDenied: Accès interdit
+        emptyData: Aucune données présentes
+        add_city_to_territorySuccess: La ville a été ajouté au territoire avec succés !
+    units:
+      literByDay: litres/jour
+      hoursByDay: Heures/jour
+      hoursByNight: Heures/nuit
+      hours: heures
+      weeks: semaines
+      year(s): An(s)
+      day(s): jour(s)
+      months: mois
+      nbIntakeByDay: fois par jour
+      in_month: en mois
+Navigation:
+    administration: Administration
+    abris: Abris
+    dysfonctionnement: Dysfonctionnement
+    discussion: Discussion
+    users: Utilisateurs
+    usersWaitingValidation: En attente de validation
+    usersNormal: Usager
+    usersProprio: Propriétaires
+    usersGestionnaire: Gestionnaires
+    usersAdmin: Administrateurs
+    username: Identifiant
+    password: Mot de passe
+    login: Connexion
+    logout: Se déconnecter
+    user_profil: Mon compte
+    parameters : Paramètres
+    listsAdmin: Administration des listes déroulantes
+    genericsListAdmin: Listes génériques
+    listingValueAdmin: Valeurs de listes génériques
+    listTypesAdmin: Types de listes génériques
+    helpMessageAdmin: Gestion des messages d'aide
+    pagesAdmin: Gestion des pages
+    territoriesAdmin: Gestion des territoires
+    citiesAdmin: Gestion des communes
+    statistiques: Statistiques
+
+Stats:
+   nbDysf: Nombre de Dysfonctionnements
+
+Entities:
+   Abris:
+      title: Gestion des abris
+      tabs:
+         infosGenerales: Informations générales
+         structureBatiment: Structure du bâtiment
+         equipementServices: Equipements et services
+         otherInfos: Informations
+         photos: Photos
+         dysfonctionnements: Dysfonctionnements
+         discussions: Discussions
+      fields:
+         number: Numéro de fiche
+         name: Nom de l'abri
+         coordinate: Coordonnées
+         altitude: altitude (m)
+         city: Localisation
+         capaciteAccueil: Capacité d'accueil
+         capaciteCouchage: Capacité de couchage
+         proprietaires: Propriétaire(s)
+         gestionnaires: Gestionnaire(s)
+         toit: Type de toit
+         sortieFumees : Sorties de fumées
+         materiauSortieFumees: Matériau sortie de fumée
+         nbPortes: Nombre de portes
+         type: Type d'abri
+         description: Description
+         chemineeEnPierreSurLeToit: Cheminée en pierre sur le toît
+         nbFenetres: Nombre de fenêtres
+         etage: Étage ( mezzanine incluse )
+         accesEtage: Accès
+         typeAccesEtage: Type d’accès
+         typeSol: Type de sol
+         citerneExterieure: Citerne extérieure
+         appentisExterieur: Appentis extérieur
+         nbAncrageSol: Nombre d'ancrages au sol
+         typeAncrageSol: Type d'ancrage au sol
+         remarqueStructureBat: Remarques sur la structure du bâtiment
+         source: Source à proximité
+         nomSource: Nom de la source
+         coordinateSource: Coordonnées GPS de la source
+         eauCourante: Eau courante
+         cahierSuiviEtCrayon: Cahier suivi et crayon
+         panneauInfosBonnesPratiques: Panneau infos bonnes pratiques
+         signaletiqueSourceProche: Signalétique source proche
+         typeMur: Type de murs
+         mobiliers: Mobiliers
+         couchages: Couchages
+         placeDeFeuInterieur : Place(s) de feu intérieur(s)
+         placeDeFeuExterieur : Place(s) de feu extérieure(s)
+         emplacementInterieurReserveBois: Emplacement intérieur pour réserve de bois
+         toilettesSeches: Toilettes sèches
+         mobilierPiqueniqueExterieur: Mobilier de pique nique extérieur
+         materielDivers: Matériel divers
+         abrisFavoris: Abris préférés
+         nbDysfonctionnements: Nombre de dysfonctionnements
+      helps:
+         coordinate: altitude / longitude / latitude
+      actions:
+         ajoutMobilier: Ajouter un mobilier
+         ajoutCouchage: Ajouter un couchage
+         ajoutPlaceFeu: Ajouter une place de feu intérieur
+         ajoutMobilierPicNic: Ajouter un mobilier de pique-nique extérieur
+         ajoutMaterielDivers: Ajouter un matériel divers
+         create_new: Ajouter un nouvel abri
+         select_one_city: Sélectionner une commune
+         edit: Edition de l'abri
+   Coordinate:
+        title: Coordonnées
+        fields:
+            cedex: Cedex
+            codePostal: Code postal
+            phone: Téléphone Fixe
+            mobilePhone: Téléphone portable
+            addressLine1: Adresse
+            addressLine2: Adresse Complémentaire
+            addressLine3: Adresse Complémentaire suite
+            city: Ville
+        helps:
+           multipleEmails: Si plusieurs adresses, les séparer par le caractère ; sans espaces.
+        actions:
+            select_one_city: Sélectionnez une ville
+   Discussion:
+      title: Gestion des Discussions
+      labels:
+         discussionAbris: Discussion sur l'abri
+         writeNewMessageHere: Ecrire un nouveau message
+         noMessage: Aucun message n'a encore été posté
+         nbMessage: Nombre de messages
+      tabs:
+         infos: Informations
+         discussions: Discussions
+      fields:
+         dysfonctionnement: Dysfonctionnement associé
+         abris: Abri associé
+         name: Sujet de la discussion
+         description: Description
+         isPrivate: Discussion privée
+      actions:
+         create_new: Nouvelle discussion
+         post_message: Poster le message
+   Dysfonctionnement:
+       title: Gestion des dysfonctionnements
+       lastest: Derniers dysfonctionnements
+       labels:
+         dateReport: Signalé le
+         infoDysFunction: Informations sur le dysfonctionnement
+       fields:
+           abris: Abri concerné
+           natureDys: Nature du dysfonctionnement
+           elementDys: Elément sur lequel le dysfonctionnement a été constaté
+           detailDys: Détail sur le dysfonctionnement
+           statusDys: Statut
+           description: Description du dysfonctionnement
+           discussion: Discussion à propos du dysfonctionnement
+           files: Fichier ou photo
+       actions:
+           create_new: Ajouter un nouveau dysfonctionnement
+           report_new: Signaler un dysfonctionnement
+           edit: Edition d'un dysfonctionnement
+           viewAllMessages: Voir tout les dysfonctionnements
+       messages:
+         noDiscussionsAssociate: Il n'y a pas de discussion associée à ce dysfonctionnement.
+   City:
+      title: Gestion des communes
+      fields:
+          insee: Code INSEE
+          name: Intitulé
+          territories : Territoires
+          department: Département
+          zipCode: Code postal
+          country: Pays
+          isActive: Est active
+      actions:
+         edit: Edition de la commune
+         create_new: Ajout d'une nouvelle commune
+         deleteFromTerritory: Retirer du territoire
+         selectOneCity: Sélectionner une commune
+   HelpMessage:
+      title: Gestion des messages d'aide
+      list: Liste des messages d'aide
+      actions:
+         create_new: Ajouter un nouveau message d'aide
+         edit: Edition du messages d'aide
+         selectOneHelpMessage: Sélectionner un message d'aide
+   ListingType:
+      title: Gestion des types de liste
+      list: Listes des types de liste
+      actions:
+        create_new: Ajouter un nouveau type de liste
+        edit: Édition d'un type de liste
+        add_new_listingValue: Ajouter une valeur de liste à cet élément
+        show_liste_values: Voir les valeurs de cette liste
+      fields:
+        type: Type
+   ListingValue:
+      title: Gestion des valeurs de liste
+      list: Valueurs de listes déroulantes
+      actions:
+        create_new: Ajouter une nouvelle valeur de liste
+        edit: Édition d'une valeur de liste
+        selectlistingType: Sélectionner un type de liste
+      fields:
+        listingType: Type de liste
+        listingParent: Parent
+        helpMessage : Message d'aide
+        weight : Ordre
+   Message:
+      latest: Derniers Messages
+      title: Gestion des messages
+      fields:
+         subject: Sujet
+         message: Message
+         isPrivate: Est privé
+         discussion: Discussion associé
+         parent: Réponse au message
+         childreens: Réponses à ce message
+      actions:
+         create_new: Ajouter un nouveau message
+         replyTo: Répondre au message
+         edit: Édition du message
+         viewAllMessages: Voir tout les messages
+      flashes:
+         addSuccess: Votre message a bien été ajouté.
+   Page:
+      title: Gestion des pages
+      actions:
+        create_new: Ajouter une nouvelle page
+        edit: Édition d'une page
+      fields:
+        name: Titre de la page
+        linkText: Texte du lien
+        body: Contenu de la page
+        dontListedInFrontPage: n'est pas listée dans la partie publique
+   Territory:
+      fields:
+          name: Intitulé
+          list: Territoires
+          parent: Sous territoire de
+      actions:
+          create_new: Ajout d'un territoire
+          edit: Édition du territoire
+          newsubTerritory: Ajout d'un sous-territoire
+          listCities: Liste des villes associées au territoire
+          listeSubTerritoryCities: Liste des villes associées au territoire et à ses sous-territoires
+          confirmMassiveDeleteCities: Etes vous certains de vouloir réaliser cette opération ? Cela dessasociera la ville de tout les territoires auquels elle est rattachée !
+          deleteFromSubTerritory: Retirer de tout les territoires
+          add_city_to_territory: Ajouter une commune au territoire
+          alreadyPresent: Ajout au territoire impossible car déjà présent.
+          selectOneOrManyTerritories: Sélectionner un ou plusieurs territoires.
+      title: Gestion des territoires
+      edit: Edition du territoire
+      new: Ajout d'un territoire
+      listCities: Liste des villes associées au territoire
+      listSubTerritory : et de ses sous territoires
+   User:
+      title: Gestion des comptes
+      actions:
+        create_new: Ajouter un nouveau compte
+        edit: Édition du compte
+        select_one_or_many_abris: Sélectionner un ou plusieurs abris
+      tabs:
+         favoris: Abris favoris
+         infoCompte: Informations
+         dysfunctions: Dysfonctionnements signalés
+      fields:
+        name: Nom
+        lastName: Nom de famille
+        firstName: Prénom
+        email: Courriel
+        login: Identifiant
+        roles: Rôles
+        password: Mot de passe
+        repeatPassword: Répéter le mot de passe
+        userType: Type d'usager
+        abrisFavoris: Abris favoris
+        photo: Photo de profil
+        structureName: structure / organisation
+      roles:
+         ROLE_WAITING_VALIDATION: En attente de validation
+         ROLE_USER: Usager
+         ROLE_OWNER: Propriétaire
+         ROLE_MANAGER: Gestionnaire
+         ROLE_ADMIN: Administrateur
+      flashes:
+         userValidationSuccess: Le compte utiisateur a été validé
+         changeRoleSuccess: Le rôle de l'utilisateur a été changé avec succès

@@ -1,0 +1,42 @@
+{% extends 'base-security.html.twig' %}
+
+{% block title %}{{'Security.labels.register'|trans()}}{% endblock %}
+
+{% block body %}
+    <p class="login-box-msg">{{'Security.labels.register'|trans()}}</p>
+
+    {{ form_start(registrationForm) }}
+    {{ form_row(registrationForm.lastName) }}
+    {{ form_row(registrationForm.firstName) }}
+    {{ form_row(registrationForm.email) }}
+    {{ form_row(registrationForm.login) }}
+    {{ form_row(registrationForm.plainPassword) }}
+    {{ form_row(registrationForm.userType) }}
+    {{ form_row(registrationForm.agreeTerms) }}
+
+    <button class="btn btn-primary btn-block">{{'Security.labels.register'|trans()}}</button>
+    {{ form_end(registrationForm) }}
+    <button type="button" class="btn btn-primary btn-block" data-toggle="modal" data-target="#cuModal">
+        {{ 'Security.labels.showTerms'|trans() }}
+    </button>
+    {# cuPage modal #}
+    <div class="modal" id="cuModal" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header  login-card-body">
+                    <h5 class="modal-title">{{ cuPage.name }}</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="{{ 'Generics.actions.close'|trans() }}">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <p>{{ cuPage.body|raw }}</p>
+                </div>
+                <div class="modal-footer login-card-body">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">{{ 'Generics.actions.close'|trans() }}</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

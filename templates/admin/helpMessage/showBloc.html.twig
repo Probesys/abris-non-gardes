@@ -1,0 +1,9 @@
+         <div class="modal-header">
+            <h4 class="modal-title" id=helpModalLabel-{{ helpMessage.id }}>{{ helpMessage.name }}</h4>
+         </div>
+         <div class="modal-body">
+            {{ helpMessage.message|raw }}
+         </div>
+         <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">{{'Generics.actions.close'|trans}}</button>
+         </div>

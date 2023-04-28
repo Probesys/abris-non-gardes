@@ -1,0 +1,29 @@
+{% extends 'admin/base-admin.html.twig' %}
+
+{% block title %}
+   {{'Entities.Page.actions.edit'|trans}} "{{object.name}}"
+{% endblock title %}
+
+{% block breadcrumb %}
+   <li class="breadcrumb-item"><a href="{{ path('page_index') }}">{{ 'Entities.Page.title'|trans }}</a></li>
+   <li class="breadcrumb-item active">{{ object }}</li>
+{% endblock breadcrumb %}
+
+{% block body %}
+
+   {% include 'admin/default/updatedByDiv.html.twig' with {'object': object} %}
+   <div class="col-md-12">
+   {{ form_start(form) }}
+   {{ form_widget(form) }}
+   </div>
+   <div class="btn-group mt-4">
+      <a class="btn btn-danger" href="{{path('page_delete', {'id':object.id })}}" data-toggle="tooltip" data-placement="top" title="{{'Generics.actions.remove'|trans()}}" data-container="body" onclick="return confirm('{{'Generics.messages.confirmationDeleteMessageQuestion'|trans}}');" >
+         <i class="fas fa-trash-alt"></i>
+      </a>
+      <a class="btn btn-default" data-toggle="tooltip" data-placement="top" title="{{'Generics.actions.backToTheList'|trans()}}" data-container="body" href="{{path('page_index')}}">
+         <i class="fas fa-list"></i>&nbsp;<span>{{'Generics.actions.backToTheList'|trans()}}</span>
+      </a>
+      <input type="submit" class="btn btn-primary" value="{{'Generics.actions.save'|trans()}}">
+   </div>
+   {{ form_end(form) }}
+{% endblock %}

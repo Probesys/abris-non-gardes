@@ -1,0 +1,9 @@
+twig:
+    default_path: '%kernel.project_dir%/templates'
+    form_themes:
+        - '@TetranzSelect2Entity/Form/fields.html.twig'
+        - 'bootstrap_4_layout.html.twig'
+    globals:
+           per_page_global: '%app.per_page_global%'
+           appVersion:  '%app.version%'
+           roles: ['ROLE_WAITING_VALIDATION','ROLE_USER','ROLE_OWNER', 'ROLE_MANAGER', 'ROLE_ADMIN']

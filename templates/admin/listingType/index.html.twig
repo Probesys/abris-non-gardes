@@ -1,0 +1,70 @@
+{% extends 'admin/base-admin.html.twig' %}
+
+{% block title %}
+   {{ 'Entities.ListingType.title'|trans }}
+{% endblock %}
+{% block breadcrumb %}
+   <li class="breadcrumb-item active">{{ 'Entities.ListingValue.title'|trans }}</li>
+{% endblock breadcrumb %}
+
+{% block titleAction %}
+   <a class="btn btn-primary" href="{{ path('listingType_new') }}">
+                  <i class="fas fa-plus"></i><span>&nbsp;{{ 'Entities.ListingType.actions.create_new'|trans }}</span>
+               </a>
+{% endblock titleAction %}
+
+{% block body %}
+
+   <div class="row">
+      <div class="col-md-12">
+
+         {% include 'admin/default/blocFilter.html.twig'  %}
+         <form action="{{ path('listingType_batch') }}" method="post">
+            {% include 'admin/default/blockBatchActions.html.twig'  %}
+
+            <div class=" table-responsive ">
+               <table class="table  table-condensed table-hover table-bordered table-sm">
+                  <thead>
+                     <tr>
+                        <th id="sf_admin_list_batch_actions"><input id="sf_admin_list_batch_checkbox" type="checkbox" title="Check all" onclick="checkAll();"></th>
+                        <th>{{ knp_pagination_sortable(pagination, 'Generics.fields.name'|trans, 'c.slug') }} </th>
+
+                        <th id="sf_admin_list_actions">{{'Generics.labels.actions'|trans()}}</th>
+                     </tr>
+                  </thead>
+                  <tbody>
+                     {% for entity in pagination %}
+                        <tr>
+                           <td ><input type="checkbox" name="ids[]" value="{{ entity.id }}" class="sf_admin_batch_checkbox"></td>
+                           <td><a href="{{ path('listingType_edit', {'id': entity.id}) }}">{{ entity.name }} <i class="far fa-arrow-alt-circle-right"></i></a></td>
+
+                           <td>
+                              <a class="btn btn-default btn-sm" href="{{ path('listingValue_new', {'listingTypeId':entity.id }) }}" data-toggle="tooltip" data-placement="top" title="{{ 'Entities.ListingType.actions.add_new_listingValue'|trans }}"  >
+                                 <i class="fas fa-plus-square"></i>
+                              </a>
+                              <a class="btn btn-default btn-sm" href="{{ path('listingValue_index', {'listingTypeId':entity.id}) }}" data-toggle="tooltip" data-placement="top" title="{{ 'Entities.ListingType.actions.show_liste_values'|trans }}" >
+                                 <i class="fas fa-align-justify"></i>
+                              </a>
+                              <a class="btn btn-danger btn-sm ajax-request" href="{{ path('listingType_delete', {'id':entity.id }) }}" data-action="delete" data-toggle="tooltip" data-placement="top" title="{{ 'Generics.actions.remove'|trans }}" data-container="body" data-confirm="{{ 'Generics.messages.confirmationDeleteMessageQuestion'|trans }}" >
+                                 <i class="fas fa-trash-alt"></i>
+                              </a>
+                           </td>
+                        </tr>
+                     {% else %}
+                        <tr>
+                           <td colspan="4">{{ 'Generics.messages.no_records_found'|trans }}</td>
+                        </tr>
+                     {% endfor %}
+                  </tbody>
+               </table>
+            </div>
+         </form>
+         <div class="navigation text-center">
+            {{ knp_pagination_render(pagination) }}
+         </div>
+         <!-- /.panel-body -->
+      </div>
+   </div>
+
+
+{% endblock %}

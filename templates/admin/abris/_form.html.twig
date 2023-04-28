@@ -1,0 +1,191 @@
+{% macro attributesWithQty(attributes,prototype,labelAttribute, btnLabel) %}
+    {%set btnlLabel='Entities.Abris.actions.' ~ btnLabel %}
+    {%set fieldLabel='Entities.Abris.fields.' ~ labelAttribute %}
+    <div class="with-add-btn" data-label-add-btn="{{ btnlLabel |trans }}" data-prototype="{{ form_widget(prototype)|e('html_attr') }}">
+        <label>{{ fieldLabel|trans }}</label>
+        {% for attribute in attributes %}
+            <div class="row" class="tags">
+                <div class="col-md-5">{{ form_row(attribute.listingValue) }}</div>
+                <div class="col-md-5">{{ form_row(attribute.qty) }}</div>
+                <div class="col-md-2">
+                    <a class="btn btn-danger btn-sm btn-delete-abris-attribute"
+                       href="#"
+                       title="{{ 'Generics.actions.remove'|trans }}">
+                        <i class="far fa-trash-alt "></i>
+                    </a>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+{% endmacro %}
+
+{% import _self as attributesWithQtyMacro %}
+
+<div class="card card-primary card-outline card-outline-tabs">
+    <div class="card-header p-0 border-bottom-0">
+        <ul class="nav nav-tabs" id="tabs-form-abris" role="tablist">
+            <li class="nav-item">
+                <a class="nav-link active" id="tabs-infos-tab" data-toggle="pill" href="#tabs-infos" role="tab" aria-controls="tabs-infos" aria-selected="true">
+                    {{ 'Entities.Abris.tabs.infosGenerales'|trans }}
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" id="tabs-structure-tab" data-toggle="pill" href="#tabs-structure" role="tab" aria-controls="tabs-structure" aria-selected="false">
+                    {{ 'Entities.Abris.tabs.structureBatiment'|trans }}
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" id="tabs-services-tab" data-toggle="pill" href="#tabs-services" role="tab" aria-controls="tabs-services" aria-selected="false">
+                    {{ 'Entities.Abris.tabs.equipementServices'|trans }}
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" id="tabs-other-infos-tab" data-toggle="pill" href="#tabs-other-infos" role="tab" aria-controls="tabs-other-infos" aria-selected="false">
+                    {{ 'Entities.Abris.tabs.otherInfos'|trans }}
+                </a>
+            </li>
+            {% if abris.id is not null %}
+                <li class="nav-item">
+                    <a class="nav-link" id="tabs-photos-tab" data-toggle="pill" href="#tabs-photos" role="tab" aria-controls="tabs-photos" aria-selected="false">
+                        {{ 'Entities.Abris.tabs.photos'|trans }}
+                    </a>
+                </li>
+            {% endif  %}
+        </ul>
+    </div>
+    <div class="card-body">
+        <div class="tab-content" id="custom-tabs-three-tabContent">
+            <div class="tab-pane fade show active" id="tabs-infos" role="tabpanel" aria-labelledby="tabs-infos-tab">
+                {{ form_row(form.type) }}
+                {{ form_row(form.name) }}
+                {{ form_row(form.coordinate) }}
+                {{ form_row(form.altitude) }}
+                {{ form_row(form.city) }}
+                {{ form_row(form.proprietaires) }}
+                {{ form_row(form.gestionnaires) }}
+                {{ form_row(form.capaciteAccueil) }}
+                {{ form_row(form.capaciteCouchage) }}
+                {{ form_row(form.description) }}
+            </div>
+            <div class="tab-pane fade" id="tabs-structure" role="tabpanel" aria-labelledby="tabs-structure-tab">
+                {{ form_row(form.toit) }}
+                {{ form_row(form.sortieFumees) }}
+                {{ form_row(form.materiauSortieFumees) }}
+                {{ form_row(form.nbPortes) }}
+                {{ form_row(form.nbFenetres) }}
+                {{ form_row(form.typeMur) }}
+                {{ form_row(form.etage) }}
+                {{ form_row(form.accesEtage) }}
+                {{ form_row(form.typeAccesEtage) }}
+                {{ form_row(form.typeSol) }}
+                {{ form_row(form.citerneExterieure) }}
+                {{ form_row(form.appentisExterieur) }}
+                {{ form_row(form.nbAncrageSol) }}
+                {{ form_row(form.typeAncrageSol) }}
+                {{ form_row(form.remarqueStructureBat) }}
+            </div>
+            <div class="tab-pane fade" id="tabs-services" role="tabpanel" aria-labelledby="tabs-services-tab">
+                {{ attributesWithQtyMacro.attributesWithQty(form.mobiliers,form.mobiliers.vars.prototype,'mobiliers','ajoutMobilier') }}
+                {{ attributesWithQtyMacro.attributesWithQty(form.couchages,form.couchages.vars.prototype,'couchages','ajoutCouchage') }}
+                {{ attributesWithQtyMacro.attributesWithQty(form.placeDeFeuInterieur,form.placeDeFeuInterieur.vars.prototype,'placeDeFeuInterieur','ajoutPlaceFeu') }}
+                {{ attributesWithQtyMacro.attributesWithQty(form.mobilierPiqueniqueExterieur,form.mobilierPiqueniqueExterieur.vars.prototype,'mobilierPiqueniqueExterieur','ajoutMobilierPicNic') }}
+                {{ attributesWithQtyMacro.attributesWithQty(form.materielDivers,form.materielDivers.vars.prototype,'materielDivers','ajoutMaterielDivers') }}
+                <br/>
+                {{ form_row(form.placeDeFeuExterieure) }}
+                {{ form_row(form.chemineeEnPierreSurLeToit) }}
+                {{ form_row(form.emplacementInterieurReserveBois) }}
+                {{ form_row(form.toilettesSeches) }}
+                {{ form_row(form.source) }}
+                {{ form_row(form.nomSource) }}
+                {{ form_row(form.coordinateSource) }}
+                {{ form_row(form.eauCourante) }}
+            </div>
+            <div class="tab-pane fade" id="tabs-other-infos" role="tabpanel" aria-labelledby="tabs-other-infos-tab">
+                
+                {{ form_row(form.cahierSuiviEtCrayon) }}
+                {{ form_row(form.plaqueAbris)   }}
+                {{ form_row(form.panneauInfosBonnesPratiques) }}
+                {{ form_row(form.signaletiqueSourceProche) }}
+            </div>
+            <div class="tab-pane fade" id="tabs-photos" role="tabpanel" aria-labelledby="tabs-photos">
+                {% include 'admin/abris/_gallery.html.twig' %}
+                {{ form_rest(form) }}
+            </div>
+        </div>
+    </div>
+</div>
+<!-- /.card -->
+{% block additional_bottom_js %}
+    <script>
+        {#        var $collectionHolder;#}
+
+            // setup an "add a tag" link
+
+
+            jQuery(document).ready(function () {
+
+               
+
+                $(document).on('click', '.btn-delete-abris-attribute', function (e) {
+                    e.preventDefault();
+                    $(this).parents('div.row').remove();
+                });
+
+                // Get the ul that holds the collection of tags
+                $('div.with-add-btn').each(function () {
+                    var $addTagButton = $('<button type="button" class="btn btn-primary">' + $(this).data('label-add-btn') + '</button>');
+                    var $newLinkLi = $('<div class="row"></div>').append($addTagButton);
+                    var $collectionHolder = $(this);
+
+                    // add the "add a tag" anchor and li to the tags ul
+                    $collectionHolder.append($newLinkLi);
+
+                    // count the current form inputs we have (e.g. 2), use that as the new
+                    // index when inserting a new item (e.g. 2)
+                    $collectionHolder.data('index', $collectionHolder.find('input').length);
+
+                    $addTagButton.on('click', function (e) {
+                        // add a new tag form (see next code block)
+                        addTagForm($collectionHolder, $newLinkLi);
+                    });
+                });
+
+
+
+            });
+
+            function addTagForm($collectionHolder, $newLinkLi) {
+                var prototype = $collectionHolder.data('prototype');
+
+                var index = $collectionHolder.data('index');
+
+                var newForm = prototype;
+                newForm = newForm.replace(/__name__/g, index);
+                console.log(newForm);
+                $collectionHolder.data('index', index + 1);
+
+                var $newFormLine = $('<div class="row"><div class="col-md-5 proto"></div><div class="col-md-5 proto"></div><div class="col-md-2">\n\
+                    <a class="btn btn-danger btn-sm btn-delete-abris-attribute" \n\
+                       href="#"  \n\
+                       title="">\n\
+                        <i class="far fa-trash-alt "></i>\n\
+                    </a>  \n\
+        \n\
+</div></div>');
+
+                $newFormLine.find('div.proto:eq(0)').html($(newForm).find('div.form-group')[0]);
+                $newFormLine.find('div.proto:eq(1)').html($(newForm).find('div.form-group')[1]);
+                $collectionHolder.find('div:last').before($newFormLine);
+            }
+
+            function addTagFormDeleteLink($tagFormLi) {
+                var $removeFormButton = $('<button type="button">Delete this tag</button>');
+                $tagFormLi.append($removeFormButton);
+
+                $removeFormButton.on('click', function (e) {
+                    // remove the li for the tag form
+                    $tagFormLi.remove();
+                });
+            }
+    </script>
+{% endblock additional_bottom_js %}

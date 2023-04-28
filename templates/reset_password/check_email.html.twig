@@ -1,0 +1,8 @@
+{% extends 'base-security.html.twig' %}
+
+{% block title %}{{'Security.labels.passwordResetEmailSent'|trans()}}{% endblock %}
+
+{% block body %}
+    <p class="login-box-msg">{{'Security.messages.anEmailHasBeenSent'|trans({'%duration%': tokenLifetime|date('g')})}}.</p>
+    <p class="login-box-msg">{{'Security.messages.IfYouDontReceiveResetPasswordEmail'|trans()}} <a class="btn-" href="{{ path('app_forgot_password_request') }}">{{'Security.actions.tryAgain'|trans()}}</a>.</p>
+{% endblock %}

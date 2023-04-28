@@ -1,0 +1,91 @@
+{% extends 'admin/base-admin.html.twig' %}
+
+{% block title %}
+    {{'Entities.Dysfonctionnement.actions.edit'|trans}} "{{ dysfonctionnement.abris.name }} le {{ dysfonctionnement.created|date('d-m-Y') }}"
+{% endblock title %}
+
+{% block breadcrumb %}
+    <li class="breadcrumb-item"><a href="{{ path('dysfonctionnement_index') }}">{{ 'Entities.Dysfonctionnement.title'|trans }}</a></li>
+    <li class="breadcrumb-item active">{{ dysfonctionnement.abris.name }} le {{ dysfonctionnement.created|date('d-m-Y') }}</li>
+    {% endblock breadcrumb %}
+
+{% block body %}
+
+    {% include 'admin/default/updatedByDiv.html.twig' with {'object': dysfonctionnement} %}
+    <div class="card card-primary card-outline card-outline-tabs">
+        <div class="card-header p-0 border-bottom-0">
+            <ul class="nav nav-tabs" id="tabs-form-abris" role="tablist">
+                <li class="nav-item">
+                    <a class="nav-link active" id="tabs-infos-tab" data-toggle="pill" href="#tabs-infos" role="tab" aria-controls="tabs-infos" aria-selected="true">
+                        {{ 'Entities.Discussion.tabs.infos'|trans }}
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" id="tabs-discussions-tab" data-toggle="pill" href="#tabs-discussions" role="tab" aria-controls="tabs-discussions" aria-selected="false">
+                        {{ 'Entities.Discussion.tabs.discussions'|trans }}
+                    </a>
+                </li>
+            </ul>
+
+        </div>
+        <div class="card-body">
+            <div class="tab-content" id="custom-tabs-three-tabContent">
+                <div class="tab-pane fade show active" id="tabs-infos" role="tabpanel" aria-labelledby="tabs-infos-tab">
+                    <div class="col-md-12">
+                        {{ form_start(form) }}
+                        {{ form_row(form.abris) }}
+                        {{ form_row(form.natureDys) }}
+                        {% if form.elementDys is defined %}
+                            {{ form_row(form.elementDys) }}
+                        {% endif %}
+                        {{ form_row(form.description) }}
+                        {{ form_row(form.statusDys) }}
+                        {% include 'admin/dysfonctionnement/_gallery.html.twig' %}
+
+                        {{ form_widget(form) }}
+                        <input type="submit" class="btn btn-primary" value="{{'Generics.actions.save'|trans()}}">
+                        {{ form_end(form) }}
+                    </div>
+                </div>
+
+                <div class="tab-pane fade  direct-chat-primary" id="tabs-discussions" role="tabpanel" aria-labelledby="tabs-discussions-tab">
+                    {% if dysfonctionnement.discussion %}
+                        {% if dysfonctionnement.discussion.messages|length %}
+                            {% include 'admin/default/_messages.html.twig' with {'messages':dysfonctionnement.discussion.messages} %}
+                            <hr>
+                        {% endif %}
+                        <blockquote class="quote-secondary">
+                            <h3>{{'Entities.Message.actions.create_new'|trans()}}</h3>
+                            <form action="{{ path('message_new', {'id' : dysfonctionnement.discussion.id}) }}" method="post">
+                                <div class="form-group">
+                                <label for="message">{{'Generics.fields.description'|trans()}}</label>
+                                <textarea name="message" class="form-control summernote"></textarea>
+                                </div>
+                                <input type="submit" class="btn btn-primary" value="{{'Generics.actions.save'|trans()}}">
+                            </form>
+                        </blockquote>
+                    {% else %}
+                        <blockquote class="quote-info">
+                            <p>{{'Entities.Dysfonctionnement.messages.noDiscussionsAssociate'|trans()}}</p>
+                        </blockquote>
+                    {% endif %}
+                </div>
+
+
+            </div>
+        </div>
+    </div>
+
+
+
+    <div class="btn-group mt-4">
+        <a class="btn btn-danger" href="{{path('dysfonctionnement_delete', {'id':dysfonctionnement.id })}}" data-toggle="tooltip" data-placement="top" title="{{'Generics.actions.remove'|trans()}}" data-container="body" onclick="return confirm('{{'Generics.messages.confirmationDeleteMessageQuestion'|trans}}');" >
+            <i class="fas fa-trash-alt"></i>
+        </a>
+        <a class="btn btn-default" data-toggle="tooltip" data-placement="top" title="{{'actions.backToTheList'|trans()}}" data-container="body" href="{{path('dysfonctionnement_index')}}">
+            <i class="fas fa-list"></i>&nbsp;<span>{{'Generics.actions.backToTheList'|trans()}}</span>
+        </a>
+
+    </div>
+
+{% endblock %}

@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title>Application gestion des abris non gardés du Vercors | {% block pageTitle %}Accueil{% endblock %}</title>
+        <!-- Tell the browser to be responsive to screen width -->
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#472A69"/>
+        <link rel="manifest" href="/manifest.webmanifest">
+        {% block head_css %}
+            <link rel="stylesheet" href="{{ asset('vendor/adminlte/plugins/fontawesome-free/css/all.min.css') }}">
+            <link rel="stylesheet" href="{{ asset('front/css/styles.css') }}">
+            <link rel="stylesheet" href="{{ asset('front/css/line-awesome.min.css') }}">
+            <link rel="stylesheet" href="{{ asset('front/css/codyhouse-nav.css') }}">
+            <link rel="stylesheet" href="https://unpkg.com/vue-select@latest/dist/vue-select.css">
+            <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.4.1/dist/MarkerCluster.Default.css">
+            
+            {{ encore_entry_link_tags('app') }}
+        {% endblock %}
+        <!-- Matomo -->
+        <script type="text/javascript">
+            var _paq = window._paq = window._paq || [];
+            /* tracker methods like "setCustomDimension" should be called before "trackPageView" */
+            _paq.push(['trackPageView']);
+            _paq.push(['enableLinkTracking']);
+            (function () {
+                var u = "https://stats.probesys.com/";
+                _paq.push(['setTrackerUrl', u + 'matomo.php']);
+                _paq.push(['setSiteId', '46']);
+                var d = document, g = d.createElement('script'), s = d.getElementsByTagName('script')[0];
+                g.type = 'text/javascript';
+                g.async = true;
+                g.src = u + 'matomo.js';
+                s.parentNode.insertBefore(g, s);
+            })();
+        </script>
+        <!-- End Matomo Code -->
+    </head>
+    <body id="page-top">
+        <div class="wrapper" id="front">
+            <div id="app" data-is-authenticated="{{ isAuthenticated }}" data-user="{{ user }}"></div>
+        </div>
+        <script src="{{ asset('vendor/adminlte/plugins/jquery/jquery.min.js') }}"></script>
+        <script src="{{ asset('vendor/popper/popper.min.js') }}"></script>
+        <script src="{{ asset('vendor/adminlte/plugins/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
+        <script src="{{ asset('vendor/select2/dist/js/select2.full.min.js')}}"></script>
+        <script src="{{ asset('front/js/main-nav.js')}}"></script>
+        <script src="{{ asset('front/js/search-panel.js')}}"></script>
+        <script src="{{ asset('front/js/main.js')}}"></script>
+        <script src="{{ asset('front/js/codyhouse/util.js')}}"></script>
+        <script src="{{ asset('front/js/codyhouse/main.js')}}"></script>   
+        
+        {{ encore_entry_script_tags('app') }}      
+        <script src="https://unpkg.com/leaflet.markercluster@1.4.1/dist/leaflet.markercluster.js"></script>
+     
+    </body>
+
+</html>

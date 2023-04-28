@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+
+   <head>
+      <meta charset="UTF-8">
+      <meta http-equiv="X-UA-Compatible" content="IE=edge">
+      <title>Application gestion des abris non gardés du Vercors | {% block pageTitle %}Accueil{% endblock %}</title>
+      <!-- Tell the browser to be responsive to screen width -->
+      <meta name="viewport" content="width=device-width, initial-scale=1">
+      {% block head_css %}
+         <link rel="stylesheet" href="{{ asset('vendor/adminlte/plugins/fontawesome-free/css/all.min.css') }}">
+         <link rel="stylesheet" href="{{ asset('front/css/styles.css') }}">
+         <link rel="stylesheet" href="{{ asset('front/css/line-awesome.min.css') }}">
+
+      {% endblock %}
+   </head>
+   <body id="page-top">
+      <div class="wrapper">
+      {% block body %}
+      {%  endblock body %}
+      </div>
+      <script src="{{ asset('vendor/adminlte/plugins/jquery/jquery.min.js') }}"></script>
+
+      <script src="{{ asset('vendor/adminlte/plugins/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
+
+
+   </body>
+
+</html>

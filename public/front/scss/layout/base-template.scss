@@ -1,0 +1,17 @@
+/* ========================================================================*/
+/* ! BASE-TEMPLATE - base template Layout */
+/* ========================================================================*/
+
+.main-nav + div {
+  padding: 0 1rem;
+  .map-container {
+    position: relative;
+    z-index: 10
+  }
+}
+
+.wrapper {
+  & > .container-fluid {
+    position: relative;
+  }
+}

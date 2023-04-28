@@ -1,0 +1,53 @@
+/* ========================================================================*/
+/* ! LOCAL-NAV */
+/* ========================================================================*/
+
+.local-nav {
+  height: 55px;
+  @media screen and (min-width: 1024px) {
+    height: 65px;
+  }
+  ul {
+    padding-left: 36px;
+    background-color: #fff;
+    // box-shadow: 0px 0px 4px 0px rgba(0,0,0,0.25);
+    border-bottom: 1px solid $gray-200;
+  }
+
+  .local-nav-item {
+    flex-basis: 165px;
+
+
+    
+    .local-nav-link {
+      max-height: 54px;
+      font-size: 1.35rem;
+      font-weight: 500;
+      text-align: center;
+      line-height: 1.35em;
+      color: $secondary;
+      transition: background-color 0.15s cubic-bezier(0.62, 0.28, 0.23, 0.99);
+      &:hover, &:focus, &.active {
+        text-decoration: none;
+        background-color: $gray-200;
+      }
+
+      &::before {
+        content: "";
+        position: absolute;
+        bottom: 0px;
+        right: 0;
+        left: 0;
+        height: 3px;
+        background-color: transparent;
+        transition: background-color 0.1s cubic-bezier(0.62, 0.28, 0.23, 0.99);
+      }
+
+      &[class*="--selected"] {
+        &::before {
+          background-color: $primary;
+        }
+      }
+    }
+  }
+}

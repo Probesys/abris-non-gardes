@@ -1,0 +1,9 @@
+{% extends 'base-email.html.twig' %}
+{% block pageTitle %}
+   {{ subject|trans() }}
+{% endblock pageTitle %}
+
+{% block body %}
+   {{ body|trans()|raw }}
+{% endblock body %}
+

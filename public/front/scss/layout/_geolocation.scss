@@ -1,0 +1,309 @@
+/* ========================================================================/
+/ !   GEOLOCATION
+/ ========================================================================*/
+#map {
+  width: 100%;
+}
+
+.leaflet-container {
+  position: relative;
+  z-index: 10;
+}
+
+// .geolocation-section {
+//   display: flex;
+//   align-items: center;
+// }
+//
+// .probesys-geolocation {
+//   background-color: $brand-gray-2;
+//   width: 100%;
+//   overflow: hidden;
+//
+//   .las.la-crosshairs {
+//     font-size: 2.4rem;
+//   }
+// }
+//
+// .filter-geolocation {
+//   width: 100%;
+//   padding: 20px 15px;
+//   background-color: $brand-gray-2;
+//   display: flex;
+//   justify-content: space-between;
+//   color: $brand-anthracite-1;
+//   font-weight: bold;
+//   font-size: 2.3rem;
+//   border-top-left-radius: 14px;
+//   border-top-right-radius: 14px;
+//
+//   p {
+//     margin: 0;
+//   }
+// }
+//
+// .map-leaflet {
+//   max-width: 760px;
+//   width: 100%;
+// }
+//
+// .ui-widget.ui-widget-content {
+//   border: none;
+// }
+//
+// .ui-state-default, .ui-widget-content .ui-state-default, .ui-widget-header .ui-state-default, .ui-button, html .ui-button.ui-state-disabled:hover, html .ui-button.ui-state-disabled:active {
+//   border-radius: 15px;
+//   color: $brand-anthracite-1;
+// }
+// .ui-slider-horizontal .ui-slider-handle {
+//   top: -.5em;
+// }
+// .handle-output {
+//   color: $brand-anthracite-1;
+// }
+//
+// .ui-state-active,
+// .ui-widget-content .ui-state-active,
+// .ui-widget-header .ui-state-active,
+// a.ui-button:active,
+// .ui-button:active,
+// .ui-button.ui-state-active:hover {
+//  border:1px solid $brand-gray-dark;
+//  background:$brand-gray-dark;
+// }
+//
+// .ui-icon-background,
+// .ui-state-active .ui-icon-background {
+//  border:$brand-gray-dark;
+// }
+// .range-title {
+//   margin-bottom: 35px;
+// }
+//
+// .checkboxes {
+//   margin-bottom: 10px !important;
+// }
+//
+//
+// /* --------------------------------------------/
+// / ! FORMULAIRE /
+// /---------------------------------------------*/
+// .form-geolocation {
+//   padding: 15px;
+//
+//   label, select, input, p, h3, .form-custom-range {
+//     color: $brand-anthracite-1;
+//   }
+//
+//   .form-control::placeholder {
+//     color: $brand-anthracite-1;
+//   }
+//
+//   #edit-city, #edit-city--2 {
+//     border: 1px solid $brand-anthracite-1;
+//     border-radius: 6px;
+//     font-style: italic;
+//   }
+//
+//   #edit-areakm, #edit-areakm--2, .slider-range-budget, .slider-areaKm {
+//     background: none;
+//     height: 4px;
+//     border-radius: 6px;
+//     background: $brand-anthracite-2;
+//     outline: none;
+//     padding: 0;
+//     margin: 0;
+//   }
+//
+//   select {
+//     border-bottom: 1px solid $brand-anthracite-2;
+//   }
+//
+//   label, .range-title {
+//     text-transform: uppercase;
+//   }
+//
+//   .fa-map-marker-alt {
+//     font-size: 1.8rem;
+//     padding-right: 20px;
+//   }
+//
+//   .check-activity {
+//     display: flex;
+//     justify-content: space-between;
+//
+//     label {
+//       font-size: 1.3rem;
+//     }
+//   }
+//
+//   .form-group-city {
+//     margin-bottom: 35px;
+//     display: flex;
+//     align-items: center;
+//
+//     .form-item-city {
+//       margin: 0;
+//     }
+//
+//     .btn-geoloc {
+//       padding: 0 15px;
+//     }
+//     .btn-geoloc, .btn-geoloc:hover, .btn-geoloc:focus {
+//       color: $brand-anthracite-1;
+//     }
+//   }
+// }
+//
+// @include media-breakpoint-down(md) {
+//     .geolocation-section {
+//       flex-wrap: wrap;
+//     }
+//  }
+//
+// @include media-breakpoint-up(lg) {
+//   .probesys-geolocation {
+//     border-radius: 14px;
+//     max-width: 365px;
+//     display: block;
+//     position: relative;
+//     left: 35px;
+//     z-index: 11;
+//
+//     .collapse {
+//       display: block !important;
+//     }
+//     .form-geolocation {
+//       padding: 35px;
+//       // padding-left: 0;
+//     }
+//     .custom-submit-container {
+//       text-align: center;
+//     }
+//     .custom-submit, .search-ajax {
+//       margin: 0;
+//     }
+//   }
+//   .filter-geolocation {
+//     display: none;
+//   }
+// }
+//
+//
+//
+// /* --------------------------------------------/
+// / ! CARD CONTENT /
+// /---------------------------------------------*/
+// .leaflet-popup {
+//   display: none;
+// }
+//
+// .card-separator {
+//   border-bottom: 1px solid $brand-gray-2;
+//   margin-bottom: 15px;
+//   padding-bottom: 15px;
+// }
+// .card-link-content {
+//   text-align: center;
+//   padding-top: 25px;
+// }
+// .map-content {
+//   overflow: hidden;
+// }
+//
+// .card-info-carto {
+//   position: absolute;
+//   right: 0;
+//   top: 0;
+//   z-index: 10;
+//   background-color: $brand-gray-light;
+//   height: 100%;
+//   width: 300px;
+//   padding: 20px 15px;
+//
+//
+//   transform: translate(300px);
+//   -webkit-transition: all 0.3s ease-in-out;
+//   -moz-transition: all 0.3s ease-in-out;
+//   -o-transition: all 0.3s ease-in-out;
+//   transition: all 0.3s ease-in-out;
+//
+//   .type-card-info, .custom-link, .la-angle-right {
+//     text-transform: uppercase;
+//     font-size: 1.3rem;
+//   }
+//   .type-card-info {
+//     padding-right: 30px;
+//   }
+//
+//   .la-times, .la-phone-alt {
+//     font-size: 2.5rem;
+//   }
+//
+//   .address-card-info, .content-card-info {
+//     font-size: 1.6rem;
+//     margin-bottom: 15px;
+//   }
+//
+//   #card-close {
+//     cursor: pointer;
+//     position: absolute;
+//     right: 15px;
+//     top: 15px;
+//   }
+// }
+//
+// .card-view {
+//   transform: translate(0px);
+//
+// }
+//
+// .next-mobile, .previous-mobile {
+//   display: none;
+// }
+//
+//
+// @include media-breakpoint-down(md) {
+//   .map-content {
+//     padding: 0;
+//   }
+// }
+//
+// @include media-breakpoint-down(md) {
+//   .next-mobile, .previous-mobile {
+//     display: block;
+//     text-transform: uppercase;
+//     color: $brand-anthracite-1; // TODO changer couleur
+//   }
+//   .panels {
+//     display: flex;
+//     flex-wrap: nowrap;
+//     position: relative;
+//
+//     .panel {
+//       background-color: $brand-gray-2;
+//       height: 100%;
+//       width: 100%;
+//     }
+//
+//     .second-panel {
+//       position: absolute;
+//       -webkit-transition: all 0.3s ease-in-out;
+//       -moz-transition: all 0.3s ease-in-out;
+//       -o-transition: all 0.3s ease-in-out;
+//       transition: all 0.3s ease-in-out;
+//       min-width: 350px;
+//     }
+//
+//     .panel-hide {
+//       transform: translate(200%);
+//     }
+//
+//     .panel-show {
+//       transform: translate(0px);
+//
+//     }
+//
+//   }
+//
+// }

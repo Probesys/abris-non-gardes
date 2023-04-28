@@ -1,0 +1,156 @@
+{% extends 'admin/base-admin.html.twig' %}
+
+{% block title %}{{user}}{% endblock %}
+
+{% block breadcrumb %}
+   <li class="breadcrumb-item"><a href="{{ path('user_index', {'userType' : userType})}}">{{ 'Entities.User.title'|trans }}</a> </li>
+   <li class="breadcrumb-item active">{{ user }}</li>
+{% endblock breadcrumb %}
+
+{% block body %}
+    <section class="content">
+      <div class="container-fluid">
+        <div class="row">
+          <div class="col-md-3">
+
+            <!-- Profile Image -->
+            <div class="card card-primary card-outline">
+              <div class="card-body box-profile">
+                 {%  if user.photo %}
+                <div class="text-center">
+                  <img class="profile-user-img img-fluid img-circle" src="{{ asset('files/users/' ~ user.id ~ '/' ~ user.photo.fileName) }}" alt="{{user}}">
+                </div>
+                  {%  endif %}
+                <h3 class="profile-username text-center">{{user}}</h3>
+
+                <p class="text-muted text-center">{{user.email}}</p>
+
+                <ul class="list-group list-group-unbordered mb-3">
+                  <li class="list-group-item">
+                     <b>Messages</b> <a class="float-right">{{ userMessages|length }}</a>
+                  </li>
+                  <li class="list-group-item">
+                    <b>Dysfonctionnements</b> <a class="float-right">{{ user.dysfonctionnements|length }}</a>
+                  </li>
+
+                </ul>
+
+                <a href="{{ path('user_edit', {'id': user.id, 'userType':userType}) }}" class="btn btn-success btn-block"><b>{{ 'Generics.actions.edit'|trans() }}</b></a>
+
+              </div>
+              <!-- /.card-body -->
+            </div>
+            <!-- /.card -->
+
+            <!-- About Me Box -->
+            <div class="card card-primary">
+              <div class="card-header">
+                <h3 class="card-title">Informations</h3>
+              </div>
+              <!-- /.card-header -->
+              <div class="card-body">
+                <strong><i class="fas fa-universal-access mr-1"></i> {{ 'Entities.User.fields.roles'|trans() }}</strong>
+
+                {%  if is_granted('ROLE_ADMIN') %}
+                   <form action="{{ path('user_changeRole', {'id':user.id}) }}" method="POST" class="form-horizontal">
+
+                      <div class="form-group row">
+                      <select name="newRole">
+                         {% for role in roles %}
+                            <option value="{{ role }}" {% if role in user.roles %} selected {% endif %}>{{ ('Entities.User.roles.'~role)|trans() }}</option>
+                         {%  endfor %}
+                      </select>
+                      </div>
+                      <input type="submit" class="btn btn-primary" value="{{'Generics.actions.change'|trans()}}">
+                   </form>
+                {% else %}
+                   <p class="text-muted">
+                     {%  for role in user.roles %}
+                        {{ ('Entities.User.roles.'~role)|trans() }}
+                     {%  endfor %}
+                  </p>
+                {% endif %}
+
+                <hr>
+               {%  if user.userType %}
+                 <strong><i class="fas fa-user-tag mr-1"></i> {{ 'Entities.User.fields.userType'|trans() }}</strong>
+
+                <p class="text-muted">
+                  {{  user.userType }}
+                </p>
+
+                <hr>
+                 {% endif %}
+
+                <strong><i class="fas fa-map-marker-alt mr-1"></i> {{ 'Entities.Coordinate.title'|trans() }}</strong>
+                {%  if user.coordinate %}
+                <p class="text-muted">{{ user.coordinate.getFormatedAddress() }}</p>
+                {%  endif %}
+                <hr>
+
+
+              </div>
+              <!-- /.card-body -->
+            </div>
+            <!-- /.card -->
+          </div>
+          <!-- /.col -->
+          <div class="col-md-9">
+            <div class="card">
+              <div class="card-header p-2">
+                <ul class="nav nav-pills">
+
+                  <li class="nav-item"><a class="nav-link active" href="#settings" data-toggle="tab">Settings</a></li>
+                </ul>
+              </div><!-- /.card-header -->
+              <div class="card-body">
+                <div class="tab-content">
+
+
+                  <div class="tab-pane active " id="settings">
+                    <form class="form-horizontal" action="{{ path('user_edit', {'id': user.id, 'userType': userType}) }}" method="post">
+
+                        {{ form_widget(form) }}
+                        {%   if object.photo %}
+                           <div class="filtr-item col-sm-2" data-category="1" data-sort="">
+                              <div>
+                                 <span class="btn-delete-photo">
+                                    <a class="btn btn-danger btn-sm"
+                                       href="{{ path('admin_user_delete_photo', {'id':object.photo.id }) }}?_token={{ csrf_token('delete_photo' ~ object.photo.id)}}"
+                                       data-action="delete"
+                                       title="{{ 'Generics.actions.remove'|trans }}"
+                                       data-container="body"
+                                       data-confirm="{{ 'Generics.messages.confirmationDeleteMessageQuestion'|trans }}" >
+                                       <i class="far fa-trash-alt "></i>
+                                    </a>
+                                 </span>
+                                 <a href="{{ asset('files/users/' ~ object.id ~ '/' ~ object.photo.fileName) }}" data-toggle="lightbox" data-title="{{ object.photo.fileName }}">
+                                    <img class="profile-user-img img-fluid img-circle" src="{{ asset('files/users/' ~ object.id ~ '/' ~ object.photo.fileName) }}" alt="{{object.photo.fileName}}"/>
+                                 </a>
+                              </div>
+
+                           </div>
+                        {% endif %}
+                      <div class="form-group row">
+                        <div class="offset-sm-2 col-sm-10">
+                          <input type="submit" class="btn btn-primary" value="{{'Generics.actions.save'|trans()}}">
+                        </div>
+                      </div>
+                    </form>
+                  </div>
+                  <!-- /.tab-pane -->
+                </div>
+                <!-- /.tab-content -->
+              </div><!-- /.card-body -->
+            </div>
+            <!-- /.nav-tabs-custom -->
+          </div>
+          <!-- /.col -->
+        </div>
+        <!-- /.row -->
+      </div><!-- /.container-fluid -->
+    </section>
+
+
+
+{% endblock %}

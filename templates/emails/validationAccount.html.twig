@@ -1,0 +1,7 @@
+{% extends 'base-email.html.twig' %}
+
+{% block body %}
+<h3>{{ 'Generics.text.hello'|trans() }} {{ user }},</h3>
+{{ 'Security.messages.yourAccountisValidate'|trans }} <a href="{{ path('login') }}">{{ 'Security.actions.signIn'|trans }}</a>
+{% endblock body %}
+

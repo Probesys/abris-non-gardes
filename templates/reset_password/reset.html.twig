@@ -1,0 +1,12 @@
+{% extends 'base-security.html.twig' %}
+
+{% block title %}{{'Security.labels.resetYourPassword'|trans()}}{% endblock %}
+
+{% block body %}
+    <p class="login-box-msg">{{'Security.labels.resetYourPassword'|trans()}}</p>
+
+    {{ form_start(resetForm) }}
+        {{ form_row(resetForm.plainPassword) }}
+        <button class="btn btn-primary">{{'Security.actions.resetPassword'|trans()}}</button>
+    {{ form_end(resetForm) }}
+{% endblock %}

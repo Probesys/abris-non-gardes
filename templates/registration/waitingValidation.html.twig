@@ -1,0 +1,19 @@
+{% extends 'base-security.html.twig' %}
+
+{% block title %}{{'Security.labels.registrationWaitingValidation'|trans()}}{% endblock %}
+
+{% block body %}
+    <p class="login-box-msg">{{'Security.labels.registrationWaitingValidation'|trans()}}</p>
+
+    <div class="alert alert-info alert-dismissible alert-auto-hidden" role="alert">
+       <strong>{{ 'Generics.text.hello'|trans()|capitalize }} {{ app.user }},<br/></strong>
+       <div id="alert-box">
+
+                 {{'Security.messages.accountCreatedAndWaitingAdminValidation'|trans()|raw}}
+       </div>
+    </div>
+
+
+    <a href="{{ path('logout') }}" class="btn btn-primary btn-block">{{'Security.actions.logout'|trans()}}</a>
+
+{% endblock %}

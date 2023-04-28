@@ -1,0 +1,63 @@
+{% extends 'base-security.html.twig' %}
+
+{% block title %}{{ 'Generics.actions.logIn'|trans() }}{% endblock %}
+
+{% block body %}
+
+   <p class="login-box-msg">{{ 'Security.labels.signInToStartYourSession'|trans() }}</p>
+
+      <form  method="post">
+         {% if error %}
+            <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
+        {% endif %}
+        <div class="input-group mb-5">
+          <input type="email" value="{{ last_username }}" name="email" id="inputEmail" class="form-control" placeholder="{{ 'Security.fields.email'|trans() }}" required autofocus>
+          <div class="input-group-append">
+            <div class="input-group-text">
+              <span class="fas fa-envelope"></span>
+            </div>
+          </div>
+        </div>
+        <div class="input-group mb-5">
+          <input type="password" name="password" id="inputPassword" class="form-control" placeholder="{{ 'Security.fields.password'|trans() }}" required>
+          <div class="input-group-append">
+            <div class="input-group-text">
+              <span class="fas fa-lock"></span>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-6">
+            <div class="icheck-primary">
+              <input type="checkbox" id="remember" name="_remember_me">
+              <label for="remember">
+                {{ 'Security.fields.rememberMe'|trans() }}
+              </label>
+            </div>
+          </div>
+           <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
+
+          <!-- /.col -->
+          <div class="col-6">
+            <button type="submit" class="btn btn-primary btn-block">{{ 'Security.actions.signIn'|trans() }}</button>
+          </div>
+          <!-- /.col -->
+        </div>
+      </form>
+
+
+
+      <p class="mb-1 text-center">
+        <a class="forgot-password" href="{{ path('app_forgot_password_request') }}">{{ 'Security.labels.iForgotMyPassword'|trans() }} ?</a>
+      </p>
+
+      <p class="m-2">
+        <a class="btn btn-secondary btn-block" href="{{ path('app_register') }}">{{ 'Security.labels.register'|trans() }}</a>
+      </p>
+      
+      <p class="m-2">
+          <a href="javascript:void(0)" class="ajax_content btn btn-secondary btn-block" data-url-content="{{ path('ajax_page', {'id':'1'}) }}">A propos</a>
+      </p>    
+
+
+{% endblock %}

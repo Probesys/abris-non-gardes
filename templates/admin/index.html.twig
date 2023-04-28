@@ -1,0 +1,23 @@
+{% extends 'admin/base-admin.html.twig' %}
+
+{% block title %}
+   {{ 'Generics.labels.appName'|trans() }}
+{% endblock %}
+
+{% block breadcrumb %}
+
+
+{% endblock breadcrumb %}
+
+{% block body %}
+
+   <div class="row">
+      <div class="col-sm-6">
+         {% include 'admin/homepage/_lastDysfonctionnements.html.twig' with {'lastDysfonctionnements': lastDysfonctionnements} %}
+      </div>
+      <div class="col-sm-6">
+         {% include 'admin/homepage/_lastMessages.html.twig' with {'messages': lastMessages} %}
+      </div>
+   </div>
+
+{% endblock body %}

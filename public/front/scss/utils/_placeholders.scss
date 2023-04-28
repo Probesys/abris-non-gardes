@@ -1,0 +1,20 @@
+/* ========================================================================*/
+/* ! PLACEHOLDERS */
+/* ========================================================================*/
+
+
+/* --------------------------------------------*/
+/* ! TYPOGRAPHY */
+/*---------------------------------------------*/
+
+/* ! LINKS */
+$main-nav-link-font-size: 1.6rem;
+%typo-main-nav-links {
+  font-family: Roboto, sans-serif;
+  font-weight: 500;
+  font-size: $main-nav-link-font-size;
+  letter-spacing: 0.03em;
+  line-height: 1.45em;
+  text-transform: uppercase;
+  color: #FFFFFF;
+}

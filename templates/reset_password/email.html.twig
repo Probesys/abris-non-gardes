@@ -1,0 +1,13 @@
+<h1>{{ 'Generics.text.hello'|trans()|capitalize }}!</h1>
+
+<p>
+    {{'Security.messages.toResetYourPasswordPleaseVisit'|trans()}}
+    <a href="{{ url('app_reset_password', {token: resetToken.token}) }}">{{ 'Generics.text.here'|trans() }}</a></br>
+    {{'Security.messages.thisLinkExpireIn'|trans({'%duration%': tokenLifetime|date('g')})}}...
+</p>
+
+<p>
+    Gestion abris non gardés du Vercors.
+    <br/><br/><br/>
+    <i>Ce mail est envoyé à partir d'une adresse email générique, merci de ne pas y répondre directement.</i>
+</p>

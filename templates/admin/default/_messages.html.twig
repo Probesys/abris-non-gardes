@@ -1,0 +1,14 @@
+<div class="direct-chat-messages">
+    {% for message in messages %}
+        <div class="direct-chat-msg {% if message.createdBy.id != app.user.id %}right{% endif%} " id="message-{{message.id}}">
+            <div class="direct-chat-infos clearfix">
+                <span class="direct-chat-name float-left"> {{ message.createdBy.firstname }}</span>
+                <span class="direct-chat-timestamp float-right">{{ message.created | date('d/m/Y H:i') }}</span>
+            </div>
+
+            <div class="direct-chat-text">
+            {{ message.message|raw }}
+            </div>
+        </div>
+    {% endfor %}
+</div>

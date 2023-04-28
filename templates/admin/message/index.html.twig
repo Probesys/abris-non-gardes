@@ -1,0 +1,75 @@
+{% extends 'admin/base-admin.html.twig' %}
+
+{% block title %}
+   {{ 'Entities.Message.title'|trans }}
+{% endblock %}
+
+{% block breadcrumb %}
+   <li class="breadcrumb-item active">{{ 'Entities.Message.title'|trans }}</li>
+{% endblock breadcrumb %}
+
+{% block titleAction %}
+
+{% endblock titleAction %}
+
+
+
+{% block body %}
+
+   <div class="row">
+      <div class="col-md-12">
+
+         <!-- /.panel-heading -->
+         {% include 'admin/default/blocFilter.html.twig'  %}
+
+         <form action="{{ path('admin_message_batch') }}" action="post">
+            {% include 'admin/default/blockBatchActions.html.twig'  %}
+
+
+            <div class="table-responsive">
+               <table class="table table-striped table-condensed table-hover table-bordered table-sm">
+                  <thead>
+                     <tr>
+                        <th id="sf_admin_list_batch_actions"><input id="sf_admin_list_batch_checkbox" type="checkbox" title="Check all" onclick="checkAll();"></th>
+
+                        <th>{{ knp_pagination_sortable(pagination, 'Date', 'm.created') }} </th>
+                        <th>{{ knp_pagination_sortable(pagination, 'Entities.Message.fields.subject'|trans, 'm.subject') }} </th>
+                        <th>{{ knp_pagination_sortable(pagination, 'Entities.Dysfonctionnement.fields.abris'|trans, 'a.slug') }} </th>
+                        <th>{{ knp_pagination_sortable(pagination, 'Entities.Message.fields.discussion'|trans, 'd.slug') }} </th>
+
+                        <th id="sf_admin_list_actions">{{'Generics.labels.actions'|trans()}}</th>
+                     </tr>
+                  </thead>
+                  <tbody>
+                     {% for message in pagination %}
+
+                        <tr>
+                           <td><input type="checkbox" name="ids[]" value="{{ message.id }}" class="sf_admin_batch_checkbox"></td>
+                           <td>{{ message.created|date('d-m-Y') }}</td>
+                           <td><a href='{{ path('admin_discussion_show', {'id': message.discussion.id}) }}#message-{{ message.id }}'>{{ message.subject }}</a>
+                           <td><a href="{{ path('admin_abris_edit', {'id': message.discussion.abris.id}) }}">{{ message.discussion.abris }}</a></td>
+                           <td><a href='{{ path('admin_discussion_show', {'id': message.discussion.id}) }}'>{{ message.discussion }}</a>
+                           <td>
+                              <a class="btn btn-danger btn-sm ajax-request" href="{{ path('admin_message_delete', {'id':message.id }) }}" data-action="delete" data-toggle="tooltip" data-placement="top" title="{{ 'Generics.actions.remove'|trans }}" data-container="body" data-confirm="{{ 'Generics.messages.confirmationDeleteMessageQuestion'|trans }}" >
+                                 <i class="fas fa-trash-alt"></i>
+                              </a>
+                           </td>
+                        </tr>
+                     {% else %}
+                        <tr>
+                           <td colspan="7">{{ 'Generics.messages.no_records_found'|trans }}</td>
+                        </tr>
+                     {% endfor %}
+                  </tbody>
+               </table>
+            </div>
+         </form>
+         <div class="navigation text-center">
+            {{ knp_pagination_render(pagination) }}
+         </div>
+         <!-- /.panel-body -->
+      </div>
+   </div>
+
+
+{% endblock %}

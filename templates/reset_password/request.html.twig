@@ -1,0 +1,21 @@
+{% extends 'base-security.html.twig' %}
+
+{% block title %}{{'Security.labels.resetYourPassword'|trans()}}{% endblock %}
+
+{% block body %}
+    {% for flashError in app.flashes('reset_password_error') %}
+        <div class="alert alert-danger" role="alert">{{ flashError }}</div>
+    {% endfor %}
+    <p class="login-box-msg">{{'Security.labels.resetYourPassword'|trans()}}</p>
+
+    {{ form_start(requestForm) }}
+        {{ form_row(requestForm.email) }}
+        <div>
+            <small>
+                {{'Security.messages.enterEmailtoReceiveResetPasswordEmail'|trans()}}.
+            </small>
+        </div>
+
+        <button class="btn btn-primary mt-3">{{'Security.labels.sendPasswordResetEmail'|trans()}}</button>
+    {{ form_end(requestForm) }}
+{% endblock %}

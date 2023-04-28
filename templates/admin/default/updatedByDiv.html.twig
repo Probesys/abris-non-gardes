@@ -1,0 +1,13 @@
+{% if object.updated %}
+    <div class="alert alert-info">
+        {{'Generics.labels.lastModificationOn'|trans}} {{object.updated|date('d/m/Y H:i')}}
+        {% if(object.updatedBy) %}
+            {{'Generics.text.by'|trans}} {{ object.updatedBy.username }}.
+        {% endif %}
+        {#
+        <a  href="{{ path('version_liste', {'objectId': object.id, 'class':object.getClassName()}) }}" title="{{'actions.showVersion'|trans}}">
+            {{'actions.showVersion'|trans}}
+        </a>
+        #}
+    </div>
+{% endif %}

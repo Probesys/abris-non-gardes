@@ -1,0 +1,39 @@
+.login-page {
+   font-family: Roboto;
+   .login-box {
+
+
+      .login-logo{
+         font-family: Roboto;
+         font-style: normal;
+         font-weight: normal;
+         font-size: 24px;
+         line-height: 28px;
+
+         background: $primary;
+         color: $secondary;
+      }
+      .login-card-body{
+
+         .login-box-msg {
+            font-size: 14px;
+            line-height: 179%;
+            text-align: center;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+            color: $white;
+         }
+         background-color: $secondary;
+         color: $white;
+         .form-control{
+            font-weight:normal;
+         }
+         .forgot-password {
+            color: $white;
+            font-weight: bold;
+         }
+      }
+   }
+}
+
+

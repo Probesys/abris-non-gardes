@@ -1,0 +1,147 @@
+/* ========================================================================*/
+/* ! MAIN NAVIGATION */
+/* ========================================================================*/
+
+
+/* --------------------------------------------*/
+/* ! NAVIGATION */
+/*---------------------------------------------*/
+
+.main-nav {
+  position: fixed;
+  padding-top: 80px;
+  top: 0; left: 0;
+  height: 100vh;
+  z-index: 20;
+  overflow-y: auto;
+  background-color: $brand-anthracite;
+  transition: transform 0.3s cubic-bezier(0.62, 0.28, 0.23, 0.99);
+
+  @include media-breakpoint-down(lg) {
+    width: 100vw;
+  }
+
+  @include media-breakpoint-up(md) {
+    width: 375px;
+  }
+
+  .main-menu {
+    padding: 0 10px 0 10px;
+  }
+
+  
+}
+div#accordion > h2,
+div#custom-page > h2,
+div#dysfonctionnement > h2,
+div#discussion > h2
+{
+  margin-left: 60px; 
+  margin-top: 10px;
+  margin-bottom: 20px;
+}
+
+.main-nav-item {
+  padding: 0 8px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.10);
+  transition: padding-left 0.1s cubic-bezier(0.62, 0.28, 0.23, 0.99);
+
+  &:hover {
+    padding-left: 13px;
+  }
+
+  .main-nav-link {
+    display: inline-block;
+    padding: 15px 8px;
+    @extend %typo-main-nav-links;
+    &:hover, &:focus {
+      text-decoration: none;
+    }
+
+    i {
+      padding-left: 2px;
+      font-size: 1.12em;
+    }
+  }
+}
+
+/* ! HIDING NAV */
+body:not(.nav-open) {
+  .main-nav {
+    transform: translateX(-100%);
+  }
+}
+
+
+
+
+/* --------------------------------------------*/
+/* ! BTN BURGER */
+/*---------------------------------------------*/
+.menu-btn {
+  display: inline-block;
+  width: 55px;
+  height: 55px;
+  position: fixed;
+  top: 0; left: 0;
+  z-index: 30;
+  background-color: #fff;
+  box-shadow: 0px 0px 6px rgba(0, 0, 0, 0.21);
+
+
+    .burger {
+      display: inline-block;
+    	position: relative;
+    	width:20px;
+    	height: 16px;
+    	display: block;
+    	padding:0;
+    	margin:0;
+    	cursor:pointer;
+        span {
+        	background: $secondary;
+        	height:2px;
+        	width:100%;
+        	display:inline-block;
+        	margin:0;
+        	padding:0;
+        	opacity:1;
+        	position:absolute;
+        	transition: 0.3s;
+            &:last-child{
+            	margin-bottom:0;
+            }
+        }
+        .first-bar{
+            top:0;
+        }
+        .second-bar{
+            top:0.7rem;
+        }
+        .third-bar{
+            top:1.4rem;
+        }
+        .first-bar.open{
+            -webkit-transform: rotate(45deg);
+            -moz-transform: rotate(45deg);
+            -ms-transform: rotate(45deg);
+            -o-transform: rotate(45deg);
+            transform: rotate(45deg);
+            transition: 0.3s;
+            top:0.7rem;
+        }
+        .second-bar.open{
+            opacity:0;
+            transition: 0.3s;
+        }
+        .third-bar.open{
+            -webkit-transform: rotate(-45deg);
+            -moz-transform: rotate(-45deg);
+            -ms-transform: rotate(-45deg);
+            -o-transform: rotate(-45deg);
+            transform: rotate(-45deg);
+            transition: 0.4s;
+            top:0.7rem;
+        }
+    }
+}

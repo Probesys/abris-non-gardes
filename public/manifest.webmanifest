@@ -1,0 +1,22 @@
+{
+    "name": "Abris non gardés du Vercors",
+    "short_name": "Abris non gardés",
+    "description": "Application gestion abris non gardés du Vercors",
+    "icons": [
+        {
+          "src": "img/marker-icon.2273e3d8.png",
+          "sizes": "25x41",
+          "type": "image/png"
+        },
+        {
+          "src": "img/logo-512.png",
+          "sizes": "512x512",
+          "type": "image/png"
+        }        
+        ],
+    "start_url": "/abris",
+    "scope": "/",
+    "display": "standalone",
+    "background_color": "#472A69",
+    "theme_color": "#472A69"
+  }

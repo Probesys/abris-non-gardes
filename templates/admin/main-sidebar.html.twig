@@ -1,0 +1,144 @@
+{% set currentRoute = app.request.get('_route') %}
+{% set currentRouteBase = currentRoute|split('_')|first %}
+
+
+<!-- Sidebar -->
+<div class="sidebar">
+
+
+   <!-- Sidebar Menu -->
+   <nav class="mt-2">
+      <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
+         <!-- Add icons to the links using the .nav-icon class
+              with font-awesome or any other icon font library -->
+
+         <li class="nav-item">
+            <a href="{{ path('admin_abris_index') }}" class="nav-link {% if currentRoute == 'admin_abris_index' %}active{% endif %}">
+               <i class="nav-icon fas fa-home"></i>
+               <p>{{ 'Navigation.abris'|trans() }}</p>
+            </a>
+         </li>
+
+         <li class="nav-item">
+            <a href="{{ path('dysfonctionnement_index') }}" class="nav-link {% if currentRoute == 'dysfonctionnement_index' %}active{% endif %}">
+               <i class="nav-icon fas fa-bug"></i>
+               <p>{{ 'Navigation.dysfonctionnement'|trans() }}</p>
+            </a>
+         </li>
+
+         <li class="nav-item">
+            <a href="{{ path('discussion_index') }}" class="nav-link {% if currentRoute == 'discussion_index' %}active{% endif %}">
+               <i class="nav-icon fas fa-comments "></i>
+               <p>{{ 'Navigation.discussion'|trans() }}</p>
+            </a>
+         </li>
+
+
+         {% if is_granted('ROLE_ADMIN') %}
+         <li class="nav-item has-treeview {% if currentRouteBase in ['user']%}menu-open{% endif %}">
+            <a href="#" class="nav-link">
+               <i class="nav-icon fas fa-users"></i>
+               <p>
+                  {{ 'Navigation.users'|trans() }}
+                  <i class="fas fa-angle-left right"></i>
+               </p>
+            </a>
+            <ul class="nav nav-treeview ">
+               <li class="nav-item ">
+                  <a href="{{ path('user_index', {'userType' : 'waiting_validation'}) }}" class="nav-link {% if currentRoute == '' %}active{% endif %}">
+                     <i class="far fa-circle nav-icon"></i>
+                     <p>{{ 'Navigation.usersWaitingValidation'|trans() }}</p>
+                  </a>
+               </li>
+               <li class="nav-item ">
+                  <a href="{{ path('user_index', {'userType' : 'user'}) }}" class="nav-link {% if currentRoute == '' %}active{% endif %}">
+                     <i class="far fa-circle nav-icon"></i>
+                     <p>{{ 'Navigation.usersNormal'|trans() }}</p>
+                  </a>
+               </li>
+               <li class="nav-item">
+                   <a href="{{ path('user_index', {'userType' : 'owner'}) }}" class="nav-link {% if currentRoute == '' %}active{% endif %}">
+                     <i class="far fa-circle nav-icon"></i>
+                     <p>{{ 'Navigation.usersProprio'|trans() }}</p>
+                  </a>
+               </li>
+               <li class="nav-item">
+                   <a href="{{ path('user_index', {'userType' : 'manager'}) }}" class="nav-link {% if currentRoute == '' %}active{% endif %}">
+                     <i class="far fa-circle nav-icon"></i>
+                     <p>{{ 'Navigation.usersGestionnaire'|trans() }}</p>
+                  </a>
+               </li>
+               <li class="nav-item">
+                   <a href="{{ path('user_index', {'userType' : 'admin'}) }}" class="nav-link {% if currentRoute == '' %}active{% endif %}">
+                     <i class="far fa-circle nav-icon"></i>
+                     <p>{{ 'Navigation.usersAdmin'|trans() }}</p>
+                  </a>
+               </li>
+
+            </ul>
+         </li>
+
+         <li class="nav-item">
+            <a href="{{ path('stats_index') }}" class="nav-link  {% if currentRoute == 'stats_index' %}active{% endif %}">
+               <i class="nav-icon fas fa-chart-bar"></i>
+               <p>
+                  {{ 'Navigation.statistiques'|trans() }}
+
+               </p>
+            </a>
+         </li>
+
+         <li class="nav-item has-treeview {% if currentRouteBase in ['listingType', 'listingValue', 'helpMessage', 'page', 'territory', 'city']%}menu-open{% endif %}">
+            <a href="#" class="nav-link">
+               <i class="nav-icon fas fa-tools"></i>
+               <p>
+                  {{ 'Navigation.administration'|trans() }}
+                  <i class="fas fa-angle-left right"></i>
+               </p>
+            </a>
+            <ul class="nav nav-treeview ">
+               <li class="nav-item ">
+                  <a href="{{ path('listingType_index') }}" class="nav-link {% if currentRouteBase == 'listingType' %}active{% endif %}">
+                     <i class="far fa-circle nav-icon"></i>
+                     <p>{{ 'Navigation.listTypesAdmin'|trans() }}</p>
+                  </a>
+               </li>
+               <li class="nav-item">
+                   <a href="{{ path('listingValue_index') }}" class="nav-link {% if currentRouteBase == 'listingValue' %}active{% endif %}">
+                     <i class="far fa-circle nav-icon"></i>
+                     <p>{{ 'Navigation.listingValueAdmin'|trans() }}</p>
+                  </a>
+               </li>
+               <li class="nav-item">
+                   <a href="{{ path('helpMessage_index') }}" class="nav-link {% if currentRouteBase == 'helpMessage' %}active{% endif %}">
+                     <i class="far fa-circle nav-icon"></i>
+                     <p>{{ 'Navigation.helpMessageAdmin'|trans() }}</p>
+                  </a>
+               </li>
+               <li class="nav-item">
+                   <a href="{{ path('page_index') }}" class="nav-link {% if currentRouteBase == 'page' %}active{% endif %}">
+                     <i class="far fa-circle nav-icon"></i>
+                     <p>{{ 'Navigation.pagesAdmin'|trans() }}</p>
+                  </a>
+               </li>
+               <li class="nav-item">
+                   <a href="{{ path('territory_index') }}" class="nav-link {% if currentRouteBase == 'territory' %}active{% endif %}">
+                     <i class="far fa-circle nav-icon"></i>
+                     <p>{{ 'Navigation.territoriesAdmin'|trans() }}</p>
+                  </a>
+               </li>
+               <li class="nav-item">
+                   <a href="{{ path('city_index') }}" class="nav-link {% if currentRouteBase == 'city' %}active{% endif %}">
+                     <i class="far fa-circle nav-icon"></i>
+                     <p>{{ 'Navigation.citiesAdmin'|trans() }}</p>
+                  </a>
+               </li>
+
+            </ul>
+         </li>
+          {% endif %}
+      </ul>
+   </nav>
+   <!-- /.sidebar-menu -->
+</div>
+

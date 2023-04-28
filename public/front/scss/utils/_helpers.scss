@@ -1,0 +1,16 @@
+/* ========================================================================/
+/ !   HELPERS
+/ ========================================================================*/
+
+.radius {
+  border-radius: 14px;
+  overflow: hidden;
+}
+
+.grabbing{
+  cursor: grabbing;
+}
+
+.bg-dark {
+  background-color: $brand-anthracite !important;
+}
