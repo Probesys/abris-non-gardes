@@ -15,7 +15,13 @@ Emails:
    Discussion:
       newDiscussion:
          subject: "Nouvelle discussion #%id% concernant l'abris %abris%"
-         body: "Une nouvelle discussion a été créée concernant l'abri %abris%. Vous pouvez la consulter <a href='%url%'>ici</a>."     
+         body: "Une nouvelle discussion a été créée concernant l'abri %abris%. Vous pouvez la consulter <a href='%url%'>ici</a>."  
+   Abris:
+       updateNotification:
+         subject: "Modification de l'abris %abris% #%id%"
+         body: "Bonjour,\n
+            L'abri ''%abris%'' vient d'être modifié par '%currentUser%'.\n
+            Vous pouvez le consulter <a href='%url%'>ici</a>."  
 Security:
    actions:
       logIn: Authentification
