@@ -4,17 +4,20 @@ namespace App\Controller\Admin;
 
 use App\Entity\Abris;
 use App\Entity\UploadedDocument;
+use App\Entity\User;
 use App\Form\AbrisFormType as AbrisFormType;
 use App\FormFilter\AbrisFilterType;
 use App\Repository\AbrisRepository;
 use App\Service\FileUploader;
+use Doctrine\ORM\EntityManagerInterface;
 use Knp\Component\Pager\PaginatorInterface;
+use Swift_Message;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController as Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Contracts\Translation\TranslatorInterface;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
+use Symfony\Contracts\Translation\TranslatorInterface;
 use function Safe\unlink;
 
 /**
@@ -22,6 +25,14 @@ use function Safe\unlink;
  */
 class AbrisController extends Controller
 {
+    
+    /** @var EntityManagerInterface */
+    private $em;
+    
+    public function __construct(EntityManagerInterface $em)
+    {
+        $this->em = $em;
+    }
 
     /**
      * @Route("/", name="admin_abris_index", methods="GET|POST")
@@ -113,7 +124,7 @@ class AbrisController extends Controller
     /**
      * @Route("/{id}/edit", name="admin_abris_edit", methods="GET|POST")
      */
-    public function editAction(Request $request, Abris $abris, TranslatorInterface $translator, FileUploader $fileUploader): Response
+    public function editAction(Request $request, Abris $abris, TranslatorInterface $translator, FileUploader $fileUploader, \Swift_Mailer $mailer): Response
     {
         $this->checkAccess($abris, $translator);
         $form = $this->createForm(AbrisFormType::class, $abris, ['translator' => $translator]);
@@ -128,6 +139,10 @@ class AbrisController extends Controller
             }
             $this->getDoctrine()->getManager()->flush();
             $this->addFlash('success', 'Generics.flash.editSuccess');
+            // faire en sorte que les admin soient avertis par mail lors des mises à jour sur les abris par les gestionnaires/propriétaires
+            if($this->isGranted('ROLE_OWNER') || $this->isGranted('ROLE_MANAGER')){
+                $this->sendEditNotificationEmail($abris, $translator, $mailer);
+            }
 
             return $this->redirectToRoute('admin_abris_index');
         }
@@ -214,6 +229,44 @@ class AbrisController extends Controller
     {
         if (!$this->isGranted('ROLE_ADMIN') && !($this->getUser()->getGestionnaireAbris())->contains($abris) && !($this->getUser()->getProprietaireAbris())->contains($abris)) {
             throw new AccessDeniedException($translator->trans('Security.messages.accessDeniedException'));
+        }
+    }
+    
+    private function sendEditNotificationEmail($abris, $translator, $mailer)
+    {
+        // recherche des admins
+        $filter = ['role'=>'ROLE_ADMIN'];
+        $admins = $this->em->getRepository(User::class)->search($filter);
+        
+        $destsMail = [];
+        foreach($admins as $admin){
+            $destsMail[] = $admin->getEmail();
+        }
+        
+        $currentUser = $this->getUser(); 
+        $baseUrl = "https://abris.parc-du-vercors.fr";
+        $url = $baseUrl.$this->generateUrl('admin_abris_edit', [
+            'id' => $abris->getId(),
+        ]);
+
+
+        $subject = str_replace(['%id%','%abris%'], [$abris, $currentUser], $translator->trans('Emails.Abris.updateNotification.subject'));
+        $body = str_replace(['%id%','%abris%','%url%','%currentUser%'], [$abris->getId(), $abris, $url, $currentUser], $translator->trans('Emails.Abris.updateNotification.body'));
+        
+        try {
+            $message = (new \Swift_Message($subject))
+                ->setFrom($this->getParameter('app.genericMail'))
+                ->setTo($destsMail)
+                ->setBody(
+                    $this->renderView(
+                        'emails/generics.html.twig',
+                        ['subject'=>$subject, 'body' => $body]
+                    ),
+                    'text/html'
+                ) ;
+            $mailer->send($message);
+        } catch (Exception $exc) {
+            echo "Imposssible d'envoyer le mail aux destinataires" . $exc->getTraceAsString();
         }
     }
 }
