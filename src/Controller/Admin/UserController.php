@@ -2,26 +2,39 @@
 
 namespace App\Controller\Admin;
 
-use App\Entity\User;
 use App\Entity\UploadedDocument;
+use App\Entity\User;
 use App\Form\UserFormType as UserFormType;
 use App\FormFilter\UserFilterType;
-use App\Repository\UserRepository;
 use App\Repository\MessageRepository;
+use App\Repository\UserRepository;
 use App\Service\FileUploader;
+use Cocur\Slugify\Slugify;
+use Doctrine\ORM\EntityManagerInterface;
+use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController as Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Contracts\Translation\TranslatorInterface;
-use Knp\Component\Pager\PaginatorInterface;
-use Cocur\Slugify\Slugify;
 
 /**
  * @Route("/admin/users")
  */
 class UserController extends Controller
 {
+   private $translator;
+   private $em;
+
+  
+    public function __construct(TranslatorInterface $translator, EntityManagerInterface $em)
+    {
+        $this->translator = $translator;
+        $this->em = $em;
+
+    }
+  
     /**
      * My account page
      *
@@ -287,12 +300,16 @@ class UserController extends Controller
      */
     public function batchAction(Request $request, UserRepository $userRepository)
     {
-        if ('batchDelete' === $request->request->get('batch_action')) {
-            $ids = $request->request->get('ids');
-            if ($ids) {
-                $userRepository->batchDelete($ids);
-                $this->addFlash('success', 'Les éléments selectionnés ont été supprimés');
-            }
+        $ids = $request->request->get('ids');
+        if ($ids) {
+          if ('batchDelete' === $request->request->get('batch_action')) {
+                  $userRepository->batchDelete($ids);
+                  $this->addFlash('success', 'Les éléments selectionnés ont été supprimés');
+              }
+
+          if ('batchExport' === $request->request->get('batch_action')) {
+              return $this->exportUsers($userRepository, $ids);
+          }
         }
         $userType = $request->query->get('userType');
 
@@ -328,6 +345,52 @@ class UserController extends Controller
 
 
         return $this->redirectToRoute('admin_user_edit', ['id' => $userId]);
+    }
+    
+    private function exportUsers(UserRepository $userRepository,$usersIds): Response
+    {
+        
+        $users = $userRepository->findBy(['id'=>$usersIds]);
+        $now = new \DateTime;
+        $rows = ['Nom;Prénom;Rôles;Structure;Courriel;Tél fixe; Tél portable;Adresse;'];
+        /** @var Registration $registration */
+        foreach($users as $user) {
+            $roleString = '';
+            $separator = '';
+            foreach($user->getRoles() as $role){
+              $roleString .= $separator.$this->translator->trans('Entities.User.roles.'.$role);
+              $separator = '-';
+            }
+            $data = 
+                [
+                  $user->getLastName(),
+                  $user->getFirstName(),
+                  $roleString,
+                  $user->getStructureName(),
+                  $user->getEmail(),
+                  $user->getCoordinate()?$user->getCoordinate()->getPhone():'',
+                  $user->getCoordinate()?$user->getCoordinate()->getMobilePhone():'',
+                  $user->getCoordinate()?$user->getCoordinate()->getFormatedAddress():'',
+
+                ];
+            $rows[] = implode(';', $data);
+        }
+        
+        $content = implode("\n", $rows);
+        
+        $response = new Response($content);
+        //$response->headers->set('Content-Type', 'text/csv');
+        $response->headers->set('Content-Type', 'application/force-download');
+        $response->headers->set('Cache-Control', 'no-cache');
+        $slugify = new Slugify();
+        $filename = $slugify->slugify('export utilisateurs '.$now->format('d-m-Y H:i:s'));
+        //$response->headers->set('Content-disposition', 'attachment; filename='.$filename.'.csv');
+        $response->headers->set('Content-Disposition', $response->headers->makeDisposition(
+            ResponseHeaderBag::DISPOSITION_ATTACHMENT, "$filename.csv"
+        ));
+
+        return $response;
+        
     }
     
     private function updateUserSlug(User $user)

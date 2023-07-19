@@ -98,6 +98,7 @@ Generics:
         prevStep: Etape précédente
         cancel: Annuler
         change: Changer
+        export: Exporter
     fields:
         name: Intitulé
         title: Titre

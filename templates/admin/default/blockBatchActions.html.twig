@@ -5,6 +5,9 @@
       <select name="batch_action" class="form-control">
          <option value="">{{'Generics.batch.labels.choose_action'|trans}}</option>
          <option value="batchDelete">{{'Generics.actions.remove'|trans}}</option>
+         {% if batchExport is defined  %}
+           <option value="batchExport">{{'Generics.actions.export'|trans}}</option>
+         {% endif %}  
       </select>
 
    </div>

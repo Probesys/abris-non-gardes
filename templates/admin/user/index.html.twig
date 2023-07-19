@@ -28,7 +28,7 @@
          {% include 'admin/default/blocFilter.html.twig'  %}
 
          <form action="{{ path('user_batch' , {'userType': userType}) }}" method="post">
-            {% include 'admin/default/blockBatchActions.html.twig'  %}
+            {% include 'admin/default/blockBatchActions.html.twig' with {'batchExport': true} %}
 
 
             <div class="table-responsive">
