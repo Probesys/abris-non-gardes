@@ -6,7 +6,7 @@
   {% endif %}
 {% endif %}
 {% set per_page = app.request.get('per_page') ? app.request.get('per_page') : per_page_global %}
-<label class="col-form-label">{{'Generics.labels.item_per_page'|trans}}</label>
+<label class="col-form-label" for="resultsPerPage">{{'Generics.labels.item_per_page'|trans}}</label>
 
 <select class="form-control form-control-sm" name="per_page" id="resultsPerPage">
    {% for value in values|sort %}

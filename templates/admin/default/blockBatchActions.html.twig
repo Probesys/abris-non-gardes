@@ -2,7 +2,7 @@
    <div class="p-2 bd-highlight ">
       <label for="batch_action" >{{'Generics.batch.labels.for_selection'|trans}}</label>
 
-      <select name="batch_action" class="form-control">
+      <select name="batch_action" id="batch_action" class="form-control">
          <option value="">{{'Generics.batch.labels.choose_action'|trans}}</option>
          <option value="batchDelete">{{'Generics.actions.remove'|trans}}</option>
          {% if batchExport is defined  %}
