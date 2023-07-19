@@ -379,12 +379,10 @@ class UserController extends Controller
         $content = implode("\n", $rows);
         
         $response = new Response($content);
-        //$response->headers->set('Content-Type', 'text/csv');
         $response->headers->set('Content-Type', 'application/force-download');
         $response->headers->set('Cache-Control', 'no-cache');
         $slugify = new Slugify();
         $filename = $slugify->slugify('export utilisateurs '.$now->format('d-m-Y H:i:s'));
-        //$response->headers->set('Content-disposition', 'attachment; filename='.$filename.'.csv');
         $response->headers->set('Content-Disposition', $response->headers->makeDisposition(
             ResponseHeaderBag::DISPOSITION_ATTACHMENT, "$filename.csv"
         ));
