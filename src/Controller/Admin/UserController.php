@@ -84,10 +84,11 @@ class UserController extends Controller
         $filterData['role'] = $role = 'ROLE_'.strtoupper($userType);
 
         $per_page = $this->getParameter('app.per_page_global');
+
         $query = $userRepository->search($filterData);
         $pagination = $paginator->paginate(
             $query,
-            $request->query->getInt('user', 1)/* user number */,
+            $request->query->getInt('page', 1)/* page number */,
             $request->query->getInt('per_page', $per_page), /* limit per user */
             ['defaultSortFieldName' => 'u.slug', 'defaultSortDirection' => 'asc']
         );
@@ -160,7 +161,6 @@ class UserController extends Controller
         $this->addFlash('success', 'Entities.User.flashes.userValidationSuccess');
         // send mail to user to inform that his account is valide
         $message = (new \Swift_Message($translator->trans('Security.messages.yourAccountisValidate')))
-           
             ->setFrom($this->getParameter('app.genericMail'))
             ->setTo($user->getEmail())
             ->setBody(

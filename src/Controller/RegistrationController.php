@@ -59,12 +59,19 @@ class RegistrationController extends AbstractController
             $entityManager->flush();
 
             $this->addFlash('success', 'Security.messages.accountCreatedAndWaitingAdminValidation');
+            
+            
 
             // send email to admin
-            // send mail to user to inform that his account is valide
+            // recherche des admins
+            $destsMail = [];
+            $admins = $this->em->getRepository(User::class)->search(['role'=>'ROLE_ADMIN']);
+            foreach($admins as $admin){
+                $destsMail[] = $admin->getEmail();
+            }
             $message = (new \Swift_Message($translator->trans('Security.messages.newAccountWaitValidation')))
                     ->setFrom($this->getParameter('app.genericMail'))
-                    ->setTo($this->getParameter('app.genericMail'))
+                    ->setTo($destsMail)
                     ->setBody(
                         $this->renderView(
                             'emails/newAccountWaitValidation.html.twig',

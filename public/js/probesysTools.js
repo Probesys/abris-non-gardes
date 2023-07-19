@@ -10,6 +10,22 @@ function htmlEntities(str) {
    return String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 }
 
+function $_GET(param)
+{
+    var vars = {};
+    window.location.href.replace(location.hash, '').replace(
+        /[?&]+([^=&]+)=?([^&]*)?/gi, // regexp
+        function (m, key, value) {
+        // callback
+            vars[key] = value !== undefined ? value : '';
+        }
+    );
+    if (param) {
+        return vars[param] ? vars[param] : null;
+    }
+    return vars;
+}
+
 
 $(document).ready(function() {
 
@@ -52,128 +68,19 @@ $(document).ready(function() {
    });
 
 
-   //Gestion de la photo de l'animal
-   if ($("div#dropzone-animal-picture").length > 0)
-   {
-      var url_dropzone_animal_picture = $("div#dropzone-animal-picture").attr("data-dropzone-action");
-      var id_animal = $("div#dropzone-animal-picture").attr("data-id-animal");
-      var scheme = $("div#dropzone-animal-picture").attr("data-scheme");
-      var myDropzone = new Dropzone("div#dropzone-animal-picture", {url: url_dropzone_animal_picture, createImageThumbnails: false, acceptedFiles: 'image/*', autoQueue: false});
-      if ($("div#dropzone-animal-picture img").length > 0)
-      {
-         myDropzone.disable();
-      }
-      myDropzone.on('sending', function(file, xhr, formData) {
-         formData.append('entity', 'animalPhoto');
-         formData.append('id_entity', id_animal);
-      });
-      myDropzone.on('success', function(file, data) {
-         var domResult = '<span id="delete-animal-picture" data-id-picture="' + data.id + '"class="fa fa-times-circle fa-3x text-success pull-right"></span>';
-         var url = data.url.replace('http', scheme);
-         domResult += '<img src="' + url + '" style="height:100%;max-width:100%">';
-         $("div#dropzone-animal-picture").html(domResult);
-         myDropzone.disable();
-      });
-
-      myDropzone.on("addedfile", function(origFile) {
-         var MAX_WIDTH = 400;
-         var MAX_HEIGHT = 300;
-         var reader = new FileReader();
-         // Convert file to img
-         reader.addEventListener("load", function(event) {
-            var origImg = new Image();
-            origImg.src = event.target.result;
-            origImg.addEventListener("load", function(event) {
-               var width = event.target.width;
-               var height = event.target.height;
-               // Don't resize if it's small enough
-               if (width <= MAX_WIDTH && height <= MAX_HEIGHT) {
-                  myDropzone.enqueueFile(origFile);
-                  return;
-               }
-               // Calc new dims otherwise
-               if (width > height) {
-                  if (width > MAX_WIDTH) {
-                     height *= MAX_WIDTH / width;
-                     width = MAX_WIDTH;
-                  }
-               } else {
-                  if (height > MAX_HEIGHT) {
-                     width *= MAX_HEIGHT / height;
-                     height = MAX_HEIGHT;
-                  }
-               }
-               // Resize
-               var canvas = document.createElement('canvas');
-               canvas.width = width;
-               canvas.height = height;
-               var ctx = canvas.getContext("2d");
-               ctx.drawImage(origImg, 0, 0, width, height);
-               var resizedFile = base64ToFile(canvas.toDataURL(), origFile);
-               // Replace original with resized
-               var origFileIndex = myDropzone.files.indexOf(origFile);
-               myDropzone.files[origFileIndex] = resizedFile;
-               // Enqueue added file manually making it available for
-               // further processing by dropzone
-               myDropzone.enqueueFile(resizedFile);
-            });
-         });
-
-         reader.readAsDataURL(origFile);
-      });
-
-      function base64ToFile(dataURI, origFile) {
-         var byteString, mimestring;
-         if (dataURI.split(',')[0].indexOf('base64') !== -1) {
-            byteString = atob(dataURI.split(',')[1]);
-         } else {
-            byteString = decodeURI(dataURI.split(',')[1]);
-         }
-         mimestring = dataURI.split(',')[0].split(':')[1].split(';')[0];
-         var content = new Array();
-         for (var i = 0; i < byteString.length; i++) {
-            content[i] = byteString.charCodeAt(i);
-         }
-         var newFile = new File(
-                 [new Uint8Array(content)], origFile.name, {type: mimestring}
-         );
-         // Copy props set by the dropzone in the original file
-         var origProps = [
-            "upload", "status", "previewElement", "previewTemplate", "accepted"
-         ];
-         $.each(origProps, function(i, p) {
-            newFile[p] = origFile[p];
-         });
-
-         return newFile;
-      }
-
-      $(document).on('click', '#delete-animal-picture', function()
-      {
-         if (confirm(Translator.trans('Generics.messages.confirmationDeleteMessageQuestion')))
-         {
-            var urlDeletePicture = Routing.generate('unlink_animal_photo', {id: id_animal});
-            $.ajax({
-               type: "GET",
-               url: urlDeletePicture,
-               success: function(data) {
-                  obj_response = $.parseJSON(data);
-
-                  if (obj_response.result)
-                  {
-                     $("div#dropzone-animal-picture").html("");
-                     myDropzone.enable();
-                  }
-
-               },
-               error: function() {
-                  //message d'alerte
-               }
-            });
-         }
-      });
-
-   }
+   $('#resultsPerPage').change(function () {
+        var url = $(location).attr('pathname') + $(location).attr('search').replace('page=' + $_GET('page'), 'page=1');
+        var item = $('#resultsPerPage').find(":selected").text();
+        if (~url.indexOf('per_page')) {
+            $(location).attr('href', url.replace($_GET('per_page'), item));
+        } else {
+            if (~url.indexOf('?')) {
+                $(location).attr('href', url + '&per_page=' + item);
+            } else {
+                $(location).attr('href', url + '?per_page=' + item);
+            }
+        }
+    });
 
 
    //Gestion des l'ordre des items dans listing value

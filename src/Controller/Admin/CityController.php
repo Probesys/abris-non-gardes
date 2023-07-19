@@ -75,7 +75,7 @@ class CityController extends Controller
         $query = $cityRepository->search($filterData);
         $pagination = $paginator->paginate(
             $query,
-            $request->query->getInt('city', 1)/* city number */,
+            $request->query->getInt('page', 1)/* city number */,
             $request->query->getInt('per_page', $per_page), /* limit per city */
             ['defaultSortFieldName' => 'c.slug', 'defaultSortDirection' => 'asc']
         );
