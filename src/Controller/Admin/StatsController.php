@@ -56,7 +56,7 @@ class StatsController extends Controller
                 $filterForm->get('type')->setData($filterData['type']);
             }
         }
-        
+
         // envoi du user logué si son rôle est autre que admin
         if (!$this->getUser()->hasRole('ROLE_ADMIN')) {
             $filterData['userID'] = $this->getUser()->getId();

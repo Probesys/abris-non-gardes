@@ -19,7 +19,7 @@ class AbrisRepository extends ServiceEntityRepository
     {
         parent::__construct($registry, Abris::class);
     }
-    
+
     /**
      *  autocomplete query.
      *
@@ -35,7 +35,7 @@ class AbrisRepository extends ServiceEntityRepository
         $dql = $this->createQueryBuilder('a')
             ->select('a.id, a.name')
             ->orderby('a.slug', 'ASC')
-            ;
+        ;
 
         if ($q) {
             $dql->Where("a.slug LIKE '%".$slug."%'");
@@ -62,7 +62,7 @@ class AbrisRepository extends ServiceEntityRepository
     {
         $dql = $this->createQueryBuilder('a')
           ->select('a')
-          
+
         ;
         $slugify = new Slugify();
         if ($filter && isset($filter['name']) && '' != $filter['name']) {
@@ -83,7 +83,7 @@ class AbrisRepository extends ServiceEntityRepository
 
         return $dql->getQuery();
     }
-    
+
     /**
     * massive delete function.
     *

@@ -20,8 +20,6 @@ use Symfony\Contracts\Translation\TranslatorInterface;
  */
 class DiscussionController extends AbstractController
 {
-
-    
     /**
      * @Route("/", name="discussion_index", methods={"GET|POST"})
      */
@@ -54,7 +52,7 @@ class DiscussionController extends AbstractController
                 $filterForm->get('abris')->setData($filterData['abris']);
             }
         }
-        
+
         // envoi du user logué si son rôle est autre que admin
         if (!$this->getUser()->hasRole('ROLE_ADMIN')) {
             $filterData['userID'] = $this->getUser()->getId();
@@ -66,14 +64,14 @@ class DiscussionController extends AbstractController
             $query,
             $request->query->getInt('page', 1)/* user number */,
             $request->query->getInt('per_page', $per_page), /* limit per user */
-                []
+            []
         );
 
 
         return $this->render('admin/discussion/index.html.twig', ['pagination' => $pagination, 'search_form' => $filterForm->createView()]);
     }
-    
-    
+
+
 
     /**
      * @Route("/{id}/newMessage", name="message_new", methods={"POST"})
@@ -99,10 +97,10 @@ class DiscussionController extends AbstractController
         //             'form' => $form->createView(),
         // ]);
     }
-    
-    
-    
-    
+
+
+
+
     /**
      * Finds and displays a Discussion entity.
      *
@@ -118,10 +116,10 @@ class DiscussionController extends AbstractController
         //$this->checkAccess($discussion, $translator);
         return $this->render('admin/discussion/show.html.twig', [
             'discussion' => $discussion,
-            
+
         ]);
     }
-    
+
     /**
      * send email notification
      * @param type $message
@@ -145,7 +143,7 @@ class DiscussionController extends AbstractController
                 $destMail[] = $user->getEmail();
             }
         }
-           
+
         $body = str_replace(['%id%','%abris%'], [$message->getId(), $abris], $translator->trans('Emails.Message.newMessageAboutAbris.body'));
         $subject = str_replace('%id%', $message->getId(), $translator->trans('Emails.Message.newMessageAboutAbris.subject'));
         try {
@@ -188,7 +186,7 @@ class DiscussionController extends AbstractController
 
         return new Response(json_encode($return, JSON_THROW_ON_ERROR), \Symfony\Component\HttpFoundation\Response::HTTP_OK);
     }
-    
+
     /**
      * Batch action for discussion entity.
      *
@@ -209,7 +207,7 @@ class DiscussionController extends AbstractController
 
         return $this->redirectToRoute('discussion_index');
     }
-    
+
     private function checkAccess(Discussion $discussion, $translator)
     {
         $abris = $discussion->getAbris();

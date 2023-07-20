@@ -32,7 +32,7 @@ class ListingValue
      */
     private $id;
 
-    
+
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\ListingType", inversedBy="listingValues")
      * @ORM\JoinColumn(nullable=false)
@@ -56,7 +56,7 @@ class ListingValue
      * @ORM\Column(type="integer", nullable=true)
      */
     private ?int $orderInList = null;
-    
+
 
     public function getId(): ?int
     {
@@ -148,7 +148,7 @@ class ListingValue
             $return[] = $item;
             $item = $item->getParent();
         }
-//        $return[] = $item;
+        //        $return[] = $item;
         return array_reverse($return);
     }
 }

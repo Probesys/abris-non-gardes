@@ -19,7 +19,7 @@ use Symfony\Component\Serializer\SerializerInterface;
 
 /**
  * @Rest\Route("/api/abris")
- 
+
  */
 final class ApiAbrisController extends AbstractController
 {
@@ -44,19 +44,19 @@ final class ApiAbrisController extends AbstractController
         $data = $this->serializer->serialize($abris, 'json', ['groups' => ['abris']]);
 
         return new JsonResponse($data, Response::HTTP_OK, [], true);
-    }    
+    }
 
     /**
      * @Rest\Get("/search", name="searchAbris")
      */
     public function search(Request $request): JsonResponse
-    {        
+    {
         $searchFilter = ['name' => $request->query->get("keySearch")];
         $abris = $this->em->getRepository(Abris::class)->search($searchFilter)->getResult();
         $data = $this->serializer->serialize($abris, 'json', ['groups' => ['abris']]);
 
         return new JsonResponse($data, Response::HTTP_OK, [], true);
-    }     
+    }
 
     /**
      * @Rest\Get("/detail/{id}", name="detailAbris")
@@ -67,18 +67,17 @@ final class ApiAbrisController extends AbstractController
         $data = $this->serializer->serialize($abris, 'json', ['groups' => ['abris']]);
 
         return new JsonResponse($data, Response::HTTP_OK, [], true);
-    }       
-      
+    }
+
     /**
      * @Rest\Get("/{id}/discussions", name="discussionsAbris")
      */
     public function discussions(Abris $abris, Request $request): JsonResponse
-    {        
-//        dd($abris);
+    {
+        //        dd($abris);
         $discussions = $this->em->getRepository(Discussion::class)->listForAbris($abris);
         $data = $this->serializer->serialize($discussions, 'json', ['groups' => ['abris']]);
 
         return new JsonResponse($data, Response::HTTP_OK, [], true);
-    }      
+    }
 }
-

@@ -14,7 +14,7 @@ trait EntityTimestampableTrait
      * @Gedmo\Timestampable(on="create")
      * @ORM\Column(type="datetime")
      * @Groups({"abris","dysfunction","discussion","user"})
-     * 
+     *
      */
     private $created;
 

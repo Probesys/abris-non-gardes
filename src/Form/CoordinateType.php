@@ -15,15 +15,13 @@ use Tetranz\Select2EntityBundle\Form\Type\Select2EntityType;
 
 class CoordinateType extends AbstractType
 {
-    
-
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        
+
         $builder
             ->add('addressLine1', null, ['label' => 'Entities.Coordinate.fields.addressLine1', 'required' => false])
             ->add('addressLine2', null, ['label' => 'Entities.Coordinate.fields.addressLine2', 'required' => false])
-            ->add('addressLine3', null, ['label' => 'Entities.Coordinate.fields.addressLine3', 'required' => false])    
+            ->add('addressLine3', null, ['label' => 'Entities.Coordinate.fields.addressLine3', 'required' => false])
 
 //            ->add('phone', null, array('label' => 'Entities.Coordinate.fields.phone'))
             ->add('city', Select2EntityType::class, [
@@ -46,7 +44,7 @@ class CoordinateType extends AbstractType
                     //'attr' => array('class' => 'city-select2'),
                     // 'object_manager' => $objectManager, // inject a custom object / entity manager
             ])
-            
+
             ->add('phone', TelType::class, [
                 'label' => 'Entities.Coordinate.fields.phone',
                 'required' => false,
@@ -54,17 +52,17 @@ class CoordinateType extends AbstractType
                 'attr' => ['class' => '', 'trim' => true],
             ])
             ->add('mobilePhone', TelType::class, ['label' => 'Entities.Coordinate.fields.mobilePhone', 'required' => false, 'trim' => true, 'attr' => ['class' => '', 'trim' => true]])
-            ;
+        ;
     }
 
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
         'data_class' => Coordinate::class,
-        
+
         ]);
     }
-    
+
     public function getDefaultOptions(array $options)
     {
         return [];

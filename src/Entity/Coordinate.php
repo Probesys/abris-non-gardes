@@ -27,7 +27,7 @@ class Coordinate
      * @ORM\Column(type="string", length=255, nullable=true)
      */
     private ?string $addressLine2 = null;
-    
+
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      */

@@ -14,7 +14,6 @@ use App\Repository\HelpMessageRepository;
 use App\Repository\AbrisRepository;
 use App\Repository\PageRepository;
 
-
 /**
  * Description of AjaxController.
  *
@@ -22,7 +21,6 @@ use App\Repository\PageRepository;
  */
 class AjaxController extends Controller
 {
-    
     /**
      * autocomplete abris action. search in abris.
      *
@@ -36,7 +34,7 @@ class AjaxController extends Controller
         $entities = $abrisRepository->autoComplete($q, $request->query->get('page_limit'), $request->query->get('page'));
         foreach ($entities as $entity) {
             $label = ''.$entity['name'];
-            
+
             $items[] = ['id' => $entity['id'], 'text' => $label, 'label' => $label];
         }
 
@@ -48,7 +46,7 @@ class AjaxController extends Controller
 
         return new Response(json_encode($return, JSON_THROW_ON_ERROR), $return ? 200 : 404);
     }
-    
+
     /**
      * autocomplete city action. search in city.
      *
@@ -128,7 +126,7 @@ class AjaxController extends Controller
         }
     }
 
-    
+
 
     /**
      * @Route("/autocomplete-search-help-message", name="autocomplete_search_help_message", options={"expose"=true})
@@ -148,7 +146,7 @@ class AjaxController extends Controller
 
         return new Response(json_encode($return, JSON_THROW_ON_ERROR), $return ? 200 : 404);
     }
-    
+
     /**
      * autocomplete territory action. search in territories.
      *
@@ -173,7 +171,7 @@ class AjaxController extends Controller
 
         return new Response(json_encode($return, JSON_THROW_ON_ERROR), $return ? 200 : 404);
     }
-    
+
 
     /**
      * @Route("/page/{id}", name="ajax_page", options={"expose"=true})
@@ -183,7 +181,7 @@ class AjaxController extends Controller
         $page = $pageRepository->find($id);
         $return = '';
         if($page) {
-           $return = '<div class="modal-header">
+            $return = '<div class="modal-header">
         <h5 class="modal-title">'.$page->getName().'</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
@@ -191,10 +189,10 @@ class AjaxController extends Controller
       </div>
       <div class="modal-body"><p>'.$page->getBody().'</p></div>';
         }
-        
+
         return new Response($return, $return ? 200 : 404);
 
-    } 
+    }
 
-    
+
 }

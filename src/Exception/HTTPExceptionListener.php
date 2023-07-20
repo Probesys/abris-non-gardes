@@ -7,6 +7,7 @@ namespace App\Exception;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpKernel\Event\ExceptionEvent;
 use Symfony\Component\HttpKernel\Exception\HttpException;
+
 use function strpos;
 
 final class HTTPExceptionListener

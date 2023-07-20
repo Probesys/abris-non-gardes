@@ -19,7 +19,7 @@ class Dysfonctionnement
 {
     use EntityBlameableTrait;
     use EntityTimestampableTrait;
-    
+
     /**
      * @ORM\Id()
      * @ORM\GeneratedValue()
@@ -89,7 +89,7 @@ class Dysfonctionnement
     {
         $this->photos = new ArrayCollection();
     }
-    
+
     public function __toString()
     {
         return $this->getAbris()." ".$this->getNatureDys().$this->getCreated()->format('d/m/Y');

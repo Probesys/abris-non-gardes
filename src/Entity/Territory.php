@@ -12,7 +12,6 @@ use App\Entity\Traits\EntityCommonTrait;
 use App\Entity\Traits\EntityNameTrait;
 use App\Entity\City;
 
-
 /**
  * @Gedmo\Tree(type="nested")
  * @ORM\Entity(repositoryClass="App\Repository\NestedTerritoryRepository")

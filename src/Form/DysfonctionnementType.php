@@ -18,20 +18,22 @@ use Symfony\Component\Form\FormEvents;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class DysfonctionnementType extends AbstractType {
-
+class DysfonctionnementType extends AbstractType
+{
     use ListingValuesFormsTrait;
 
     private $em;
 
-    public function __construct(EntityManagerInterface $em) {
+    public function __construct(EntityManagerInterface $em)
+    {
         $this->em = $em;
     }
 
-    public function buildForm(FormBuilderInterface $builder, array $options) {
+    public function buildForm(FormBuilderInterface $builder, array $options)
+    {
         // abris
         $user = $options['user'];
-        if(!$user || ($user && ($user->hasRole('ROLE_USER') || $user->hasRole('ROLE_ADMIN'))) ){
+        if(!$user || ($user && ($user->hasRole('ROLE_USER') || $user->hasRole('ROLE_ADMIN')))) {
             $builder->add('abris', null, [
                     'label' => 'Entities.Dysfonctionnement.fields.abris',
                     'required' => true,
@@ -45,16 +47,16 @@ class DysfonctionnementType extends AbstractType {
                     'placeholder' => '',
                     'expanded' => false,
                     'multiple' => false,
-                    'query_builder' => fn(AbrisRepository $er) => $er->createQueryBuilder('a')
+                    'query_builder' => fn (AbrisRepository $er) => $er->createQueryBuilder('a')
                         ->leftJoin('a.createdBy', 'crea')
                         ->leftJoin('a.proprietaires', 'proprios')
                         ->leftJoin('a.gestionnaires', 'gests')
-                        ->andWhere('crea.id=\''.$user->getId().'\' OR proprios.id=\''.$user->getId().'\' OR gests.id=\''.$user->getId().'\'' ),
+                        ->andWhere('crea.id=\''.$user->getId().'\' OR proprios.id=\''.$user->getId().'\' OR gests.id=\''.$user->getId().'\''),
                 ]);
         }
-        
-        
-        
+
+
+
         $builder
                 ->add('statusDys', EntityType::class, ['label' => 'Entities.Dysfonctionnement.fields.statusDys', 'class' => ListingValue::class, 'expanded' => false, 'required' => true, 'multiple' => false, 'placeholder' => '', 'choice_attr' => function ($choiceValue, $key, $value) {
                     if ($choiceValue->getHelpMessage()) {
@@ -64,7 +66,7 @@ class DysfonctionnementType extends AbstractType {
                     } else {
                         return [];
                     }
-                }, 'query_builder' => fn(ListingValueRepository $rep) => $this->createListingValueBuilder($rep, $this->getUuidTypeListeFromAnnotation('Dysfonctionnement', 'statusDys'))])
+                }, 'query_builder' => fn (ListingValueRepository $rep) => $this->createListingValueBuilder($rep, $this->getUuidTypeListeFromAnnotation('Dysfonctionnement', 'statusDys'))])
                 ->add('natureDys', EntityType::class, ['label' => 'Entities.Dysfonctionnement.fields.natureDys', 'class' => ListingValue::class, 'expanded' => false, 'required' => true, 'multiple' => false, 'placeholder' => '', 'choice_attr' => function ($choiceValue, $key, $value) {
                     if ($choiceValue->getHelpMessage()) {
                         $id_helpMessage = $choiceValue->getHelpMessage()->getId();
@@ -73,12 +75,12 @@ class DysfonctionnementType extends AbstractType {
                     } else {
                         return [];
                     }
-                }, 'query_builder' => fn(ListingValueRepository $rep) => $this->createListingValueBuilder($rep, $this->getUuidTypeListeFromAnnotation('Dysfonctionnement', 'natureDys'))])
+                }, 'query_builder' => fn (ListingValueRepository $rep) => $this->createListingValueBuilder($rep, $this->getUuidTypeListeFromAnnotation('Dysfonctionnement', 'natureDys'))])
                 ->add('description', null, [
                     'label' => 'Generics.fields.description',
                     'attr' => [ 'class' => 'summernote']
                 ])
-                
+
                 ->add('files', FileType::class, [
                     'label' => 'Entities.Dysfonctionnement.fields.files',
                     'required' => false,
@@ -88,13 +90,14 @@ class DysfonctionnementType extends AbstractType {
                         'accept' => 'image/*',
                         'multiple' => 'multiple'
                     ]
-                ])                            
+                ])
         ;
         $builder->addEventListener(FormEvents::PRE_SET_DATA, [$this, 'onPreSetData']);
         $builder->addEventListener(FormEvents::PRE_SUBMIT, [$this, 'onPreSubmit']);
     }
 
-    public function addElements(FormInterface $form,$natureDys) {
+    public function addElements(FormInterface $form, $natureDys)
+    {
 
         $ListValueRepository = $this->em->getRepository(ListingValue::class);
 
@@ -114,10 +117,11 @@ class DysfonctionnementType extends AbstractType {
                 }
             }, 'query_builder' => $typeListBuilder]);
         }
-        
+
     }
 
-    public function onPreSetData(FormEvent $event) {
+    public function onPreSetData(FormEvent $event)
+    {
         $data = $event->getData();
         $form = $event->getForm();
 
@@ -127,20 +131,22 @@ class DysfonctionnementType extends AbstractType {
         $this->addElements($form, $natureDys);
     }
 
-    public function onPreSubmit(FormEvent $event) {
+    public function onPreSubmit(FormEvent $event)
+    {
         $form = $event->getForm();
         $data = $event->getData();
 
-        
+
 
         $natureDys = array_key_exists('natureDys', $data) && !empty($data['natureDys']) ? $data['natureDys'] : null;
         $elementDys = array_key_exists('elementDys', $data) && !empty($data['elementDys']) ? $data['elementDys'] : null;
-        
+
 
         $this->addElements($form, $natureDys);
     }
 
-    public function configureOptions(OptionsResolver $resolver) {
+    public function configureOptions(OptionsResolver $resolver)
+    {
         $resolver->setDefaults([
             'data_class' => Dysfonctionnement::class,
             'user'         => null

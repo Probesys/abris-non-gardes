@@ -19,7 +19,7 @@ class MessageRepository extends ServiceEntityRepository
     {
         parent::__construct($registry, Message::class);
     }
-    
+
     public function search($filter = null)
     {
         $dql = $this->createQueryBuilder('m')
@@ -32,7 +32,7 @@ class MessageRepository extends ServiceEntityRepository
             $slug = $slugify->slugify($filter['abris'], '-');
             $dql->andwhere('a.slug LIKE \'%'.$slug.'%\'');
         }
-        
+
         if ($filter && isset($filter['userID']) && '' != $filter['userID']) {
             $userID = $filter['userID'];
             $dql->leftJoin('a.createdBy', 'crea');
@@ -51,7 +51,7 @@ class MessageRepository extends ServiceEntityRepository
                 ->select('m, d, a')
                 ->leftJoin('m.discussion', 'd')
                 ->leftJoin('d.abris', 'a')
-                
+
                 ->orderBy('d.created', 'DESC')
         ;
         if ($user->hasRole('ROLE_USER')) {
@@ -65,7 +65,7 @@ class MessageRepository extends ServiceEntityRepository
             $dql->leftJoin('a.gestionnaires', 'gests')
                 ->andWhere('gests.id=\''.$user->getId().'\'');
         }
-        
+
         $query = $dql->getQuery();
         if ($limit) {
             $query->setMaxResults($limit);
@@ -73,7 +73,7 @@ class MessageRepository extends ServiceEntityRepository
 
         return $query->getResult();
     }
-    
+
     public function getUserMessages($userId, $limit = null)
     {
         $dql = $this->createQueryBuilder('m')
@@ -81,7 +81,7 @@ class MessageRepository extends ServiceEntityRepository
                 ->leftJoin('m.createdBy', 'crea')
                 ->where('crea.id=\''.$userId.'\'')
         ;
-        
+
         $query = $dql->getQuery();
         if ($limit) {
             $query->setMaxResults($limit);
@@ -89,7 +89,7 @@ class MessageRepository extends ServiceEntityRepository
 
         return $query->getResult();
     }
-    
+
     /**
      * massive delete function.
      *

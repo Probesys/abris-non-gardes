@@ -8,9 +8,10 @@ use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\DBAL\Exception\ForeignKeyConstraintViolationException;
 use Doctrine\Persistence\ManagerRegistry;
 
-class ListingValueRepository extends ServiceEntityRepository {
-
-    public function __construct(ManagerRegistry $registry) {
+class ListingValueRepository extends ServiceEntityRepository
+{
+    public function __construct(ManagerRegistry $registry)
+    {
         parent::__construct($registry, ListingValue::class);
     }
 
@@ -21,7 +22,8 @@ class ListingValueRepository extends ServiceEntityRepository {
      *
      * @return type
      */
-    public function search($filter = null) {
+    public function search($filter = null)
+    {
         $dql = $this->createQueryBuilder('lv')
                 ->select('lv, lt,lvp')
                 ->leftJoin('lv.listingType', 'lt')
@@ -45,7 +47,8 @@ class ListingValueRepository extends ServiceEntityRepository {
     /** Retourne la liste des items fils directs lié à l'item courant
      * @return type
      */
-    public function getChildren($parent_id) {
+    public function getChildren($parent_id)
+    {
         $dql = $this->createQueryBuilder('lv')
                 ->select('lv.id,lv.name,hm.id as id_help_msg')
                 ->leftJoin('lv.helpMessage', 'hm')
@@ -62,7 +65,8 @@ class ListingValueRepository extends ServiceEntityRepository {
      *
      * @return bool
      */
-    public function getHelpMessage($id_liste) {
+    public function getHelpMessage($id_liste)
+    {
         $dql = $this->createQueryBuilder('lv')
                 ->select('hm.id')
                 ->join('lv.helpMessage', 'hm')
@@ -83,7 +87,8 @@ class ListingValueRepository extends ServiceEntityRepository {
      *
      * @param type $ids
      */
-    public function batchDelete($ids = null) {
+    public function batchDelete($ids = null)
+    {
         if ($ids) {
             $queryBuilder = $this->createQueryBuilder('ListingValue')
                     ->delete('App\Entity\ListingValue ListingValue')

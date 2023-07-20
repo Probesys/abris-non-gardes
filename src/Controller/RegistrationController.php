@@ -17,7 +17,6 @@ use Symfony\Component\Security\Guard\GuardAuthenticatorHandler;
 
 class RegistrationController extends AbstractController
 {
-
     /**
      * @Route("/register", name="app_register")
      */
@@ -39,7 +38,7 @@ class RegistrationController extends AbstractController
         }
         // conditions d'utilisation
         $cuPage = $pageRepository->find(5);
-        
+
         $form = $this->createForm(RegistrationFormType::class, $user, ['translator' => $translator]);
         $form->handleRequest($request);
 
@@ -59,14 +58,14 @@ class RegistrationController extends AbstractController
             $entityManager->flush();
 
             $this->addFlash('success', 'Security.messages.accountCreatedAndWaitingAdminValidation');
-            
-            
+
+
 
             // send email to admin
             // recherche des admins
             $destsMail = [];
             $admins = $this->em->getRepository(User::class)->search(['role'=>'ROLE_ADMIN']);
-            foreach($admins as $admin){
+            foreach($admins as $admin) {
                 $destsMail[] = $admin->getEmail();
             }
             $message = (new \Swift_Message($translator->trans('Security.messages.newAccountWaitValidation')))

@@ -28,7 +28,7 @@ class Abris
     use EntityTimestampableTrait;
     use EntityCommonTrait;
     use EntityNameTrait;
-    
+
     /**
      * @ORM\Id
      * @ORM\Column(type="uuid", unique=true)
@@ -53,7 +53,7 @@ class Abris
      * @Assert\Regex(
      *     pattern="/^((\-?|\+?)?\d+(\.\d+)?),\s*((\-?|\+?)?\d+(\.\d+)?)$/",
      *     match=true,
-     *     message="Le format du champ doit être de la forme 45.179225,5.724737" 
+     *     message="Le format du champ doit être de la forme 45.179225,5.724737"
      * )
      */
     private ?string $coordinate = null;
@@ -372,7 +372,7 @@ class Abris
         $this->followers = new ArrayCollection();
         $this->discussions = new ArrayCollection();
     }
-    
+
     /**
      * @ORM\PrePersist
      *

@@ -44,12 +44,12 @@ class ListingTypeRepository extends ServiceEntityRepository
 
         return $query = $dql->getQuery();
     }
-    
-     /**
-     * massive delete function.
-     *
-     * @param type $ids
-     */
+
+    /**
+    * massive delete function.
+    *
+    * @param type $ids
+    */
     public function batchDelete($ids = null)
     {
         if ($ids) {

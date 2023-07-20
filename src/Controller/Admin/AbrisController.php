@@ -18,6 +18,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Symfony\Contracts\Translation\TranslatorInterface;
+
 use function Safe\unlink;
 
 /**
@@ -25,10 +26,9 @@ use function Safe\unlink;
  */
 class AbrisController extends Controller
 {
-    
     /** @var EntityManagerInterface */
     private $em;
-    
+
     public function __construct(EntityManagerInterface $em)
     {
         $this->em = $em;
@@ -72,7 +72,7 @@ class AbrisController extends Controller
                 $filterForm->get('type')->setData($filterData['type']);
             }
         }
-        
+
         // envoi du user logué si son rôle est autre que admin
         if (!$this->getUser()->hasRole('ROLE_ADMIN')) {
             $filterData['userID'] = $this->getUser()->getId();
@@ -83,7 +83,7 @@ class AbrisController extends Controller
             $query,
             $request->query->getInt('page', 1)/* page number */,
             $request->query->getInt('per_page', $per_page), /* limit per page */
-                ['defaultSortFieldName' => 'a.slug', 'defaultSortDirection' => 'asc']
+            ['defaultSortFieldName' => 'a.slug', 'defaultSortDirection' => 'asc']
         );
 
         return $this->render('admin/abris/index.html.twig', ['pagination' => $pagination, 'search_form' => $filterForm->createView()]);
@@ -96,9 +96,9 @@ class AbrisController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
         $abris = new Abris();
-//        $placeDeFeuInt = new AbrisPlaceDeFeuInterieur();
+        //        $placeDeFeuInt = new AbrisPlaceDeFeuInterieur();
         $em->persist($abris);
-//        $abris->addAbrisPlaceDeFeuInterieur($placeDeFeuInt);
+        //        $abris->addAbrisPlaceDeFeuInterieur($placeDeFeuInt);
         $form = $this->createForm(AbrisFormType::class, $abris, ['translator' => $translator, 'attr' => ['id' => 'abris-form']]);
         $form->handleRequest($request);
 
@@ -140,7 +140,7 @@ class AbrisController extends Controller
             $this->getDoctrine()->getManager()->flush();
             $this->addFlash('success', 'Generics.flash.editSuccess');
             // faire en sorte que les admin soient avertis par mail lors des mises à jour sur les abris par les gestionnaires/propriétaires
-            if($this->isGranted('ROLE_OWNER') || $this->isGranted('ROLE_MANAGER')){
+            if($this->isGranted('ROLE_OWNER') || $this->isGranted('ROLE_MANAGER')) {
                 $this->sendEditNotificationEmail($abris, $translator, $mailer);
             }
 
@@ -224,26 +224,26 @@ class AbrisController extends Controller
 
         return $this->redirectToRoute('admin_abris_index');
     }
-    
+
     private function checkAccess($abris, $translator)
     {
         if (!$this->isGranted('ROLE_ADMIN') && !($this->getUser()->getGestionnaireAbris())->contains($abris) && !($this->getUser()->getProprietaireAbris())->contains($abris)) {
             throw new AccessDeniedException($translator->trans('Security.messages.accessDeniedException'));
         }
     }
-    
+
     private function sendEditNotificationEmail($abris, $translator, $mailer)
     {
         // recherche des admins
         $filter = ['role'=>'ROLE_ADMIN'];
         $admins = $this->em->getRepository(User::class)->search($filter);
-        
+
         $destsMail = [];
-        foreach($admins as $admin){
+        foreach($admins as $admin) {
             $destsMail[] = $admin->getEmail();
         }
-        
-        $currentUser = $this->getUser(); 
+
+        $currentUser = $this->getUser();
         $baseUrl = "https://abris.parc-du-vercors.fr";
         $url = $baseUrl.$this->generateUrl('admin_abris_edit', [
             'id' => $abris->getId(),
@@ -252,7 +252,7 @@ class AbrisController extends Controller
 
         $subject = str_replace(['%id%','%abris%'], [$abris, $currentUser], $translator->trans('Emails.Abris.updateNotification.subject'));
         $body = str_replace(['%id%','%abris%','%url%','%currentUser%'], [$abris->getId(), $abris, $url, $currentUser], $translator->trans('Emails.Abris.updateNotification.body'));
-        
+
         try {
             $message = (new \Swift_Message($subject))
                 ->setFrom($this->getParameter('app.genericMail'))

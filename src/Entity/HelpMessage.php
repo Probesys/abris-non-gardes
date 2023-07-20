@@ -13,9 +13,9 @@ use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\HelpMessageRepository")
- * 
+ *
  */
-class HelpMessage 
+class HelpMessage
 {
     use EntityBlameableTrait;
     use EntityTimestampableTrait;
@@ -29,14 +29,14 @@ class HelpMessage
     private $id;
 
     /**
-     * 
+     *
      * @ORM\Column(type="string", length=255)
      * @Groups({"default"})
      */
     private ?string $name = null;
 
     /**
-     * 
+     *
      * @ORM\Column(type="text", nullable=true)
      */
     private ?string $message = null;
@@ -47,7 +47,7 @@ class HelpMessage
      */
     private ?string $slug = null;
 
-    
+
 
     public function __construct()
     {
@@ -101,5 +101,5 @@ class HelpMessage
         return $this;
     }
 
-    
+
 }

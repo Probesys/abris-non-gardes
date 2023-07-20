@@ -24,17 +24,17 @@ use Symfony\Contracts\Translation\TranslatorInterface;
  */
 class UserController extends Controller
 {
-   private $translator;
-   private $em;
+    private $translator;
+    private $em;
 
-  
+
     public function __construct(TranslatorInterface $translator, EntityManagerInterface $em)
     {
         $this->translator = $translator;
         $this->em = $em;
 
     }
-  
+
     /**
      * My account page
      *
@@ -58,7 +58,7 @@ class UserController extends Controller
             'userMessages' => $userMessages
         ]);
     }
-    
+
     /**
      * @Route("/{userType}", name="user_index", methods="GET|POST", requirements={"userType": "waiting_validation|user|owner|manager|admin"})
      *
@@ -131,7 +131,7 @@ class UserController extends Controller
             $request->request->set('user_form', $userForm);
         }
         $form->handleRequest($request);
-        
+
         if ($form->isSubmitted() && $form->isValid()) {
             $em = $this->getDoctrine()->getManager();
             $em->persist($user);
@@ -145,14 +145,14 @@ class UserController extends Controller
                 $form = $this->createForm(UserFormType::class, $user, ['userType' => $userType, 'isNew' => true]);
             }
         }
-        
+
         return $this->render('admin/user/new.html.twig', [
                 'user' => $user,
                 'form' => $form->createView(),
                 'userType' => $userType,
         ]);
     }
-    
+
     /**
      * Finds and displays a User entity.
      *
@@ -185,7 +185,7 @@ class UserController extends Controller
             )
         ;
         $mailer->send($message);
-        
+
         return $this->redirectToRoute('user_index', ['userType' => 'waiting_validation']);
     }
 
@@ -195,7 +195,7 @@ class UserController extends Controller
     public function editAction(Request $request, $userType, User $user, FileUploader $fileUploader): Response
     {
         $form = $this->createForm(UserFormType::class, $user, ['userType' => $userType, 'isNew' => false]);
-        
+
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
@@ -207,9 +207,9 @@ class UserController extends Controller
             $user->setSlug(''); // to force slug refresh
             $this->getDoctrine()->getManager()->persist($user);
             $this->getDoctrine()->getManager()->flush();
-            
+
             $this->updateUserSlug($user);
-            
+
             $this->addFlash('success', 'Generics.flash.editSuccess');
 
             return $this->redirectToRoute('user_show', ['userType' => $userType, 'id' => $user->getId()]);
@@ -221,7 +221,7 @@ class UserController extends Controller
                 'userType' => $userType,
         ]);
     }
-    
+
     /**
      * Change type and role of on user
      *
@@ -236,21 +236,21 @@ class UserController extends Controller
     {
         // gestion des anciens rôles
         $user->resetRoles();
-        
+
         // gestion du nouveau rôle
         $new_role = $request->request->get('newRole');
         $user->addRole($new_role);
         $em = $this->getDoctrine()->getManager();
         $em->persist($user);
         $em->flush();
-        
+
         $this->addFlash('success', 'Entities.User.flashes.changeRoleSuccess');
 
         $userType = strtolower(str_replace('ROLE_', '', $new_role));
-        
+
         return $this->redirectToRoute('user_show', ['userType' => $userType, 'id' => $user-> getId()]);
     }
-    
+
     /**
      * Delete a user entity.
      *
@@ -267,7 +267,7 @@ class UserController extends Controller
 
         return $this->redirectToRoute('user_index', ['userType' => $userType]);
     }
-    
+
     /**
      * Finds and displays a User entity.
      *
@@ -289,7 +289,7 @@ class UserController extends Controller
             'userMessages' => $userMessages
         ]);
     }
-    
+
     /**
      * Batch action for BusinessState entity.
      *
@@ -302,20 +302,20 @@ class UserController extends Controller
     {
         $ids = $request->request->get('ids');
         if ($ids) {
-          if ('batchDelete' === $request->request->get('batch_action')) {
-                  $userRepository->batchDelete($ids);
-                  $this->addFlash('success', 'Les éléments selectionnés ont été supprimés');
-              }
+            if ('batchDelete' === $request->request->get('batch_action')) {
+                $userRepository->batchDelete($ids);
+                $this->addFlash('success', 'Les éléments selectionnés ont été supprimés');
+            }
 
-          if ('batchExport' === $request->request->get('batch_action')) {
-              return $this->exportUsers($userRepository, $ids);
-          }
+            if ('batchExport' === $request->request->get('batch_action')) {
+                return $this->exportUsers($userRepository, $ids);
+            }
         }
         $userType = $request->query->get('userType');
 
         return $this->redirectToRoute('user_index', ['userType' => $userType]);
     }
-    
+
     /**
      * Delete a photo entity.
      *
@@ -346,51 +346,52 @@ class UserController extends Controller
 
         return $this->redirectToRoute('admin_user_edit', ['id' => $userId]);
     }
-    
-    private function exportUsers(UserRepository $userRepository,$usersIds): Response
+
+    private function exportUsers(UserRepository $userRepository, $usersIds): Response
     {
-        
+
         $users = $userRepository->findBy(['id'=>$usersIds]);
-        $now = new \DateTime;
+        $now = new \DateTime();
         $rows = ['Nom;Prénom;Rôles;Structure;Courriel;Tél fixe; Tél portable;Adresse;'];
         /** @var Registration $registration */
         foreach($users as $user) {
             $roleString = '';
             $separator = '';
-            foreach($user->getRoles() as $role){
-              $roleString .= $separator.$this->translator->trans('Entities.User.roles.'.$role);
-              $separator = '-';
+            foreach($user->getRoles() as $role) {
+                $roleString .= $separator.$this->translator->trans('Entities.User.roles.'.$role);
+                $separator = '-';
             }
-            $data = 
+            $data =
                 [
                   $user->getLastName(),
                   $user->getFirstName(),
                   $roleString,
                   $user->getStructureName(),
                   $user->getEmail(),
-                  $user->getCoordinate()?$user->getCoordinate()->getPhone():'',
-                  $user->getCoordinate()?$user->getCoordinate()->getMobilePhone():'',
-                  $user->getCoordinate()?$user->getCoordinate()->getFormatedAddress():'',
+                  $user->getCoordinate() ? $user->getCoordinate()->getPhone() : '',
+                  $user->getCoordinate() ? $user->getCoordinate()->getMobilePhone() : '',
+                  $user->getCoordinate() ? $user->getCoordinate()->getFormatedAddress() : '',
 
                 ];
             $rows[] = implode(';', $data);
         }
-        
+
         $content = implode("\n", $rows);
-        
+
         $response = new Response($content);
         $response->headers->set('Content-Type', 'application/force-download');
         $response->headers->set('Cache-Control', 'no-cache');
         $slugify = new Slugify();
         $filename = $slugify->slugify('export utilisateurs '.$now->format('d-m-Y H:i:s'));
         $response->headers->set('Content-Disposition', $response->headers->makeDisposition(
-            ResponseHeaderBag::DISPOSITION_ATTACHMENT, "$filename.csv"
+            ResponseHeaderBag::DISPOSITION_ATTACHMENT,
+            "$filename.csv"
         ));
 
         return $response;
-        
+
     }
-    
+
     private function updateUserSlug(User $user)
     {
         $em = $this->getDoctrine()->getManager();

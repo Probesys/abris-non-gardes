@@ -18,13 +18,14 @@ class DiscussionFilterType extends AbstractType
 
     private $em;
 
-    public function __construct(EntityManagerInterface $em) {
+    public function __construct(EntityManagerInterface $em)
+    {
         $this->em = $em;
     }
-    
+
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        
+
         $builder
               ->add('abris', null, ['label' => 'Entities.Dysfonctionnement.fields.abris', 'required' => false])
         ;

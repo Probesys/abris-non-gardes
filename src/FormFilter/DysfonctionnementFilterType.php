@@ -18,13 +18,14 @@ class DysfonctionnementFilterType extends AbstractType
 
     private $em;
 
-    public function __construct(EntityManagerInterface $em) {
+    public function __construct(EntityManagerInterface $em)
+    {
         $this->em = $em;
     }
-    
+
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        
+
         $builder
               ->add('abris', null, ['label' => 'Entities.Dysfonctionnement.fields.abris', 'required' => false])
               ->add('natureDys', EntityType::class, ['label' => 'Entities.Dysfonctionnement.fields.natureDys', 'class' => ListingValue::class, 'expanded' => false, 'multiple' => false, 'required' => false, 'placeholder' => '', 'choice_attr' => function ($choiceValue, $key, $value) {
@@ -35,7 +36,7 @@ class DysfonctionnementFilterType extends AbstractType
                   } else {
                       return [];
                   }
-              }, 'query_builder' => fn(ListingValueRepository $rep) => $this->createListingValueBuilder($rep, $this->getUuidTypeListeFromAnnotation('Dysfonctionnement', 'natureDys'))])
+              }, 'query_builder' => fn (ListingValueRepository $rep) => $this->createListingValueBuilder($rep, $this->getUuidTypeListeFromAnnotation('Dysfonctionnement', 'natureDys'))])
                 ->add('statusDys', EntityType::class, ['label' => 'Entities.Dysfonctionnement.fields.statusDys', 'class' => ListingValue::class, 'expanded' => false, 'required' => false, 'multiple' => false, 'placeholder' => '', 'choice_attr' => function ($choiceValue, $key, $value) {
                     if ($choiceValue->getHelpMessage()) {
                         $id_helpMessage = $choiceValue->getHelpMessage()->getId();
@@ -44,7 +45,7 @@ class DysfonctionnementFilterType extends AbstractType
                     } else {
                         return [];
                     }
-                }, 'query_builder' => fn(ListingValueRepository $rep) => $this->createListingValueBuilder($rep, $this->getUuidTypeListeFromAnnotation('Dysfonctionnement', 'statusDys'))])            
+                }, 'query_builder' => fn (ListingValueRepository $rep) => $this->createListingValueBuilder($rep, $this->getUuidTypeListeFromAnnotation('Dysfonctionnement', 'statusDys'))])
         ;
     }
 

@@ -34,7 +34,7 @@ class CityRepository extends ServiceEntityRepository
         ;
 
         $slugify = new Slugify();
-        if ($filter ) {
+        if ($filter) {
             if (isset($filter['name']) && '' != $filter['name']) {
                 $slug = $slugify->slugify($filter['name'], '-');
                 $dql->andwhere('c.slug LIKE \'%'.$slug.'%\'');
@@ -81,7 +81,7 @@ class CityRepository extends ServiceEntityRepository
         $dql = $this->createQueryBuilder('c')
             ->select('c.id, c.name, c.zipCode')
             ->orderby('c.slug', 'ASC')
-            ;
+        ;
 
         if ($q) {
             $dql->Where("c.zipCode LIKE '".$slug."%'");
@@ -97,7 +97,7 @@ class CityRepository extends ServiceEntityRepository
 
         return $query->getResult();
     }
-    
+
     /**
      * query to return cities associate to one territory.
      *
@@ -115,13 +115,13 @@ class CityRepository extends ServiceEntityRepository
             ->where('t.id='.$territoryId)
             ->orderBy('c.name', 'ASC')
         ;
-        if (array_key_exists('name', $filterData) && '' != $filterData['name'] ) {
+        if (array_key_exists('name', $filterData) && '' != $filterData['name']) {
             $dql->andWHere('c.name LIKE \'%'.$filterData['name'].'%\'');
         }
-        if (array_key_exists('zipCode', $filterData) && '' != $filterData['zipCode'] ) {
+        if (array_key_exists('zipCode', $filterData) && '' != $filterData['zipCode']) {
             $dql->andWHere('c.zipCode LIKE \'%'.$filterData['zipCode'].'%\'');
         }
-        if (array_key_exists('department', $filterData) && '' != $filterData['name'] ) {
+        if (array_key_exists('department', $filterData) && '' != $filterData['name']) {
             $dql->andWHere('c.department LIKE \'%'.$filterData['department'].'%\'');
         }
 
@@ -149,13 +149,13 @@ class CityRepository extends ServiceEntityRepository
             $territoryId[] = $teritory->getId();
         }
         $dql->andWhere('t.id IN ('.implode($territoryId, ',').')');
-        if (array_key_exists('name', $filterData) && '' != $filterData['name'] ) {
+        if (array_key_exists('name', $filterData) && '' != $filterData['name']) {
             $dql->andWHere('c.name LIKE \'%'.$filterData['name'].'%\'');
         }
-        if (array_key_exists('zipCode', $filterData) && '' != $filterData['zipCode'] ) {
+        if (array_key_exists('zipCode', $filterData) && '' != $filterData['zipCode']) {
             $dql->andWHere('c.zipCode LIKE \'%'.$filterData['zipCode'].'%\'');
         }
-        if (array_key_exists('department', $filterData) && '' != $filterData['name'] ) {
+        if (array_key_exists('department', $filterData) && '' != $filterData['name']) {
             $dql->andWHere('c.department LIKE \'%'.$filterData['department'].'%\'');
         }
 

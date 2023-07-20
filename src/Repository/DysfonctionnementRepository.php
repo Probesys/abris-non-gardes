@@ -28,7 +28,7 @@ class DysfonctionnementRepository extends ServiceEntityRepository
                 ->leftJoin('d.natureDys', 'nd')
                 ->leftJoin('d.statusDys', 'sd')
                 ->leftJoin('d.elementDys', 'ed')
-                
+
         ;
         $slugify = new Slugify();
         if ($filter && isset($filter['abris']) && '' != $filter['abris']) {
@@ -68,16 +68,16 @@ class DysfonctionnementRepository extends ServiceEntityRepository
             $dql->leftJoin('a.gestionnaires', 'gests')
                 ->andWhere('gests.id=\''.$user->getId().'\'');
         }
-        
+
         $query = $dql->getQuery();
-        
+
         if ($limit) {
             $query->setMaxResults($limit);
         }
 
         return $query->getResult();
     }
-    
+
     /**
      * massive delete function.
      *

@@ -22,7 +22,8 @@ class MessageController extends Controller
     /**
      * @Route("/", name="admin_message_index", methods="GET|POST")
      */
-    public function indexAction(MessageRepository $messageRepository, Request $request, PaginatorInterface $paginator): Response {
+    public function indexAction(MessageRepository $messageRepository, Request $request, PaginatorInterface $paginator): Response
+    {
         $session = $request->getSession();
         $filterData = [];
         $filterForm = $this->createForm(MessageFilterType::class);
@@ -48,9 +49,9 @@ class MessageController extends Controller
             if (array_key_exists('abris', $filterData)) {
                 $filterForm->get('abris')->setData($filterData['abris']);
             }
-            
+
         }
-        
+
         // envoi du user logué si son rôle est autre que admin
         if(!$this->getUser()->hasRole('ROLE_ADMIN')) {
             $filterData['userID'] = $this->getUser()->getId();
@@ -59,16 +60,16 @@ class MessageController extends Controller
         $per_page = $this->getParameter('app.per_page_global');
         $query = $messageRepository->search($filterData);
         $pagination = $paginator->paginate(
-                $query,
-                $request->query->getInt('page', 1)/* page number */,
-                $request->query->getInt('per_page', $per_page), /* limit per page */
-                ['defaultSortFieldName' => 'm.created', 'defaultSortDirection' => 'desc']
+            $query,
+            $request->query->getInt('page', 1)/* page number */,
+            $request->query->getInt('per_page', $per_page), /* limit per page */
+            ['defaultSortFieldName' => 'm.created', 'defaultSortDirection' => 'desc']
         );
 
         return $this->render('admin/message/index.html.twig', ['pagination' => $pagination, 'search_form' => $filterForm->createView()]);
     }
 
-    
+
 
     /**
      * Delete a message entity.

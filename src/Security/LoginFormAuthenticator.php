@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Security;
 
 use App\Entity\User;
@@ -39,7 +40,7 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator implements P
         $this->csrfTokenManager = $csrfTokenManager;
         $this->passwordEncoder = $passwordEncoder;
     }
-    
+
     public function supportsRememberMe()
     {
         return true;
@@ -79,12 +80,13 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator implements P
             // fail authentication with a custom error
             throw new CustomUserMessageAuthenticationException('Email could not be found.');
         }
-        
+
 
         return $user;
     }
-    
-    public function getPassword($credentials) :?string{
+
+    public function getPassword($credentials): ?string
+    {
         return true;
     }
 
@@ -95,18 +97,18 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator implements P
 
     public function onAuthenticationSuccess(Request $request, TokenInterface $token, $providerKey)
     {
-        if (in_array('ROLE_USER',$token->getUser()->getRoles())) {
-            return new RedirectResponse($this->urlGenerator->generate('index',['vueRouting'=> 'abris']));
+        if (in_array('ROLE_USER', $token->getUser()->getRoles())) {
+            return new RedirectResponse($this->urlGenerator->generate('index', ['vueRouting'=> 'abris']));
         }
-        
-        if (in_array('ROLE_WAITING_VALIDATION',$token->getUser()->getRoles())) {
+
+        if (in_array('ROLE_WAITING_VALIDATION', $token->getUser()->getRoles())) {
             return new RedirectResponse($this->urlGenerator->generate('app_registration-waiting-validation'));
         }
-        
-//        if ($targetPath = $this->getTargetPath($request->getSession(), $providerKey)) {
-//            return new RedirectResponse($targetPath);
-//        }
-        
+
+        //        if ($targetPath = $this->getTargetPath($request->getSession(), $providerKey)) {
+        //            return new RedirectResponse($targetPath);
+        //        }
+
         return new RedirectResponse($this->urlGenerator->generate('admin_index'));
     }
 

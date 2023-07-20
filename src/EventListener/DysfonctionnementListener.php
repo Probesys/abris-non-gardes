@@ -26,16 +26,16 @@ class DysfonctionnementListener
     {
         $this->index($args);
     }
-    
+
     public function index(LifecycleEventArgs $event)
     {
         $entity = $event->getEntity();
 
         $em = $event->getEntityManager();
 
-        if ( $entity instanceof Dysfonctionnement && is_null($entity->getDiscussion()) ) {
-           // $this->postUpdateConsultationFeedingInfos($entity, $em);
-           /**@var Dysfonctionnement $entity*/
+        if ($entity instanceof Dysfonctionnement && is_null($entity->getDiscussion())) {
+            // $this->postUpdateConsultationFeedingInfos($entity, $em);
+            /**@var Dysfonctionnement $entity*/
             $abris = $entity->getAbris();
             $discussion = new Discussion();
             $discussion->setDysfonctionnement($entity);

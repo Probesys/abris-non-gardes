@@ -17,12 +17,13 @@ use Knp\Component\Pager\PaginatorInterface;
 /**
  * @Route("/admin/listing-value")
  */
-class ListingValueController extends Controller {
-
+class ListingValueController extends Controller
+{
     /**
      * @Route("/", name="listingValue_index", methods="GET|POST")
      */
-    public function indexAction(ListingValueRepository $listingValueRepository, ListingTypeRepository $listingTypeRepository, Request $request, PaginatorInterface $paginator): Response {
+    public function indexAction(ListingValueRepository $listingValueRepository, ListingTypeRepository $listingTypeRepository, Request $request, PaginatorInterface $paginator): Response
+    {
         $session = $request->getSession();
         $filterData = [];
         $filterForm = $this->createForm(ListingValueFilterType::class);
@@ -72,10 +73,10 @@ class ListingValueController extends Controller {
         $per_page = $this->getParameter('app.per_page_global');
         $query = $listingValueRepository->search($filterData);
         $pagination = $paginator->paginate(
-                $query,
-                $request->query->getInt('page', 1)/* page number */,
-                $request->query->getInt('per_page', $per_page), /* limit per page */
-                ['defaultSortFieldName' => 'lt.slug', 'defaultSortDirection' => 'asc']
+            $query,
+            $request->query->getInt('page', 1)/* page number */,
+            $request->query->getInt('per_page', $per_page), /* limit per page */
+            ['defaultSortFieldName' => 'lt.slug', 'defaultSortDirection' => 'asc']
         );
         return $this->render('admin/listingValue/index.html.twig', ['pagination' => $pagination, 'search_form' => $filterForm->createView()]);
     }
@@ -83,7 +84,8 @@ class ListingValueController extends Controller {
     /**
      * @Route("/new", name="listingValue_new", methods="GET|POST")
      */
-    public function newAction(Request $request, ListingTypeRepository $listingTypeRepository, TranslatorInterface $translator): Response {
+    public function newAction(Request $request, ListingTypeRepository $listingTypeRepository, TranslatorInterface $translator): Response
+    {
         $listingValue = new ListingValue();
 
         if ($request->query->has('listingTypeId')) {
@@ -119,7 +121,8 @@ class ListingValueController extends Controller {
     /**
      * @Route("/{id}/edit", name="listingValue_edit", methods="GET|POST")
      */
-    public function editAction(Request $request, ListingValue $listingValue, TranslatorInterface $translator): Response {
+    public function editAction(Request $request, ListingValue $listingValue, TranslatorInterface $translator): Response
+    {
         $form = $this->createForm(ListingValueFormType::class, $listingValue, ['translator' => $translator]);
         $form->handleRequest($request);
 
@@ -144,7 +147,8 @@ class ListingValueController extends Controller {
      *
      * @return Response
      */
-    public function deleteAction($id, ListingValueRepository $listingValueRepository) {
+    public function deleteAction($id, ListingValueRepository $listingValueRepository)
+    {
         $ids = [$id];
         if ($listingValueRepository->batchDelete($ids)) {
             $this->addFlash('success', 'Suppression effectuée avec succès');
@@ -164,7 +168,8 @@ class ListingValueController extends Controller {
      *
      * @return Response
      */
-    public function batchAction(Request $request, ListingValueRepository $listingValueRepository) {
+    public function batchAction(Request $request, ListingValueRepository $listingValueRepository)
+    {
         if ('batchDelete' === $request->request->get('batch_action')) {
             $ids = $request->request->get('ids');
             if ($ids) {

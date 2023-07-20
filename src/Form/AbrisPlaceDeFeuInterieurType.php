@@ -12,11 +12,12 @@ use Symfony\Component\Form\Extension\Core\Type\NumberType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class AbrisPlaceDeFeuInterieurType extends AbstractType {
+class AbrisPlaceDeFeuInterieurType extends AbstractType
+{
+    use ListingValuesFormsTrait;
 
-     use ListingValuesFormsTrait;
-     
-    public function buildForm(FormBuilderInterface $builder, array $options) {
+    public function buildForm(FormBuilderInterface $builder, array $options)
+    {
         $builder
                 ->add('qty', NumberType::class, [
                     'label' => 'quantité'
@@ -29,13 +30,14 @@ class AbrisPlaceDeFeuInterieurType extends AbstractType {
                     } else {
                         return [];
                     }
-                }, 'query_builder' => fn(ListingValueRepository $rep) => $this->createListingValueBuilder($rep, $this->getUuidTypeListeFromAnnotation('AbrisPlaceDeFeuInterieur', 'typePlace'))])
+                }, 'query_builder' => fn (ListingValueRepository $rep) => $this->createListingValueBuilder($rep, $this->getUuidTypeListeFromAnnotation('AbrisPlaceDeFeuInterieur', 'typePlace'))])
 //                ->add('listingValue')
 //                ->add('abris')
         ;
     }
 
-    public function configureOptions(OptionsResolver $resolver) {
+    public function configureOptions(OptionsResolver $resolver)
+    {
         $resolver->setDefaults([
             'data_class' => AbrisPlaceDeFeuInterieur::class,
         ]);

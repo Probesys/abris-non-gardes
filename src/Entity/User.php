@@ -50,7 +50,7 @@ class User implements UserInterface
      * @ORM\Column(name="password", type="string")
      */
     private ?string $password = null;
-    
+
     /**
      * @ORM\Column(type="string", length=255, unique=true)
      * @Assert\Email()
@@ -76,7 +76,7 @@ class User implements UserInterface
      * @var DateTime
      */
     private $updated;
-    
+
     /**
      * @ORM\Column(type="string", length=255)
      * @Groups({"abris","dysfunction", "discussion" ,"user"})
@@ -104,7 +104,7 @@ class User implements UserInterface
      * @ORM\ManyToMany(targetEntity="App\Entity\Abris", mappedBy="gestionnaires")
      */
     private $gestionnaireAbris;
-    
+
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\ListingValue")
      * @ORM\JoinColumn(nullable=true)
@@ -112,19 +112,19 @@ class User implements UserInterface
      * @Groups({"user"})
      */
     private ?\App\Entity\ListingValue $userType = null;
-    
+
     /**
      * @ORM\OneToOne(targetEntity="App\Entity\Coordinate", inversedBy="user", cascade={"persist", "remove"})
      */
     private ?\App\Entity\Coordinate $coordinate = null;
-    
+
     /**
      * @ORM\ManyToMany(targetEntity="App\Entity\Abris", mappedBy="followers", cascade={"persist"})
      * @Groups({"user"})
      */
     public $abrisFavoris;
-    
-    
+
+
     /**
      * @ORM\OneToOne(targetEntity="App\Entity\UploadedDocument", mappedBy="user", cascade={"persist", "remove"})
      */
@@ -150,7 +150,7 @@ class User implements UserInterface
         $this->abrisFavoris = new ArrayCollection();
         $this->dysfonctionnements = new ArrayCollection();
     }
-    
+
     public function __toString()
     {
         $return = '';
@@ -158,7 +158,7 @@ class User implements UserInterface
             $return .= $this->structureName.' / ';
         }
         $return .= $this->lastName.' '.$this->firstName;
-        
+
         return $return;
     }
 
@@ -172,7 +172,7 @@ class User implements UserInterface
         $this->id = Uuid::uuid4();
         $this->created = new DateTime('NOW');
     }
-    
+
     public function onPostPersist(): void
     {
         $this->login = $this->email;
@@ -254,7 +254,7 @@ class User implements UserInterface
     {
         $this->roles = $roles;
     }
-    
+
     public function addRole($role)
     {
         $roles = $this->roles;
@@ -263,7 +263,7 @@ class User implements UserInterface
         }
         $this->roles = $roles;
     }
-    
+
     public function removeRole($role)
     {
         $roles = $this->roles;
@@ -273,12 +273,12 @@ class User implements UserInterface
         }
         $this->roles = $roles;
     }
-    
+
     public function resetRoles()
     {
         $this->roles = [];
     }
-    
+
     public function hasRole($role)
     {
         $roles = $this->roles;

@@ -7,7 +7,6 @@ use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 use Cocur\Slugify\Slugify;
 
-
 /**
  * @method Page|null find($id, $lockMode = null, $lockVersion = null)
  * @method Page|null findOneBy(array $criteria, array $orderBy = null)
@@ -21,7 +20,7 @@ class PageRepository extends ServiceEntityRepository
         parent::__construct($registry, Page::class);
     }
 
-        public function search($filter = null)
+    public function search($filter = null)
     {
         $dql = $this->createQueryBuilder('p')
               ->select('p')
@@ -49,13 +48,14 @@ class PageRepository extends ServiceEntityRepository
 
         return $query->getResult();
     }
-    
+
     /**
      * massive delete function.
      *
      * @param type $ids
      */
-    public function batchDelete($ids = null) {
+    public function batchDelete($ids = null)
+    {
         if ($ids) {
             $queryBuilder = $this->createQueryBuilder('p')->delete('App\Entity\Page p')->where('p.id IN (' . implode(',', $ids) . ')');
             $query = $queryBuilder->getQuery();

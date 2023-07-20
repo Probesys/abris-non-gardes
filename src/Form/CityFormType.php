@@ -9,7 +9,6 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 use Tetranz\Select2EntityBundle\Form\Type\Select2EntityType;
 use App\Entity\Territory;
 
-
 class CityFormType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
@@ -37,8 +36,8 @@ class CityFormType extends AbstractType
                     'language' => 'fr',
                     'placeholder' => 'Entities.Territory.actions.selectOneOrManyTerritories',
                     'by_reference' => false,
-                  ]) 
-              
+                  ])
+
 
         ;
     }

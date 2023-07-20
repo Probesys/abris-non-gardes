@@ -15,9 +15,9 @@ use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\PageRepository")
- * 
+ *
  */
-class Page 
+class Page
 {
     use EntityBlameableTrait;
     use EntityTimestampableTrait;
@@ -30,26 +30,26 @@ class Page
      * @Groups({"default"})
      */
     private $id;
-    
+
     /**
-     * 
+     *
      * @ORM\Column(type="string", length=255)
      * @Groups({"default"})
      */
     private $name;
 
     /**
-     * 
+     *
      * @ORM\Column(type="text", nullable=true)
      * @Groups({"default"})
      */
     private ?string $body = null;
-    
+
     /**
      * @ORM\Column(type="integer", nullable=true)
      */
     private ?int $orderInList = null;
-    
+
     /**
      * @ORM\Column(type="boolean")
      */
@@ -120,7 +120,7 @@ class Page
         return $this;
     }
 
-    
-    
-    
+
+
+
 }

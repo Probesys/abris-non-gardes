@@ -25,7 +25,7 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * @Rest\Route("/api/user")
- 
+
  */
 final class ApiUserController extends AbstractController
 {
@@ -91,34 +91,34 @@ final class ApiUserController extends AbstractController
         return new JsonResponse($data, Response::HTTP_OK, [], true);
     }
 
-  /**
-     * @throws BadRequestHttpException
-     *
-     * @Rest\Post("/{id}/updateProfile", name="updateProfile")
-     */
+    /**
+       * @throws BadRequestHttpException
+       *
+       * @Rest\Post("/{id}/updateProfile", name="updateProfile")
+       */
     public function updateProfile(User $user, Request $request, TranslatorInterface $translator): JsonResponse
     {
-//        $dysfonctionnement = new Dysfonctionnement();
+        //        $dysfonctionnement = new Dysfonctionnement();
 
         $form = $this->createForm(RegistrationFormType::class, $user, ['translator' => $translator]);
         $form->remove('email');
         $form->remove('login');
         $form->handleRequest($request);
-        
+
 
         if ($form->isSubmitted()) {
 
-        
+
             $this->em->persist($user);
             $this->em->flush();
 
 
         }
- 
+
         $data = $this->serializer->serialize($user, 'json', ['groups' => ['user']]);
 
         return new JsonResponse($data, Response::HTTP_CREATED, [], true);
     }
-    
-    
+
+
 }

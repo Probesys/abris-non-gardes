@@ -20,7 +20,7 @@ trait EntityNameTrait
      * @ORM\Column(name="name", type="string", length=255, nullable=true)
      * @Gedmo\Versioned
      * @Groups({"default","abris","dysfunction", "discussion" ,"user"})
-     * 
+     *
      */
     private $name;
 

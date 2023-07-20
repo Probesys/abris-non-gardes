@@ -39,7 +39,7 @@ class ListingValueFormType extends AbstractType
                     'label' => 'Entities.ListingValue.fields.listingType',
                     //'attr' => array('class' => 'select2'),
                     'placeholder' => 'Entities.ListingValue.actions.selectlistingType',
-                    'query_builder' => fn(ListingTypeRepository $rep) => $rep->createQueryBuilder('lt')
+                    'query_builder' => fn (ListingTypeRepository $rep) => $rep->createQueryBuilder('lt')
                             ->orderBy('lt.slug', 'ASC'),
                 ])
                 ->add('orderInList', null, [
@@ -69,7 +69,7 @@ class ListingValueFormType extends AbstractType
 
             $form->add('parent', EntityType::class, ['class' => ListingValue::class, 'label' => 'Entities.ListingValue.fields.listingParent', 'placeholder' => 'Entities.ListingValue.actions.selectlistingType', 'choice_label' => function ($choice, $key, $value) use ($ListValueRepository, $curLevel) {
                 if ($choice->getParent()) {
-//                        $path = $choice->getPath();
+                    //                        $path = $choice->getPath();
                     return implode(' » ', $choice->getPath()) . ' » ' . $choice->getName();
                 } else {
                     return $choice;

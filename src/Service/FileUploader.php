@@ -13,19 +13,21 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 //use Symfony\Component\String\Slugger\SluggerInterface;
 
-class FileUploader {
-
+class FileUploader
+{
     private $slugger;
     private $em;
     private $targetDirectory;
 
-    public function __construct($targetDirectory, EntityManager $em) {
+    public function __construct($targetDirectory, EntityManager $em)
+    {
         $this->slugger = new Slugify();
         $this->targetDirectory = $targetDirectory;
         $this->em = $em;
     }
 
-    public function upload(UploadedFile $file, $obj) {
+    public function upload(UploadedFile $file, $obj)
+    {
         $targetDirectory = null;
         $originalFilename = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME);
         $fileName = $this->slugger->slugify($file->getClientOriginalName()) . '-' . uniqid() . '.' . $file->guessExtension();
@@ -42,35 +44,36 @@ class FileUploader {
                 break;
             case $obj instanceof User:
                 $targetDirectory = $this->targetDirectory . "/" . $obj->getId();
-                if($obj->getPhoto()){
+                if($obj->getPhoto()) {
                     // update photo
                     $photo = $obj->getPhoto();
-                } else{
+                } else {
                     $photo->setUser($obj);
                     $obj->setPhoto($photo);
                 }
                 break;
         }
-        
+
         $photo->setFileName($fileName);
         $photo->setMimeType($file->getMimeType());
         $photo->setFilesize($file->getSize());
-//                    $uploadedDoc->move($directory);
+        //                    $uploadedDoc->move($directory);
         try {
-            $file->move($targetDirectory , $fileName);   
+            $file->move($targetDirectory, $fileName);
             $this->em->persist($photo);
         } catch (FileException $e) {
             //Todo
             //dump($e);
             //die;
         }
-        
+
 
 
         return $fileName;
     }
-    
-    public function setTargetDirectory($dirname) {
+
+    public function setTargetDirectory($dirname)
+    {
         $this->targetDirectory = $this->targetDirectory.$dirname;
         return $this;
     }

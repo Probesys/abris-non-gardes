@@ -8,6 +8,7 @@ use App\DataFixtures\UserFixtures;
 use Safe\Exceptions\JsonException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+
 use function count;
 
 final class PostControllerTest extends AbstractControllerWebTestCase

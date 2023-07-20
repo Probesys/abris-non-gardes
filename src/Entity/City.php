@@ -78,7 +78,7 @@ class City
      * @ORM\OneToMany(targetEntity="App\Entity\Abris", mappedBy="city")
      */
     private $abris;
-    
+
     /**
      * @ORM\ManyToMany(targetEntity="App\Entity\Territory", mappedBy="cities", cascade={"persist"})
      */
@@ -98,7 +98,7 @@ class City
 
         return ' '.$this->name;
     }
-    
+
     /**
      * @return string
      */

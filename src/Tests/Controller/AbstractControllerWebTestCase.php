@@ -10,6 +10,7 @@ use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+
 use function Safe\json_decode;
 use function Safe\json_encode;
 
@@ -24,15 +25,15 @@ abstract class AbstractControllerWebTestCase extends WebTestCase
         $this->client = static::createClient();
     }
 
-   /**
-    * @param mixed[] $data
-    *
-    * @throws JsonException
-    */
-   protected function JSONRequest(string $method, string $uri, array $data = []): void
-   {
-       $this->client->request($method, $uri, [], [], ['CONTENT_TYPE' => 'application/json'], json_encode($data));
-   }
+    /**
+     * @param mixed[] $data
+     *
+     * @throws JsonException
+     */
+    protected function JSONRequest(string $method, string $uri, array $data = []): void
+    {
+        $this->client->request($method, $uri, [], [], ['CONTENT_TYPE' => 'application/json'], json_encode($data));
+    }
 
     /**
      * @return mixed

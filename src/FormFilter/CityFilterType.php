@@ -19,8 +19,8 @@ class CityFilterType extends AbstractType
               ->add('zipCode', null, ['label' => 'Entities.City.fields.zipCode', 'required' => false])
             ->add('name', null, ['label' => 'Entities.City.fields.name', 'required' => false])
             ->add('department', null, ['label' => 'Entities.City.fields.department', 'required' => false])
-            ->add('territories', EntityType::class, ['class' => Territory::class, 'query_builder' => fn(EntityRepository $er) => $er->createQueryBuilder('t')
-                  ->orderBy('t.root, t.lft', 'ASC'), 'label' => 'Territoire', 'required' => false, 'attr' => ['style'=>'width:100%']])  
+            ->add('territories', EntityType::class, ['class' => Territory::class, 'query_builder' => fn (EntityRepository $er) => $er->createQueryBuilder('t')
+                  ->orderBy('t.root, t.lft', 'ASC'), 'label' => 'Territoire', 'required' => false, 'attr' => ['style'=>'width:100%']])
         ;
     }
 

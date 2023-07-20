@@ -48,13 +48,14 @@ class HelpMessageRepository extends ServiceEntityRepository
 
         return $query->getResult();
     }
-    
+
     /**
      * massive delete function.
      *
      * @param type $ids
      */
-    public function batchDelete($ids = null) {
+    public function batchDelete($ids = null)
+    {
         if ($ids) {
             $queryBuilder = $this->createQueryBuilder('hm')->delete('App\Entity\HelpMessage hm')->where('hm.id IN (' . implode(',', $ids) . ')');
             $query = $queryBuilder->getQuery();

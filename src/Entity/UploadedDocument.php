@@ -13,7 +13,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
 class UploadedDocument
 {
     use EntityBlameableTrait;
-    use EntityTimestampableTrait;    
+    use EntityTimestampableTrait;
     /**
      * @ORM\Id()
      * @ORM\GeneratedValue()
@@ -48,15 +48,15 @@ class UploadedDocument
      * @ORM\JoinColumn(nullable=true, onDelete="CASCADE")
      */
     private ?\App\Entity\Dysfonctionnement $dysfonctionnement = null;
-    
+
     /**
      * @ORM\OneToOne(targetEntity="App\Entity\User", inversedBy="photo")
      * @ORM\JoinColumn(nullable=true, onDelete="SET NULL")
-     * 
+     *
      */
     private ?\App\Entity\User $user = null;
-    
-    
+
+
 
     public function getId(): ?int
     {
@@ -135,5 +135,5 @@ class UploadedDocument
         return $this;
     }
 
-    
+
 }

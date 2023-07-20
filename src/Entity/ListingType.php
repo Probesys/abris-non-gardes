@@ -38,7 +38,7 @@ class ListingType
      * @ORM\OneToMany(targetEntity="App\Entity\ListingValue", mappedBy="listingType")
      */
     private $listingValues;
-    
+
     /**
      *
      * @ORM\Column(type="uuid", unique=true)
@@ -46,7 +46,7 @@ class ListingType
      * @var UuidInterface
      */
     private $uuid;
-    
+
     /**
      * @ORM\PrePersist
      *

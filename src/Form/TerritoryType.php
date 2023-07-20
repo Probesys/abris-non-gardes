@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Form;
+
 use App\Entity\Territory;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -8,8 +9,6 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class TerritoryType extends AbstractType
 {
-    
-
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder

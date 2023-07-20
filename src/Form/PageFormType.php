@@ -13,9 +13,9 @@ class PageFormType extends AbstractType
     {
         $builder
               ->add('name', null, ['label' => 'Entities.Page.fields.name'])
-              ->add('linkText', null, ['label' => 'Entities.Page.fields.linkText', 'required' => true])  
+              ->add('linkText', null, ['label' => 'Entities.Page.fields.linkText', 'required' => true])
               ->add('body', null, ['label' => 'Entities.Page.fields.body', 'attr' => ['class' => 'summernote']])
-              
+
               ->add('orderInList', null, [
                 'label' => 'Entities.ListingValue.fields.weight',
                 'required' => false,

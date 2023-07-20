@@ -18,10 +18,11 @@ class AbrisFilterType extends AbstractType
 
     private $em;
 
-    public function __construct(EntityManagerInterface $em) {
+    public function __construct(EntityManagerInterface $em)
+    {
         $this->em = $em;
     }
-    
+
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
@@ -34,7 +35,7 @@ class AbrisFilterType extends AbstractType
             } else {
                 return [];
             }
-        }, 'query_builder' => fn(ListingValueRepository $rep) => $this->createListingValueBuilder($rep, $this->getUuidTypeListeFromAnnotation('Abris', 'type'))]) 
+        }, 'query_builder' => fn (ListingValueRepository $rep) => $this->createListingValueBuilder($rep, $this->getUuidTypeListeFromAnnotation('Abris', 'type'))])
 
         ;
     }

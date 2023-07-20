@@ -20,7 +20,7 @@ use App\Repository\ListingValueRepository;
 class RegistrationFormType extends AbstractType
 {
     use ListingValuesFormsTrait;
-    
+
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $translator = $options['translator'];
@@ -30,16 +30,16 @@ class RegistrationFormType extends AbstractType
                 'attr' => [
                   'style' => 'text-transform: uppercase;',
                 ]
-              ])    
+              ])
             ->add('firstName', null, [
                 'label' => 'Entities.User.fields.firstName',
-              ])    
+              ])
             ->add('email', null, [
               'label' => 'Security.fields.email',
             ])
             ->add('login', HiddenType::class, [
                 'label' => 'Entities.User.fields.login',
-              ])    
+              ])
             ->add('agreeTerms', CheckboxType::class, [
                 'label' => 'Security.fields.agreeTerms',
                 'mapped' => false,
@@ -48,7 +48,7 @@ class RegistrationFormType extends AbstractType
                         'message' => $translator->trans('Security.messages.youShouldAgreeToOurTerms'),
                     ]),
                 ],
-                
+
             ])
             ->add('plainPassword', PasswordType::class, [
                 'label' => 'Security.fields.password',
@@ -83,8 +83,8 @@ class RegistrationFormType extends AbstractType
                             return [];
                         }
                     },
-                    'query_builder' => fn(ListingValueRepository $rep) => $this->createListingValueBuilder($rep, $this->getUuidTypeListeFromAnnotation('User', 'userType')),
-                ])    
+                    'query_builder' => fn (ListingValueRepository $rep) => $this->createListingValueBuilder($rep, $this->getUuidTypeListeFromAnnotation('User', 'userType')),
+                ])
         ;
     }
 

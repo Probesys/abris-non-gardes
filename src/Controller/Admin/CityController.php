@@ -68,7 +68,7 @@ class CityController extends Controller
             if (array_key_exists('name', $filterData)) {
                 $filterForm->get('name')->setData($filterData['name']);
             }
-            
+
         }
 
         $per_page = $this->getParameter('app.per_page_global');
@@ -92,7 +92,7 @@ class CityController extends Controller
 
         $form = $this->createForm(CityFormType::class, $city);
         $form->handleRequest($request);
-        
+
         if ($form->isSubmitted() && $form->isValid()) {
             $em = $this->getDoctrine()->getManager();
             $em->persist($city);

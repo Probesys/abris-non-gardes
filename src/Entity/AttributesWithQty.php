@@ -26,7 +26,7 @@ class AttributesWithQty
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\ListingValue")
      * @ORM\JoinColumn(onDelete="CASCADE", nullable=true)
-     * 
+     *
      * @Groups({"abris"})
      */
     private ?\App\Entity\ListingValue $listingValue = null;

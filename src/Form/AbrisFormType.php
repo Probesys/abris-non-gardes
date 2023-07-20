@@ -20,9 +20,8 @@ use Tetranz\Select2EntityBundle\Form\Type\Select2EntityType;
 
 class AbrisFormType extends AbstractType
 {
-    private $em;
-
     use ListingValuesFormsTrait;
+    private $em;
 
     public function __construct(EntityManagerInterface $em)
     {

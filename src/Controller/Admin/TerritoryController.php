@@ -34,9 +34,9 @@ class TerritoryController extends AbstractController
      *
      * @return Response
      */
-    public function indexAction( Request $request)
+    public function indexAction(Request $request)
     {
-        
+
         $session = $request->getSession();
         $em = $this->getDoctrine()->getManager();
         $filterData = [];
@@ -59,7 +59,7 @@ class TerritoryController extends AbstractController
                 if ($filterForm->has('name')) {
                     $filterData['name'] = $filterForm->get('name')->getData();
                 }
-                
+
                 $session->set('territoryFilter', $filterData);
             }
         } else {
@@ -70,13 +70,13 @@ class TerritoryController extends AbstractController
                 if (array_key_exists('name', $filterData)) {
                     $filterForm->get('name')->setData($filterData['name']);
                 }
-                
+
             }
         }
         $territoryRepository = $em->getRepository(Territory::class);
 
         $query = $territoryRepository->search($filterData);
-        
+
         $options = ['decorate' => false];
 
         $htmlTree = $territoryRepository->buildTree($query->getArrayResult(), $options);
@@ -131,7 +131,7 @@ class TerritoryController extends AbstractController
      */
     public function showAction(Request $request, Territory $territory)
     {
-        
+
 
         return $this->render('admin/territory/show.html.twig', ['territory' => $territory]);
     }
@@ -148,9 +148,9 @@ class TerritoryController extends AbstractController
      */
     public function editAction(Request $request, Territory $territory): Response
     {
-        
+
         $editForm = $this->createForm(TerritoryType::class, $territory);
-        
+
         $editForm->handleRequest($request);
 
         if ($editForm->isSubmitted() && $editForm->isValid()) {

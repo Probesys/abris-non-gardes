@@ -14,7 +14,6 @@ use App\Entity\Traits\EntityCommonTrait;
 use App\Entity\Traits\EntityNameTrait;
 use Symfony\Component\Serializer\Annotation\Groups;
 
-
 /**
  * @ORM\Entity(repositoryClass="App\Repository\DiscussionRepository")
  */
@@ -31,9 +30,9 @@ class Discussion
      * @Groups({"abris","dysfunction","discussion"})
      */
     private $id;
-    
+
     /**
-     * 
+     *
      * @ORM\Column(type="string", length=255)
      * @Groups({"abris", "discussion"})
      */
@@ -51,7 +50,7 @@ class Discussion
      * @Groups({"discussion"})
      */
     private ?\App\Entity\Abris $abris = null;
-    
+
     /**
      * @Gedmo\Slug(fields={"name"})
      * @ORM\Column(type="string",length=255, unique=true)

@@ -21,7 +21,7 @@ use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 
 /**
  * @Rest\Route("/api")
- 
+
  */
 final class ApiCommonController extends AbstractController
 {
@@ -46,17 +46,17 @@ final class ApiCommonController extends AbstractController
         $data = $this->serializer->serialize($abris, 'json', ['groups' => ['default']]);
 
         return new JsonResponse($data, Response::HTTP_OK, [], true);
-    }       
+    }
 
     /**
      * @Rest\Get("/pages/{id}", name="loadPage")
      */
     public function loadPageAction(Page $page): JsonResponse
-    {        
+    {
         $data = $this->serializer->serialize($page, 'json', ['groups' => ['default']]);
 
         return new JsonResponse($data, Response::HTTP_OK, [], true);
-    }     
-     
+    }
+
 
 }

@@ -11,6 +11,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Serializer\Encoder\JsonEncoder;
 use Symfony\Component\Serializer\SerializerInterface;
+
 use function Safe\json_encode;
 
 final class IndexController extends AbstractController
@@ -25,7 +26,7 @@ final class IndexController extends AbstractController
 
     /**
      * @throws JsonException
-     * 
+     *
      * @Route("/{vueRouting}", requirements={"vueRouting"="^(?!api|reset-password|register|img|js\/routing|_(profiler|wdt)).*"}, name="index")
      */
     public function indexAction(): Response
@@ -38,7 +39,7 @@ final class IndexController extends AbstractController
             $userClone->setPassword('');
             $data = $this->serializer->serialize($userClone, JsonEncoder::FORMAT, ['groups' => ['user']]);
         }
-        
+
 
         return $this->render('base.html.twig', [
             'isAuthenticated' => json_encode(! empty($user)),

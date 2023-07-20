@@ -5,13 +5,13 @@ namespace App\Repository;
 use Cocur\Slugify\Slugify;
 use Gedmo\Tree\Entity\Repository\NestedTreeRepository;
 
-
 class NestedTerritoryRepository extends NestedTreeRepository
 {
-    public function __construct(\Doctrine\ORM\EntityManagerInterface $em, \Doctrine\ORM\Mapping\ClassMetadata $class) {
-     parent::__construct($em, $class);
+    public function __construct(\Doctrine\ORM\EntityManagerInterface $em, \Doctrine\ORM\Mapping\ClassMetadata $class)
+    {
+        parent::__construct($em, $class);
     }
-    
+
     public function search($filter)
     {
         $slugify = new Slugify();
@@ -24,15 +24,15 @@ class NestedTerritoryRepository extends NestedTreeRepository
             $dql->andwhere('t.slug LIKE \'%'.$slug.'%\'');
         }
 
-        
+
         $query = $dql->getQuery();
 
         return $query;
     }
 
-    
 
-      
 
-    
+
+
+
 }

@@ -52,20 +52,20 @@ class Message
      * @ORM\JoinColumn(nullable=false, onDelete="CASCADE")
      */
     private ?\App\Entity\Discussion $discussion = null;
-    
+
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Message", inversedBy="childreens")
      * @ORM\JoinColumn(nullable=true)
      * @Groups({"abris","dysfunction"})
      */
     private ?\App\Entity\Message $parent = null;
-    
+
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\Message", mappedBy="parent")
      * @Groups({"abris","dysfunction"})
      */
     private $childreens;
-    
+
     /**
      * @Gedmo\Slug(fields={"subject"})
      * @ORM\Column(type="string",length=255, unique=true)

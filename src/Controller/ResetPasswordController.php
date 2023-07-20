@@ -123,7 +123,7 @@ class ResetPasswordController extends AbstractController
 
             // The session is cleaned up after the password has been changed.
             $this->cleanSessionAfterReset();
-            
+
             $this->addFlash('Success', 'Security.success.reset_password');
 
             return $this->redirectToRoute('login');
@@ -139,7 +139,7 @@ class ResetPasswordController extends AbstractController
         $user = $this->getDoctrine()->getRepository(User::class)->findOneBy([
             'email' => $emailFormData,
         ]);
-        
+
 
         // Marks that you are allowed to see the app_check_email page.
         $this->setCanCheckEmailInSession();
@@ -159,7 +159,7 @@ class ResetPasswordController extends AbstractController
 
             return $this->redirectToRoute('app_forgot_password_request');
         }
-        
+
         try {
             $email = (new \Swift_Message($translator->trans('Security.labels.yourPasswordResetRequest')))
                 ->setFrom([$this->getParameter('app.genericMail')=>'Administrateur gestion abris non gardés du Vercors'])

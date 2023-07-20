@@ -80,7 +80,7 @@ class DysfonctionnementController extends AbstractController
             $query,
             $request->query->getInt('page', 1)/* user number */,
             $request->query->getInt('per_page', $per_page), /* limit per user */
-                []
+            []
         );
 
 
@@ -287,20 +287,20 @@ class DysfonctionnementController extends AbstractController
     /**
      * @Route("/{id}/newDiscussion", name="admin_dysfonctionnement_newDiscussion", methods={"POST"})
      */
-//    public function newFromDysfonctionnementAction(Dysfonctionnement $dysfonctionnement, Request $request): Response {
-//
-//        if ($request->request->has('name')){
-//            $discussion = new Discussion();
-//            $discussion->setDysfonctionnement($request->request->get('message'));
-//            $message->setSubject('');
-//            $message->setDiscussion($discussion);
-//            $this->getDoctrine()->getManager()->persist($message);
-//            $this->getDoctrine()->getManager()->flush();
-//        }
-//        $referer = $request->headers->get('referer');
-//        $this->redirect($referer);
-//
-//    }
+    //    public function newFromDysfonctionnementAction(Dysfonctionnement $dysfonctionnement, Request $request): Response {
+    //
+    //        if ($request->request->has('name')){
+    //            $discussion = new Discussion();
+    //            $discussion->setDysfonctionnement($request->request->get('message'));
+    //            $message->setSubject('');
+    //            $message->setDiscussion($discussion);
+    //            $this->getDoctrine()->getManager()->persist($message);
+    //            $this->getDoctrine()->getManager()->flush();
+    //        }
+    //        $referer = $request->headers->get('referer');
+    //        $this->redirect($referer);
+    //
+    //    }
 
     private function checkAccess(Dysfonctionnement $dysfonctionnement, $translator)
     {

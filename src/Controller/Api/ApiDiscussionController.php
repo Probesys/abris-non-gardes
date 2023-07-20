@@ -27,15 +27,16 @@ use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
  * @Rest\Route("/api/discussion")
 
  */
-final class ApiDiscussionController extends AbstractController {
-
+final class ApiDiscussionController extends AbstractController
+{
     /** @var EntityManagerInterface */
     private $em;
 
     /** @var SerializerInterface */
     private $serializer;
 
-    public function __construct(EntityManagerInterface $em, SerializerInterface $serializer) {
+    public function __construct(EntityManagerInterface $em, SerializerInterface $serializer)
+    {
         $this->em = $em;
         $this->serializer = $serializer;
     }
@@ -43,7 +44,8 @@ final class ApiDiscussionController extends AbstractController {
     /**
      * @Rest\Get("/detail/{id}", name="detailDiscussion")
      */
-    public function detailAction(Discussion $discussion): JsonResponse {
+    public function detailAction(Discussion $discussion): JsonResponse
+    {
         if (!$discussion) {
             throw new BadRequestHttpException('Discussion non trouvée');
         }
@@ -58,8 +60,9 @@ final class ApiDiscussionController extends AbstractController {
      *
      * @Rest\Post("/create/", name="createDiscussion")
      */
-    public function createAction(Request $request, TranslatorInterface $translator, \Swift_Mailer $mailer): JsonResponse {
-        
+    public function createAction(Request $request, TranslatorInterface $translator, \Swift_Mailer $mailer): JsonResponse
+    {
+
         $discussion = new Discussion();
         $form = $this->createForm(DiscussionType::class, $discussion);
         $form->handleRequest($request);
@@ -82,7 +85,8 @@ final class ApiDiscussionController extends AbstractController {
      *
      * @Rest\Post("/{id}/new-message/", name="api_message_new")
      */
-    public function newMessageAction(Discussion $discussion, Request $request, TranslatorInterface $translator, \Swift_Mailer $mailer): JsonResponse {
+    public function newMessageAction(Discussion $discussion, Request $request, TranslatorInterface $translator, \Swift_Mailer $mailer): JsonResponse
+    {
         if (!$discussion) {
             throw new BadRequestHttpException('Discussion non trouvée');
         }
@@ -107,7 +111,8 @@ final class ApiDiscussionController extends AbstractController {
         return new JsonResponse($data, Response::HTTP_CREATED, [], true);
     }
 
-    private function sendCreateEmail($discussion, $translator, $mailer) {
+    private function sendCreateEmail($discussion, $translator, $mailer)
+    {
         $abris = $discussion->getAbris();
         $destMail = [];
         // /** @var  User $user */
@@ -127,11 +132,11 @@ final class ApiDiscussionController extends AbstractController {
                         ->setFrom($this->getParameter('app.genericMail'))
                         ->setTo($destMail)
                         ->setBody(
-                        $this->renderView(
+                            $this->renderView(
                                 'emails/generics.html.twig',
                                 ['subject' => $subject, 'body' => $body]
-                        ),
-                        'text/html'
+                            ),
+                            'text/html'
                         );
                 $mailer->send($message);
             } catch (Exception $exc) {

@@ -7,9 +7,10 @@ use App\Repository\ListingValueRepository;
 use Doctrine\Common\Annotations\AnnotationReader;
 use ReflectionClass;
 
-trait ListingValuesFormsTrait {
-
-    public function createListingValueBuilder(ListingValueRepository $rep, $uuidType) {
+trait ListingValuesFormsTrait
+{
+    public function createListingValueBuilder(ListingValueRepository $rep, $uuidType)
+    {
 
         return $rep->createQueryBuilder('lv')
                         ->leftJoin('lv.listingType', 'lt')
@@ -18,15 +19,16 @@ trait ListingValuesFormsTrait {
                         ->orderBy('lv.orderInList, lv.slug', 'ASC');
     }
 
-    public function getUuidTypeListeFromAnnotation($className, $fieldName) {
+    public function getUuidTypeListeFromAnnotation($className, $fieldName)
+    {
         $className = 'App\\Entity\\' . $className;
         $obj = new $className();
         $reader = new AnnotationReader();
         $reflectionClass = new ReflectionClass($obj);
         $property = $reflectionClass->getProperty($fieldName);
         $myAnnotation = $reader->getPropertyAnnotation(
-                $property,
-                ListingAnnotation::class
+            $property,
+            ListingAnnotation::class
         );
 
         return $myAnnotation->idListingUuid;

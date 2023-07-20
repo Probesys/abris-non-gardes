@@ -7,7 +7,6 @@ use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 use Cocur\Slugify\Slugify;
 
-
 /**
  * @method User|null find($id, $lockMode = null, $lockVersion = null)
  * @method User|null findOneBy(array $criteria, array $orderBy = null)
@@ -32,7 +31,7 @@ class UserRepository extends ServiceEntityRepository
             $dql->andwhere('u.slug LIKE \'%'.$slug.'%\'');
         }
         if ($filter && isset($filter['role']) && null != $filter['role']) {
-           $dql->andwhere('u.roles LIKE \'%'.$filter['role'].'%\'');
+            $dql->andwhere('u.roles LIKE \'%'.$filter['role'].'%\'');
         }
 
         return $dql->getQuery();
@@ -52,13 +51,14 @@ class UserRepository extends ServiceEntityRepository
 
         return $query->getResult();
     }
-    
+
     /**
      * massive delete function.
      *
      * @param type $ids
      */
-    public function batchDelete($ids = null) {
+    public function batchDelete($ids = null)
+    {
         if ($ids) {
             $queryBuilder = $this->createQueryBuilder('u')->delete('App\Entity\User u')->where('u.id IN (\'' . implode('\',\'', $ids) . '\')');
             $query = $queryBuilder->getQuery();

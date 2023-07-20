@@ -13,11 +13,12 @@ use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class AttributesWithQtyFormType extends AbstractType {
-
+class AttributesWithQtyFormType extends AbstractType
+{
     use ListingValuesFormsTrait;
 
-    public function buildForm(FormBuilderInterface $builder, array $options) {
+    public function buildForm(FormBuilderInterface $builder, array $options)
+    {
         $listingType = $options['listingType'];
         $builder
 //        ->add('abris', HiddenType::class, [
@@ -31,7 +32,7 @@ class AttributesWithQtyFormType extends AbstractType {
                     } else {
                         return [];
                     }
-                }, 'query_builder' => fn(ListingValueRepository $rep) => $this->createListingValueBuilder($rep, $listingType)])
+                }, 'query_builder' => fn (ListingValueRepository $rep) => $this->createListingValueBuilder($rep, $listingType)])
                 ->add('qty', null, [
                     'label' => false,
                     'attr' => ['pattern' => '^\d+$']
@@ -41,7 +42,8 @@ class AttributesWithQtyFormType extends AbstractType {
         ;
     }
 
-    public function configureOptions(OptionsResolver $resolver) {
+    public function configureOptions(OptionsResolver $resolver)
+    {
         $resolver->setDefaults([
             'data_class' => AttributesWithQty::class,
         ]);

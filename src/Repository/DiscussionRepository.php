@@ -21,7 +21,8 @@ class DiscussionRepository extends ServiceEntityRepository
         parent::__construct($registry, Discussion::class);
     }
 
-   public function search($filter = null) {
+    public function search($filter = null)
+    {
         $dql = $this->createQueryBuilder('d')
                 ->select('d, a')
                 ->leftJoin('d.abris', 'a')
@@ -39,26 +40,27 @@ class DiscussionRepository extends ServiceEntityRepository
             $dql->leftJoin('a.createdBy', 'crea');
             $dql->leftJoin('a.proprietaires', 'proprios');
             $dql->leftJoin('a.gestionnaires', 'gests');
-            $dql->andWhere('crea.id=\''.$userID.'\' OR proprios.id=\''.$userID.'\' OR gests.id=\''.$userID.'\'' );
+            $dql->andWhere('crea.id=\''.$userID.'\' OR proprios.id=\''.$userID.'\' OR gests.id=\''.$userID.'\'');
         }
 
         return $dql->getQuery();
     }
 
 
-    public function listForAbris(Abris $abris): array{
+    public function listForAbris(Abris $abris): array
+    {
         $dql = $this->createQueryBuilder('d')
-                ->where ('d.dysfonctionnement is null')
+                ->where('d.dysfonctionnement is null')
                 ->andWhere('d.abris =:abris')
                 ->setParameter('abris', $abris);
         return $dql->getQuery()->getResult();
-    }    
+    }
 
     /**
      * massive delete function.
      *
      * @param type $ids
-     * 
+     *
      */
     public function batchDelete($ids = null)
     {

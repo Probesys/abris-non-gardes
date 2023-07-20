@@ -18,9 +18,8 @@ use Symfony\Component\Form\Extension\Core\Type\FileType;
 
 class UserFormType extends AbstractType
 {
-    
     use ListingValuesFormsTrait;
-    
+
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $userType = $options['userType'];
@@ -29,25 +28,25 @@ class UserFormType extends AbstractType
             //->add('id')
             ->add('structureName', null, [
                 'label' => 'Entities.User.fields.structureName',
-              ])    
+              ])
             ->add('lastName', null, [
                 'label' => 'Entities.User.fields.lastName',
-              ])    
+              ])
             ->add('firstName', null, [
                 'label' => 'Entities.User.fields.firstName',
               ])
             ->add('email', null, [
                 'label' => 'Entities.User.fields.email',
-              ])     
+              ])
             ->add('login', HiddenType::class, [
                 'label' => 'Entities.User.fields.login',
               ])
             ->add('coordinate', CoordinateType::class, [
                 'label' => 'Entities.Coordinate.title',
               ])
-             
-            ;    
-            
+
+        ;
+
         if($isNew) {
             $builder->add('plainPassword', PasswordType::class, [
                 'label' => 'Entities.User.fields.password',
@@ -71,7 +70,7 @@ class UserFormType extends AbstractType
                             return [];
                         }
                     },
-                    'query_builder' => fn(ListingValueRepository $rep) => $this->createListingValueBuilder($rep, $this->getUuidTypeListeFromAnnotation('User', 'userType')),
+                    'query_builder' => fn (ListingValueRepository $rep) => $this->createListingValueBuilder($rep, $this->getUuidTypeListeFromAnnotation('User', 'userType')),
                 ])
                 ->add('abrisFavoris', Select2EntityType::class, [
                     'multiple' => true,
@@ -91,8 +90,8 @@ class UserFormType extends AbstractType
                     'language' => 'fr',
                     'placeholder' => 'Entities.User.actions.select_one_or_many_abris',
 
-                ])            
-                ;
+                ])
+            ;
         }
         $builder->add('picture', FileType::class, [
                     'required' => false,
@@ -103,8 +102,8 @@ class UserFormType extends AbstractType
                         'accept' => 'image/*',
                         //'multiple' => 'false'
                     ]
-                ])    
-            ; 
+                ])
+        ;
 
     }
 
@@ -115,6 +114,6 @@ class UserFormType extends AbstractType
         ]);
         $resolver->setRequired('userType');
         $resolver->setRequired('isNew');
-        
+
     }
 }
