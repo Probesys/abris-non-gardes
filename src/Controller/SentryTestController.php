@@ -19,7 +19,7 @@ class SentryTestController extends AbstractController
     }
 
     /**
-     * @Route(name="sentry_test", path="/_sentry-test")
+     * @Route(name="sentry_test", path="admin/_sentry-test")
      */
     public function testLog()
     {
