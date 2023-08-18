@@ -4,19 +4,29 @@ namespace App\Controller;
 
 use App\Entity\User;
 use App\Form\RegistrationFormType;
+use App\Repository\PageRepository;
+use App\Security\LoginFormAuthenticator;
+use Doctrine\ORM\EntityManagerInterface;
+use Swift_Mailer;
+use Swift_Message;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Bundle\MonologBundle\SwiftMailer;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
-use Symfony\Contracts\Translation\TranslatorInterface;
-use Symfony\Bundle\MonologBundle\SwiftMailer;
-use App\Repository\PageRepository;
-use App\Security\LoginFormAuthenticator;
 use Symfony\Component\Security\Guard\GuardAuthenticatorHandler;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 class RegistrationController extends AbstractController
 {
+    private $em;
+
+    public function __construct(EntityManagerInterface $em)
+    {
+        $this->em = $em;
+    }
+  
     /**
      * @Route("/register", name="app_register")
      */
@@ -26,7 +36,7 @@ class RegistrationController extends AbstractController
         TranslatorInterface $translator,
         GuardAuthenticatorHandler $guardHandler,
         LoginFormAuthenticator $formAuthenticator,
-        \Swift_Mailer $mailer,
+        Swift_Mailer $mailer,
         PageRepository $pageRepository
     ): Response {
         $user = new User();
@@ -52,14 +62,9 @@ class RegistrationController extends AbstractController
                 )
             );
             $user->addRole('ROLE_WAITING_VALIDATION');
-
-            $entityManager = $this->getDoctrine()->getManager();
-            $entityManager->persist($user);
-            $entityManager->flush();
-
+            $this->em->persist($user);
+            $this->em->flush();
             $this->addFlash('success', 'Security.messages.accountCreatedAndWaitingAdminValidation');
-
-
 
             // send email to admin
             // recherche des admins
@@ -68,7 +73,7 @@ class RegistrationController extends AbstractController
             foreach($admins as $admin) {
                 $destsMail[] = $admin->getEmail();
             }
-            $message = (new \Swift_Message($translator->trans('Security.messages.newAccountWaitValidation')))
+            $message = (new Swift_Message($translator->trans('Security.messages.newAccountWaitValidation')))
                     ->setFrom($this->getParameter('app.genericMail'))
                     ->setTo($destsMail)
                     ->setBody(
