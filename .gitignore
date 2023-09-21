@@ -37,8 +37,12 @@ docker-compose.override.yml
 docker.env
 ###< docker ###
 
-###> IDE  ###
-/nbproject/
+###> IDE ###
+/nbproject
+/nbproject/private/
+.vscode/
+###< IDE ###
+
 
 ### php-cs_fixer ###
 .php_cs.cache
