@@ -37,7 +37,7 @@ docker-compose.override.yml
 docker.env
 ###< docker ###
 
-###> netbeans ###
+###> IDE  ###
 /nbproject/
 
 ### php-cs_fixer ###
