@@ -27,8 +27,15 @@
 npm-debug.log
 yarn-error.log
 ###< symfony/webpack-encore-bundle ###
-### sass ####
+
+###> sass ####
 .sass-cache
+###< sass ####
+
+###> docker ###
+docker-compose.override.yml
+docker.env
+###< docker ###
 
 ###> netbeans ###
 /nbproject/
