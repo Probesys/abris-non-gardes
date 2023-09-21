@@ -1,0 +1,24 @@
+###> autres ###
+.cache
+.local
+Dockerfile
+**/.dockerignore
+**/.git/
+**/.gitattributes
+**/.gitignore
+**/.gitmodules
+**/*.php~
+###< autres ###
+
+###> symfony ###
+var/
+**/*.log
+###< symfony ###
+
+###> node ###
+node_modules/
+###< node ###
+
+###> vendor ###
+vendor/
+###< node ###

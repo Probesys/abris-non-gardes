@@ -1,0 +1,21 @@
+version: '3.7'
+services:
+  web:
+    restart: always
+    #image: gitlab.probesys.com:5050/web/mon-projet:$TAG
+    env_file:
+      - docker.env
+    ports:
+     - ${PORT_WEB-8000}:80
+
+  mysql:
+    image: mariadb
+    restart: always
+    env_file:
+      - docker.env
+    command: --max_allowed_packet=32505856
+    volumes:
+      - db:/var/lib/mysql
+
+volumes:
+  db:
