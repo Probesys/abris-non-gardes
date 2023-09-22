@@ -115,36 +115,6 @@ final class ApiDysfonctionnementController extends AbstractController
 
             $this->sendCreateEmail($dysfonctionnement, $translator, $mailer);
 
-            // ==== sending email === //
-            $destMail = [];
-
-            /** @var  Abris $abris */
-            $abris = $form['abris']->getData();
-
-            /** @var  User $user */
-            $users = $abris->getGestionnaires() ?: $abris->getProprietaires();
-            foreach ($users as $user) {
-                if (filter_var($user->getEmail(), FILTER_VALIDATE_EMAIL)) {
-                    $destMail[] = $user->getEmail();
-                }
-            }
-            if (!empty($destMail)) {
-                try {
-                    $message = (new \Swift_Message($abris->getName() . ' ' . $translator->trans('Security.messages.newDysfunctionReported')))
-                    ->setFrom($this->getParameter('app.genericMail'))
-                    ->setTo($destMail)
-                    ->setBody(
-                        $this->renderView(
-                            'emails/newDysfunction.html.twig',
-                            ['dysfonctionnement' => $dysfonctionnement]
-                        ),
-                        'text/html'
-                    ) ;
-                    $mailer->send($message);
-                } catch (Exception $exc) {
-                    echo "Imposssible d'envoyer le mail aux destinataires" . $exc->getTraceAsString();
-                }
-            }
         }
 
         $data = $this->serializer->serialize($dysfonctionnement, 'json', ['groups' => ['dysfunction']]);
@@ -154,6 +124,7 @@ final class ApiDysfonctionnementController extends AbstractController
 
     private function sendCreateEmail($dysfonctionnement, $translator, $mailer)
     {
+        // #### envoi du mail à la personne ayant ajouté le dysfonctionnement
         $abris = $dysfonctionnement->getAbris();
         $destMail = $dysfonctionnement->getCreatedBy()->getEmail();
         $url = "https://abris.parc-du-vercors.fr/";
@@ -174,6 +145,40 @@ final class ApiDysfonctionnementController extends AbstractController
             $mailer->send($message);
         } catch (Exception $exc) {
             echo "Imposssible d'envoyer le mail aux destinataires" . $exc->getTraceAsString();
+        }
+        
+        // ####  mail aux proprietaires / gestionnaires
+        $destMails = [];
+        /** @var  User $user */
+        foreach ($abris->getGestionnaires() as $user) {
+            if (filter_var($user->getEmail(), FILTER_VALIDATE_EMAIL)) {
+                $destMails[] = $user->getEmail();
+            }
+        }
+        foreach ($abris->getProprietaires() as $user) {
+            if (filter_var($user->getEmail(), FILTER_VALIDATE_EMAIL)) {
+                $destMails[] = $user->getEmail();
+            }
+        }
+
+        if (!empty($destMails)) {
+            try {
+                $message = (new \Swift_Message($abris->getName() . ' ' . $translator->trans('Security.messages.newDysfunctionReported')))
+                    ->setFrom($this->getParameter('app.genericMail'))        
+                    ->setBody(
+                    $this->renderView(
+                            'emails/newDysfunction.html.twig',
+                            ['dysfonctionnement' => $dysfonctionnement]
+                        ),
+                        'text/html'
+                    );
+                foreach($destMails as $email){
+                   $message->addTo($email); 
+                }
+                $mailer->send($message);
+            } catch (Exception $exc) {
+                echo "Imposssible d'envoyer le mail aux destinataires" . $exc->getTraceAsString();
+            }
         }
     }
 }

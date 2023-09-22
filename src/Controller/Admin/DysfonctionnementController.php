@@ -121,6 +121,7 @@ class DysfonctionnementController extends AbstractController
         $destMail = $dysfonctionnement->getCreatedBy()->getEmail();
         $url = "https://abris.parc-du-vercors.fr/";
 
+        // ####  envoi du mail à la personne ayant ajouté le dysfonctionnement    
         $body = str_replace(['%id%','%abris%','%url%'], [$dysfonctionnement->getId(), $abris, $url], $translator->trans('Emails.Dysfonctionnement.newDysfonctionnement.body'));
         $subject = str_replace(['%id%','%abris%'], [$dysfonctionnement->getId(), $abris], $translator->trans('Emails.Dysfonctionnement.newDysfonctionnement.subject'));
         try {
@@ -137,6 +138,40 @@ class DysfonctionnementController extends AbstractController
             $mailer->send($message);
         } catch (Exception $exc) {
             echo "Imposssible d'envoyer le mail aux destinataires" . $exc->getTraceAsString();
+        }
+        
+        // ####  mail aux proprietaires / gestionnaires
+        $destMails = [];
+        /** @var  User $user */
+        foreach ($abris->getGestionnaires() as $user) {
+            if (filter_var($user->getEmail(), FILTER_VALIDATE_EMAIL)) {
+                $destMails[] = $user->getEmail();
+            }
+        }
+        foreach ($abris->getProprietaires() as $user) {
+            if (filter_var($user->getEmail(), FILTER_VALIDATE_EMAIL)) {
+                $destMails[] = $user->getEmail();
+            }
+        }
+
+        if (!empty($destMails)) {
+            try {
+                $message = (new \Swift_Message($abris->getName() . ' ' . $translator->trans('Security.messages.newDysfunctionReported')))
+                    ->setFrom($this->getParameter('app.genericMail'))        
+                    ->setBody(
+                    $this->renderView(
+                            'emails/newDysfunction.html.twig',
+                            ['dysfonctionnement' => $dysfonctionnement]
+                        ),
+                        'text/html'
+                    );
+                foreach($destMails as $email){
+                   $message->addTo($email); 
+                }
+                $mailer->send($message);
+            } catch (Exception $exc) {
+                echo "Imposssible d'envoyer le mail aux destinataires" . $exc->getTraceAsString();
+            }
         }
     }
 

@@ -6,7 +6,7 @@ Un usager a signalé un nouveau dysfonctionnement concernant l'abris non gardé 
 
 {{ 'Entities.Dysfonctionnement.fields.natureDys'|trans() }} : {{dysfonctionnement.natureDys}}<br>
 {{ 'Entities.Dysfonctionnement.fields.elementDys'|trans() }} : {{dysfonctionnement.elementDys}}<br>
-{{ 'Entities.Dysfonctionnement.fields.description'|trans() }} : {{dysfonctionnement.description}}<br>
+{{ 'Entities.Dysfonctionnement.fields.description'|trans() }} : {{dysfonctionnement.description|raw}}<br>
 
 Pour consulter le détail de ce dysfonctionnement et y répondre, merci de ne pas répondre à ce mail mais utiliser ce <a href="https://abris.parc-du-vercors.fr{{ path('dysfonctionnement_edit', {'id':dysfonctionnement.id})}}#tabs-discussions">lien</a>.
 
