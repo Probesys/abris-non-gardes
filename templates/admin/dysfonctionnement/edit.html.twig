@@ -79,7 +79,14 @@
 
 
     <div class="btn-group mt-4">
-        <a class="btn btn-danger" href="{{path('dysfonctionnement_delete', {'id':dysfonctionnement.id })}}" data-toggle="tooltip" data-placement="top" title="{{'Generics.actions.remove'|trans()}}" data-container="body" onclick="return confirm('{{'Generics.messages.confirmationDeleteMessageQuestion'|trans}}');" >
+        <a class="btn btn-danger ajax-request"
+           href="{{ path('dysfonctionnement_delete', {'id':dysfonctionnement.id }) }}?_token={{ csrf_token('delete_dysfonctionnement' ~ dysfonctionnement.id)}}"
+           data-action="delete"
+           data-toggle="tooltip"
+           data-placement="top"
+           title="{{ 'Generics.actions.remove'|trans }}"
+           data-container="body"
+           data-confirm="{{ 'Generics.messages.confirmationDeleteMessageQuestion'|trans }}" >
             <i class="fas fa-trash-alt"></i>
         </a>
         <a class="btn btn-default" data-toggle="tooltip" data-placement="top" title="{{'actions.backToTheList'|trans()}}" data-container="body" href="{{path('dysfonctionnement_index')}}">
