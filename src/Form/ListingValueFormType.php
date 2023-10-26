@@ -2,7 +2,8 @@
 
 namespace App\Form;
 
-use App\Entity\listingType;
+use App\Entity\HelpMessage;
+use App\Entity\ListingType;
 use App\Entity\ListingValue;
 use App\Repository\ListingTypeRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -13,7 +14,6 @@ use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Tetranz\Select2EntityBundle\Form\Type\Select2EntityType;
-use App\Entity\HelpMessage;
 
 class ListingValueFormType extends AbstractType
 {
@@ -34,10 +34,10 @@ class ListingValueFormType extends AbstractType
                     'required' => true,
                 ])
                 ->add('listingType', EntityType::class, [
-                    'class' => listingType::class,
+                    'class' => ListingType::class,
                     'required' => true,
                     'label' => 'Entities.ListingValue.fields.listingType',
-                    //'attr' => array('class' => 'select2'),
+                    // 'attr' => array('class' => 'select2'),
                     'placeholder' => 'Entities.ListingValue.actions.selectlistingType',
                     'query_builder' => fn (ListingTypeRepository $rep) => $rep->createQueryBuilder('lt')
                             ->orderBy('lt.slug', 'ASC'),
@@ -62,19 +62,19 @@ class ListingValueFormType extends AbstractType
             $id_type = $typeListe->getId();
             $typeListBuilder = $ListValueRepository->createQueryBuilder('lv')
                     ->orderBy('lv.name, lv.slug', 'ASC')
-                    ->where('lv.listingType=' . $id_type);
+                    ->where('lv.listingType='.$id_type);
             if ($data->getId()) {
-                $typeListBuilder->andWhere('lv.id!=' . $data->getId());
+                $typeListBuilder->andWhere('lv.id!='.$data->getId());
             }
 
-            $form->add('parent', EntityType::class, ['class' => ListingValue::class, 'label' => 'Entities.ListingValue.fields.listingParent', 'placeholder' => 'Entities.ListingValue.actions.selectlistingType', 'choice_label' => function ($choice, $key, $value) use ($ListValueRepository, $curLevel) {
+            $form->add('parent', EntityType::class, ['class' => ListingValue::class, 'label' => 'Entities.ListingValue.fields.listingParent', 'placeholder' => 'Entities.ListingValue.actions.selectlistingType', 'choice_label' => function ($choice, $key, $value) {
                 if ($choice->getParent()) {
                     //                        $path = $choice->getPath();
-                    return implode(' » ', $choice->getPath()) . ' » ' . $choice->getName();
+                    return implode(' » ', $choice->getPath()).' » '.$choice->getName();
                 } else {
                     return $choice;
                 }
-            }, 'choice_attr' => function ($choiceValue, $key, $value) use ($ListValueRepository, $curLevel, $data) {
+            }, 'choice_attr' => function ($choiceValue, $key, $value) use ($curLevel, $data) {
                 $path = $choiceValue->getPath();
                 if ($data->getParent() && (is_countable($path) ? count($path) : 0) >= $curLevel) {
                     return ['class' => 'd-none', 'disabled' => true];

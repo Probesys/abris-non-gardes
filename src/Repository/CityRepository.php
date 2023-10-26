@@ -3,9 +3,9 @@
 namespace App\Repository;
 
 use App\Entity\City;
+use Cocur\Slugify\Slugify;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
-use Cocur\Slugify\Slugify;
 
 /**
  * @method City|null find($id, $lockMode = null, $lockVersion = null)
@@ -37,13 +37,17 @@ class CityRepository extends ServiceEntityRepository
         if ($filter) {
             if (isset($filter['name']) && '' != $filter['name']) {
                 $slug = $slugify->slugify($filter['name'], '-');
-                $dql->andwhere('c.slug LIKE \'%'.$slug.'%\'');
+                $dql->andWhere('c.slug LIKE \'%'.$slug.'%\'');
             }
-            if (property_exists($filter, 'zipCode') && '' != $filter['zipCode']) {
-                $dql->andWHere('c.zipCode LIKE \'%'.$filter['zipCode'].'%\'');
+            if (array_key_exists('zipCode', $filter) && '' != $filter['zipCode']) {
+                $dql->andWhere('c.zipCode LIKE \'%'.$filter['zipCode'].'%\'');
             }
-            if (property_exists($filter, 'department') && '' != $filter['department']) {
-                $dql->andWHere('c.department LIKE \'%'.$filter['department'].'%\'');
+            if (array_key_exists('department', $filter) && '' != $filter['department']) {
+                $dql->andWhere('c.department LIKE \'%'.$filter['department'].'%\'');
+            }
+            if (array_key_exists('territory', $filter) && '' != $filter['territory']) {
+                $dql->leftJoin('c.territories', 't');
+                $dql->andWhere('t.id IN ('.$filter['territory']->getId().')');
             }
         }
 
@@ -54,14 +58,13 @@ class CityRepository extends ServiceEntityRepository
      * massive delete function.
      *
      * @param type $ids
-     * @param type $entityId
      */
     public function batchDelete($ids = null)
     {
         if ($ids) {
             $queryBuilder = $this->createQueryBuilder('c')->delete('App\Entity\City c')->where('c.id IN ('.implode(',', $ids).')');
             $query = $queryBuilder->getQuery();
-            //queries execution
+            // queries execution
             $query->execute();
         }
     }
@@ -70,7 +73,6 @@ class CityRepository extends ServiceEntityRepository
      *  autocomplete query.
      *
      * @param type $q
-     * @param type $all
      *
      * @return type
      */
@@ -102,7 +104,6 @@ class CityRepository extends ServiceEntityRepository
      * query to return cities associate to one territory.
      *
      * @param type $territoryId
-     * @param type $name
      *
      * @return type
      */
@@ -134,7 +135,6 @@ class CityRepository extends ServiceEntityRepository
      * query to return cities associate to one territory and sub territories.
      *
      * @param type $childrens
-     * @param type $name
      *
      * @return type
      */

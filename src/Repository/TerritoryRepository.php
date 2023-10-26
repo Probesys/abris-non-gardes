@@ -3,9 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\Territory;
-
 use Cocur\Slugify\Slugify;
-
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -28,7 +26,6 @@ class TerritoryRepository extends ServiceEntityRepository
             $dql->andwhere('t.slug LIKE \'%'.$slug.'%\'');
         }
 
-
         $query = $dql->getQuery();
 
         return $query;
@@ -39,12 +36,10 @@ class TerritoryRepository extends ServiceEntityRepository
         if ($ids) {
             $queryBuilder = $this->createQueryBuilder('t')->delete('App\Entity\Territory t')->where('t.id IN ('.implode(',', $ids).')');
             $query = $queryBuilder->getQuery();
-            //queries execution
+            // queries execution
             $query->execute();
         }
     }
-
-
 
     public function autoComplete($q, $page_limit = 30, $page = null)
     {

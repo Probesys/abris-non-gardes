@@ -30,9 +30,9 @@ class AbrisFormType extends AbstractType
 
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        //$translator = $options['translator'];
+        // $translator = $options['translator'];
         $builder
-                ->add('type', EntityType::class, array(
+                ->add('type', EntityType::class, [
                     'label' => 'Entities.Abris.fields.type',
                     'class' => ListingValue::class,
                     'required' => true,
@@ -51,7 +51,7 @@ class AbrisFormType extends AbstractType
                     'query_builder' => function (ListingValueRepository $rep) {
                         return $this->createListingValueBuilder($rep, $this->getUuidTypeListeFromAnnotation('Abris', 'type'));
                     },
-                ))
+                ])
 
                 ->add('name', null, [
                     'label' => 'Entities.Abris.fields.name',
@@ -59,7 +59,6 @@ class AbrisFormType extends AbstractType
                 ->add('coordinate', null, [
                     'label' => 'Entities.Abris.fields.coordinate',
                     'help' => 'format : "lat,lng", ex: "45.179225,5.724737"<br/> <a href="https://www.latlong.net/convert-address-to-lat-long.html" target="_blank">www.latlong.net</a>',
-
                 ])
                 ->add('altitude', null, [
                     'label' => 'Entities.Abris.fields.altitude',
@@ -81,22 +80,22 @@ class AbrisFormType extends AbstractType
                     'cache_timeout' => 60000, // if 'cache' is true
                     'language' => 'fr',
                     'placeholder' => 'Entities.Abris.actions.select_one_city',
-                        //'attr' => array('class' => 'city-select2'),
+                        // 'attr' => array('class' => 'city-select2'),
                         // 'object_manager' => $objectManager, // inject a custom object / entity manager
                 ])
-                ->add('proprietaires', EntityType::class, array(
+                ->add('proprietaires', EntityType::class, [
                     'label' => 'Entities.Abris.fields.proprietaires',
                     'class' => User::class,
                     'expanded' => false,
                     'multiple' => true,
                     'required' => false,
                     'placeholder' => '',
-                    'query_builder' => function (UserRepository  $rep) {
+                    'query_builder' => function (UserRepository $rep) {
                         return $rep->createQueryBuilder('u')
                                 ->where('u.roles LIKE  \'%ROLE_OWNER%\'');
                     },
-                ))
-                ->add('gestionnaires', EntityType::class, array(
+                ])
+                ->add('gestionnaires', EntityType::class, [
                     'label' => 'Entities.Abris.fields.gestionnaires',
                     'class' => User::class,
                     'expanded' => false,
@@ -107,23 +106,23 @@ class AbrisFormType extends AbstractType
                         return $rep->createQueryBuilder('u')
                                 ->where('u.roles LIKE \'%ROLE_MANAGER%\'');
                     },
-                ))
+                ])
                 ->add('capaciteAccueil', null, [
                     'label' => 'Entities.Abris.fields.capaciteAccueil',
                     'attr' => [
                       'min' => 0,
-                    ]
+                    ],
                 ])
                 ->add('capaciteCouchage', null, [
                     'label' => 'Entities.Abris.fields.capaciteCouchage',
                     'attr' => [
                       'min' => 0,
-                    ]
+                    ],
                 ])
                 ->add('description', null, [
                     'label' => 'Entities.Abris.fields.description',
                 ])
-                ->add('toit', EntityType::class, array(
+                ->add('toit', EntityType::class, [
                     'label' => 'Entities.Abris.fields.toit',
                     'class' => ListingValue::class,
                     'expanded' => false,
@@ -141,8 +140,8 @@ class AbrisFormType extends AbstractType
                     'query_builder' => function (ListingValueRepository $rep) {
                         return $this->createListingValueBuilder($rep, $this->getUuidTypeListeFromAnnotation('Abris', 'toit'));
                     },
-                ))
-                ->add('sortieFumees', EntityType::class, array(
+                ])
+                ->add('sortieFumees', EntityType::class, [
                     'label' => 'Entities.Abris.fields.sortieFumees',
                     'class' => ListingValue::class,
                     'expanded' => false,
@@ -161,8 +160,8 @@ class AbrisFormType extends AbstractType
                     'query_builder' => function (ListingValueRepository $rep) {
                         return $this->createListingValueBuilder($rep, $this->getUuidTypeListeFromAnnotation('Abris', 'sortieFumees'));
                     },
-                ))
-                ->add('materiauSortieFumees', EntityType::class, array(
+                ])
+                ->add('materiauSortieFumees', EntityType::class, [
                     'label' => 'Entities.Abris.fields.materiauSortieFumees',
                     'class' => ListingValue::class,
                     'expanded' => false,
@@ -181,14 +180,14 @@ class AbrisFormType extends AbstractType
                     'query_builder' => function (ListingValueRepository $rep) {
                         return $this->createListingValueBuilder($rep, $this->getUuidTypeListeFromAnnotation('Abris', 'materiauSortieFumees'));
                     },
-                ))
+                ])
                 ->add('nbPortes', null, [
                     'label' => 'Entities.Abris.fields.nbPortes',
                 ])
                 ->add('nbFenetres', null, [
                     'label' => 'Entities.Abris.fields.nbFenetres',
                 ])
-                ->add('typeMur', EntityType::class, array(
+                ->add('typeMur', EntityType::class, [
                     'label' => 'Entities.Abris.fields.typeMur',
                     'class' => ListingValue::class,
                     'expanded' => false,
@@ -207,7 +206,7 @@ class AbrisFormType extends AbstractType
                     'query_builder' => function (ListingValueRepository $rep) {
                         return $this->createListingValueBuilder($rep, $this->getUuidTypeListeFromAnnotation('Abris', 'typeMur'));
                     },
-                ))
+                ])
                 ->add('etage', null, [
                     'label' => 'Entities.Abris.fields.etage',
                     'attr' => [
@@ -215,7 +214,7 @@ class AbrisFormType extends AbstractType
                       'data-hiddedClass' => 'etageDetails',
                     ],
                 ])
-                ->add('accesEtage', EntityType::class, array(
+                ->add('accesEtage', EntityType::class, [
                     'label' => 'Entities.Abris.fields.accesEtage',
                     'class' => ListingValue::class,
                     'expanded' => false,
@@ -237,8 +236,8 @@ class AbrisFormType extends AbstractType
                     'attr' => [
                         'class' => 'etageDetails',
                     ],
-                ))
-                ->add('typeAccesEtage', EntityType::class, array(
+                ])
+                ->add('typeAccesEtage', EntityType::class, [
                     'label' => 'Entities.Abris.fields.typeAccesEtage',
                     'class' => ListingValue::class,
                     'expanded' => false,
@@ -260,8 +259,8 @@ class AbrisFormType extends AbstractType
                     'attr' => [
                         'class' => 'etageDetails',
                     ],
-                ))
-                ->add('typeSol', EntityType::class, array(
+                ])
+                ->add('typeSol', EntityType::class, [
                     'label' => 'Entities.Abris.fields.typeSol',
                     'class' => ListingValue::class,
                     'expanded' => false,
@@ -280,7 +279,7 @@ class AbrisFormType extends AbstractType
                     'query_builder' => function (ListingValueRepository $rep) {
                         return $this->createListingValueBuilder($rep, $this->getUuidTypeListeFromAnnotation('Abris', 'typeSol'));
                     },
-                ))
+                ])
                 ->add('citerneExterieure', null, [
                     'label' => 'Entities.Abris.fields.citerneExterieure',
                 ])
@@ -290,7 +289,7 @@ class AbrisFormType extends AbstractType
                 ->add('nbAncrageSol', null, [
                     'label' => 'Entities.Abris.fields.nbAncrageSol',
                 ])
-                ->add('typeAncrageSol', EntityType::class, array(
+                ->add('typeAncrageSol', EntityType::class, [
                     'label' => 'Entities.Abris.fields.typeAncrageSol',
                     'class' => ListingValue::class,
                     'expanded' => false,
@@ -309,7 +308,7 @@ class AbrisFormType extends AbstractType
                     'query_builder' => function (ListingValueRepository $rep) {
                         return $this->createListingValueBuilder($rep, $this->getUuidTypeListeFromAnnotation('Abris', 'typeAncrageSol'));
                     },
-                ))
+                ])
                 ->add('remarqueStructureBat', null, [
                     'label' => 'Entities.Abris.fields.remarqueStructureBat',
                 ])
@@ -345,7 +344,7 @@ class AbrisFormType extends AbstractType
                     'by_reference' => false,
                 ])
                 ->add('toilettesSeches', null, [
-                    'label' => 'Entities.Abris.fields.toilettesSeches'
+                    'label' => 'Entities.Abris.fields.toilettesSeches',
                 ])
                 ->add('mobilierPiqueniqueExterieur', CollectionType::class, [
                     'label' => false,
@@ -358,10 +357,10 @@ class AbrisFormType extends AbstractType
                     'by_reference' => false,
                 ])
                 ->add('placeDeFeuExterieure', null, [
-                    'label' => 'Entities.Abris.fields.placeDeFeuExterieur'
+                    'label' => 'Entities.Abris.fields.placeDeFeuExterieur',
                 ])
                 ->add('emplacementInterieurReserveBois', null, [
-                    'label' => 'Entities.Abris.fields.emplacementInterieurReserveBois'
+                    'label' => 'Entities.Abris.fields.emplacementInterieurReserveBois',
                 ])
                 ->add('materielDivers', CollectionType::class, [
                     'label' => false,
@@ -398,8 +397,8 @@ class AbrisFormType extends AbstractType
                     'mapped' => false,
                     'attr' => [
                         'accept' => 'image/*',
-                        'multiple' => 'multiple'
-                    ]
+                        'multiple' => 'multiple',
+                    ],
                 ])
 
         ;

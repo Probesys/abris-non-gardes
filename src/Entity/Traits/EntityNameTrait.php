@@ -10,6 +10,7 @@ trait EntityNameTrait
 {
     /**
      * @Gedmo\Slug(fields={"name"})
+     *
      * @ORM\Column(length=128, unique=true)
      */
     private $slug;
@@ -18,9 +19,10 @@ trait EntityNameTrait
      * @var string
      *
      * @ORM\Column(name="name", type="string", length=255, nullable=true)
-     * @Gedmo\Versioned
-     * @Groups({"default","abris","dysfunction", "discussion" ,"user"})
      *
+     * @Gedmo\Versioned
+     *
+     * @Groups({"default","abris","dysfunction", "discussion" ,"user"})
      */
     private $name;
 

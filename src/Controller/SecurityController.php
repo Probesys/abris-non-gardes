@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace App\Controller;
 
 use App\Entity\User;
-use RuntimeException;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
@@ -36,21 +35,19 @@ final class SecurityController extends AbstractController
         $userClone = clone $user;
         $userClone->setPassword('');
         $data = $this->serializer->serialize($userClone, JsonEncoder::FORMAT, [
-            'circular_reference_handler' => fn ($object) => $object->getId()
+            'circular_reference_handler' => fn ($object) => $object->getId(),
         ]);
 
         return new JsonResponse($data, Response::HTTP_OK, [], true);
     }
 
     /**
-     * @throws RuntimeException
+     * @throws \RuntimeException
      *
      * @Route("/security/logout", name="logout")
      */
     public function logoutAction(): void
     {
-        throw new RuntimeException('This should not be reached!');
+        throw new \RuntimeException('This should not be reached!');
     }
-
-
 }

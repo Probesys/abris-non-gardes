@@ -3,9 +3,9 @@
 namespace App\Repository;
 
 use App\Entity\Page;
+use Cocur\Slugify\Slugify;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
-use Cocur\Slugify\Slugify;
 
 /**
  * @method Page|null find($id, $lockMode = null, $lockVersion = null)
@@ -57,9 +57,9 @@ class PageRepository extends ServiceEntityRepository
     public function batchDelete($ids = null)
     {
         if ($ids) {
-            $queryBuilder = $this->createQueryBuilder('p')->delete('App\Entity\Page p')->where('p.id IN (' . implode(',', $ids) . ')');
+            $queryBuilder = $this->createQueryBuilder('p')->delete('App\Entity\Page p')->where('p.id IN ('.implode(',', $ids).')');
             $query = $queryBuilder->getQuery();
-            //queries execution
+            // queries execution
             $query->execute();
         }
     }

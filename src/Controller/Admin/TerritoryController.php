@@ -2,21 +2,19 @@
 
 namespace App\Controller\Admin;
 
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
-
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
-
 use App\Entity\City;
 use App\Entity\Territory;
-use App\Form\TerritoryType ;
-use App\FormFilter\TerritoryFilterType;
+use App\Form\TerritoryType;
 use App\FormFilter\CityFilterType;
-use App\Repository\NestedTerritoryRepository;
+use App\FormFilter\TerritoryFilterType;
 use App\Repository\CityRepository;
+use App\Repository\NestedTerritoryRepository;
 use App\Repository\TerritoryRepository;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * Territory controller.
@@ -28,15 +26,14 @@ class TerritoryController extends AbstractController
     /**
      * Lists all Territory entities.
      *
-     * @param Request $request
      * @Route("/", name="territory_index")
+     *
      * @Method({"GET", "POST"})
      *
      * @return Response
      */
     public function indexAction(Request $request)
     {
-
         $session = $request->getSession();
         $em = $this->getDoctrine()->getManager();
         $filterData = [];
@@ -66,11 +63,10 @@ class TerritoryController extends AbstractController
             // Get filter from session
             if ($session->has('territoryFilter')) {
                 $filterData = $session->get('territoryFilter');
-                $filterForm = $this->createForm(TerritoryFormType::class);
+                $filterForm = $this->createForm(TerritoryType::class);
                 if (array_key_exists('name', $filterData)) {
                     $filterForm->get('name')->setData($filterData['name']);
                 }
-
             }
         }
         $territoryRepository = $em->getRepository(Territory::class);
@@ -87,11 +83,9 @@ class TerritoryController extends AbstractController
     /**
      * Creates a new Territory entity.
      *
-     * @param Request $request
      * @Route("/new", name="territory_new")
-     * @Method({"GET", "POST"})
      *
-     * @return Response
+     * @Method({"GET", "POST"})
      */
     public function newAction(Request $request): Response
     {
@@ -122,33 +116,26 @@ class TerritoryController extends AbstractController
     /**
      * Finds and displays a Territory entity.
      *
-     * @param Request   $request
-     * @param Territory $territory
      * @Route("/{id}", name="territory_show")
+     *
      * @Method("GET")
      *
      * @return Response
      */
     public function showAction(Request $request, Territory $territory)
     {
-
-
         return $this->render('admin/territory/show.html.twig', ['territory' => $territory]);
     }
 
     /**
      * Displays a form to edit an existing territory entity.
      *
-     * @param Request   $request
-     * @param Territory $territory
      * @Route("/{id}/edit", name="territory_edit")
-     * @Method({"GET", "POST"})
      *
-     * @return Response
+     * @Method({"GET", "POST"})
      */
     public function editAction(Request $request, Territory $territory): Response
     {
-
         $editForm = $this->createForm(TerritoryType::class, $territory);
 
         $editForm->handleRequest($request);
@@ -171,9 +158,8 @@ class TerritoryController extends AbstractController
     /**
      * Delete a territory entity.
      *
-     * @param Request   $request
-     * @param Territory $territory
      * @Route("/{id}/delete", name="territory_delete")
+     *
      * @Method("GET")
      *
      * @return Response
@@ -193,9 +179,8 @@ class TerritoryController extends AbstractController
     /**
      * Creates a new Territory entity.
      *
-     * @param Request   $request
-     * @param Territory $parent
      * @Route("/new/{id}", name="territory_new_subTerritory")
+     *
      * @Method({"GET","POST"})
      *
      * @return Response
@@ -230,8 +215,8 @@ class TerritoryController extends AbstractController
     /**
      * territory batch actions.
      *
-     * @param Request $request
      * @Route("/batch", name="territory_batch")
+     *
      * @Method({"POST"})
      *
      * @return Response
@@ -261,10 +246,8 @@ class TerritoryController extends AbstractController
      * territory batch actions.
      *
      * @Route("/{id}/batch", name="territory_batchCities")
-     * @Method({"POST"})
      *
-     * @param Territory $territory
-     * @param Request   $request
+     * @Method({"POST"})
      *
      * @return Response
      */
@@ -296,10 +279,10 @@ class TerritoryController extends AbstractController
      * add city ton one territory.
      *
      * @Route("/{id}/addCity", name="territory_addCity")
+     *
      * @Method({"POST"})
      *
      * @param Territory $territory The Territory entity
-     * @param Request   $request
      *
      * @return Response
      */
@@ -339,7 +322,6 @@ class TerritoryController extends AbstractController
      * @Route("/{id}/listCities", name="territory_listCities")
      *
      * @param Territory $territory The Territory entity
-     * @param Request   $request
      *
      * @return Response
      */
@@ -419,7 +401,6 @@ class TerritoryController extends AbstractController
      * @Route("/{id}/listSubTerritoryCities", name="territory_listSubTerritoryCities")
      *
      * @param Territory $territory The Territory entity
-     * @param Request   $request
      *
      * @return Response
      */
@@ -499,7 +480,6 @@ class TerritoryController extends AbstractController
      *
      * @Route("/{id}/deleteCity/{cityId}", name="territory_deleteCity")
      *
-     * @param Request   $request
      * @param Territory $territory The Territory entity
      * @param int       $cityId    id of The City entity
      *
@@ -528,7 +508,6 @@ class TerritoryController extends AbstractController
      *
      * @Route("/{id}/deleteCity/{cityId}/massive", name="territory_SubdeleteCity")
      *
-     * @param Request   $request
      * @param Territory $territory The Territory entity
      * @param int       $cityId    id of The City entity
      *

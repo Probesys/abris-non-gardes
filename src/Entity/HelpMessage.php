@@ -2,18 +2,15 @@
 
 namespace App\Entity;
 
-use Gedmo\Mapping\Annotation as Gedmo;
-use Doctrine\ORM\Mapping as ORM;
-
 use App\Entity\Traits\EntityBlameableTrait;
-use App\Entity\Traits\EntityTimestampableTrait;
 use App\Entity\Traits\EntityCommonTrait;
-
+use App\Entity\Traits\EntityTimestampableTrait;
+use Doctrine\ORM\Mapping as ORM;
+use Gedmo\Mapping\Annotation as Gedmo;
 use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\HelpMessageRepository")
- *
  */
 class HelpMessage
 {
@@ -23,31 +20,31 @@ class HelpMessage
 
     /**
      * @ORM\Id()
+     *
      * @ORM\GeneratedValue()
+     *
      * @ORM\Column(type="integer")
      */
     private $id;
 
     /**
-     *
      * @ORM\Column(type="string", length=255)
+     *
      * @Groups({"default"})
      */
     private ?string $name = null;
 
     /**
-     *
      * @ORM\Column(type="text", nullable=true)
      */
     private ?string $message = null;
 
     /**
      * @Gedmo\Slug(fields={"name"})
+     *
      * @ORM\Column(type="string",length=128, unique=true)
      */
     private ?string $slug = null;
-
-
 
     public function __construct()
     {
@@ -62,8 +59,6 @@ class HelpMessage
     {
         return $this->id;
     }
-
-
 
     public function getName(): ?string
     {
@@ -100,6 +95,4 @@ class HelpMessage
 
         return $this;
     }
-
-
 }

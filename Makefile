@@ -33,6 +33,20 @@ migration: ## Install/update database
 messenger-consume: ## Consume messenger messages
 	$(DOCKER_COMPOSE_ALIAS) exec web  php bin/console messenger:consume async
 
+.PHONY: symfony-lint
+lint: ## Execute the linters
+	$(DOCKER_COMPOSE_ALIAS) exec web vendor/bin/phpstan --memory-limit=256M analyse src
+	$(DOCKER_COMPOSE_ALIAS) exec web vendor/bin/php-cs-fixer fix src --dry-run
+	#$(DOCKER_COMPOSE_ALIAS) exec web vendor/bin/rector process src --dry-run
+	$(DOCKER_COMPOSE_ALIAS) exec web php bin/console lint:container
+	$(DOCKER_COMPOSE_ALIAS) exec web php bin/console lint:twig templates
+
+.PHONY: lint-fix
+lint-fix: ## Execute php-cs-fixer and rector
+	$(DOCKER_COMPOSE_ALIAS) exec web vendor/bin/php-cs-fixer fix src
+	#$(DOCKER_COMPOSE_ALIAS) exec web vendor/bin/rector process src
+	make lint
+
 ip-adresses: ## [host] get ip addresses of containers
 	# --- mysql ip
 	docker inspect -f '{{range.NetworkSettings.Networks}}{{.IPAddress}}{{end}}' abris-non-gardes-mysql-1

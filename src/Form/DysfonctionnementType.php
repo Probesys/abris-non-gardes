@@ -2,12 +2,12 @@
 
 namespace App\Form;
 
+use App\Entity\Abris;
 use App\Entity\Dysfonctionnement;
 use App\Entity\ListingValue;
-use App\Entity\Abris;
 use App\Form\Traits\ListingValuesFormsTrait;
-use App\Repository\ListingValueRepository;
 use App\Repository\AbrisRepository;
+use App\Repository\ListingValueRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
@@ -33,11 +33,11 @@ class DysfonctionnementType extends AbstractType
     {
         // abris
         $user = $options['user'];
-        if(!$user || ($user && ($user->hasRole('ROLE_USER') || $user->hasRole('ROLE_ADMIN')))) {
+        if (!$user || ($user && ($user->hasRole('ROLE_USER') || $user->hasRole('ROLE_ADMIN')))) {
             $builder->add('abris', null, [
                     'label' => 'Entities.Dysfonctionnement.fields.abris',
                     'required' => true,
-                    'placeholder' => ''
+                    'placeholder' => '',
                 ]);
         } else {
             $builder->add('abris', EntityType::class, [
@@ -54,8 +54,6 @@ class DysfonctionnementType extends AbstractType
                         ->andWhere('crea.id=\''.$user->getId().'\' OR proprios.id=\''.$user->getId().'\' OR gests.id=\''.$user->getId().'\''),
                 ]);
         }
-
-
 
         $builder
                 ->add('statusDys', EntityType::class, ['label' => 'Entities.Dysfonctionnement.fields.statusDys', 'class' => ListingValue::class, 'expanded' => false, 'required' => true, 'multiple' => false, 'placeholder' => '', 'choice_attr' => function ($choiceValue, $key, $value) {
@@ -78,7 +76,7 @@ class DysfonctionnementType extends AbstractType
                 }, 'query_builder' => fn (ListingValueRepository $rep) => $this->createListingValueBuilder($rep, $this->getUuidTypeListeFromAnnotation('Dysfonctionnement', 'natureDys'))])
                 ->add('description', null, [
                     'label' => 'Generics.fields.description',
-                    'attr' => [ 'class' => 'summernote']
+                    'attr' => ['class' => 'summernote'],
                 ])
 
                 ->add('files', FileType::class, [
@@ -88,8 +86,8 @@ class DysfonctionnementType extends AbstractType
                     'mapped' => false,
                     'attr' => [
                         'accept' => 'image/*',
-                        'multiple' => 'multiple'
-                    ]
+                        'multiple' => 'multiple',
+                    ],
                 ])
         ;
         $builder->addEventListener(FormEvents::PRE_SET_DATA, [$this, 'onPreSetData']);
@@ -98,14 +96,12 @@ class DysfonctionnementType extends AbstractType
 
     public function addElements(FormInterface $form, $natureDys)
     {
-
         $ListValueRepository = $this->em->getRepository(ListingValue::class);
 
         if ($natureDys) {
-
             $typeListBuilder = $ListValueRepository->createQueryBuilder('lv')
                     ->orderBy('lv.name, lv.slug', 'ASC')
-                    ->where('lv.parent=' . $natureDys);
+                    ->where('lv.parent='.$natureDys);
 
             $form->add('elementDys', EntityType::class, ['class' => ListingValue::class, 'label' => 'Entities.Dysfonctionnement.fields.elementDys', 'choice_attr' => function ($choiceValue, $key, $value) {
                 if ($choiceValue->getHelpMessage()) {
@@ -117,7 +113,6 @@ class DysfonctionnementType extends AbstractType
                 }
             }, 'query_builder' => $typeListBuilder]);
         }
-
     }
 
     public function onPreSetData(FormEvent $event)
@@ -136,11 +131,8 @@ class DysfonctionnementType extends AbstractType
         $form = $event->getForm();
         $data = $event->getData();
 
-
-
         $natureDys = array_key_exists('natureDys', $data) && !empty($data['natureDys']) ? $data['natureDys'] : null;
         $elementDys = array_key_exists('elementDys', $data) && !empty($data['elementDys']) ? $data['elementDys'] : null;
-
 
         $this->addElements($form, $natureDys);
     }
@@ -149,8 +141,7 @@ class DysfonctionnementType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => Dysfonctionnement::class,
-            'user'         => null
+            'user' => null,
         ]);
     }
-
 }

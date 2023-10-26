@@ -2,19 +2,19 @@
 
 namespace App\Form;
 
+use App\Entity\Abris;
+use App\Entity\ListingValue;
 use App\Entity\User;
-use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\OptionsResolver\OptionsResolver;
-use Symfony\Component\Form\Extension\Core\Type\PasswordType;
-use Symfony\Bridge\Doctrine\Form\Type\EntityType;
-use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use App\Form\Traits\ListingValuesFormsTrait;
 use App\Repository\ListingValueRepository;
-use App\Entity\ListingValue;
-use App\Entity\Abris;
-use Tetranz\Select2EntityBundle\Form\Type\Select2EntityType;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
+use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
+use Symfony\Component\Form\Extension\Core\Type\HiddenType;
+use Symfony\Component\Form\Extension\Core\Type\PasswordType;
+use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\OptionsResolver\OptionsResolver;
+use Tetranz\Select2EntityBundle\Form\Type\Select2EntityType;
 
 class UserFormType extends AbstractType
 {
@@ -25,7 +25,7 @@ class UserFormType extends AbstractType
         $userType = $options['userType'];
         $isNew = $options['isNew'];
         $builder
-            //->add('id')
+            // ->add('id')
             ->add('structureName', null, [
                 'label' => 'Entities.User.fields.structureName',
               ])
@@ -47,7 +47,7 @@ class UserFormType extends AbstractType
 
         ;
 
-        if($isNew) {
+        if ($isNew) {
             $builder->add('plainPassword', PasswordType::class, [
                 'label' => 'Entities.User.fields.password',
                 'required' => true,
@@ -89,7 +89,6 @@ class UserFormType extends AbstractType
                     'cache_timeout' => 60000, // if 'cache' is true
                     'language' => 'fr',
                     'placeholder' => 'Entities.User.actions.select_one_or_many_abris',
-
                 ])
             ;
         }
@@ -100,11 +99,10 @@ class UserFormType extends AbstractType
                     'label' => 'Entities.User.fields.photo',
                     'attr' => [
                         'accept' => 'image/*',
-                        //'multiple' => 'false'
-                    ]
+                        // 'multiple' => 'false'
+                    ],
                 ])
         ;
-
     }
 
     public function configureOptions(OptionsResolver $resolver)
@@ -114,6 +112,5 @@ class UserFormType extends AbstractType
         ]);
         $resolver->setRequired('userType');
         $resolver->setRequired('isNew');
-
     }
 }

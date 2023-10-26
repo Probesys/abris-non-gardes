@@ -2,16 +2,12 @@
 
 namespace App\Controller\Admin;
 
-use App\Entity\Abris;
-
-use App\Repository\AbrisRepository;
 use App\FormFilter\AbrisFilterType;
-
+use App\Repository\AbrisRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController as Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * @Route("/admin/stats")
@@ -32,7 +28,7 @@ class StatsController extends Controller
 
             return $this->redirect($this->generateUrl('stats_index'));
         }
-
+        // dd($session->get('statsFilter'));
 
         if ('filter' == $request->get('filter_action')) { // Filter action
             $filterForm->handleRequest($request); // Bind values from the request
@@ -41,19 +37,20 @@ class StatsController extends Controller
                     $filterData['name'] = $filterForm->get('name')->getData();
                 }
                 if ($filterForm->has('type')) {
-                    $filterData['type'] = $filterForm->get('type')->getViewData();
+                    $filterData['type'] = $filterForm->get('type')->getData();
                 }
 
                 $session->set('statsFilter', $filterData); // Save filter to session
             }
         } elseif ($session->has('statsFilter')) {
             $filterData = $session->get('statsFilter');
-            $filterForm = $this->createForm(AbrisFilterType::class, $filterData, ['data_class' => null]);
             if (array_key_exists('name', $filterData)) {
                 $filterForm->get('name')->setData($filterData['name']);
             }
-            if (array_key_exists('type', $filterData)) {
-                $filterForm->get('type')->setData($filterData['type']);
+            if (array_key_exists('type', $filterData) && '' != $filterData['type']) {
+                $type = $filterData['type'];
+                $type = $this->getDoctrine()->getManager()->merge($type);
+                $filterForm->get('type')->setData($type);
             }
         }
 

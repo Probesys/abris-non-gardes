@@ -2,20 +2,22 @@
 
 namespace App\Entity;
 
+use App\Entity\Traits\EntityBlameableTrait;
+use App\Entity\Traits\EntityCommonTrait;
+use App\Entity\Traits\EntityNameTrait;
+use App\Entity\Traits\EntityTimestampableTrait;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
-use App\Entity\Traits\EntityBlameableTrait;
-use App\Entity\Traits\EntityTimestampableTrait;
-use App\Entity\Traits\EntityCommonTrait;
-use App\Entity\Traits\EntityNameTrait;
-use App\Entity\City;
 
 /**
  * @Gedmo\Tree(type="nested")
+ *
  * @ORM\Entity(repositoryClass="App\Repository\NestedTerritoryRepository")
+ *
  * @ORM\Table(name="territory", indexes={@ORM\Index(name="territory_slugs", columns={"slug"})})
+ *
  * @Gedmo\Loggable
  */
 class Territory
@@ -28,58 +30,71 @@ class Territory
      * @var int
      *
      * @ORM\Column(name="id", type="integer")
+     *
      * @ORM\Id
+     *
      * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $id;
 
     /**
      * @var int
+     *
      * @Gedmo\TreeRoot
+     *
      * @ORM\Column(name="root", type="integer", length=255, nullable=true)
      */
     private $root;
 
     /**
      * @var int
+     *
      * @Gedmo\TreeLeft
+     *
      * @ORM\Column(name="lft", type="integer", length=255)
      */
     private $lft;
 
     /**
      * @var int
+     *
      * @Gedmo\TreeRight
+     *
      * @ORM\Column(name="rgt", type="integer", length=255, nullable=true)
      */
     private $rgt;
 
     /**
      * @var int
+     *
      * @Gedmo\TreeLevel
+     *
      * @ORM\Column(name="level", type="integer", length=255, nullable=true)
      */
     private $level;
 
     /**
      * @Gedmo\TreeParent
+     *
      * @ORM\ManyToOne(targetEntity="App\Entity\Territory", inversedBy="children")
+     *
      * @ORM\JoinColumn(name="parent_id", referencedColumnName="id", onDelete="CASCADE")
      */
     private ?\App\Entity\Territory $parent = null;
 
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\Territory", mappedBy="parent")
+     *
      * @ORM\OrderBy({"lft" = "ASC"})
      */
     private $children;
 
     /**
      * @ORM\ManyToMany(targetEntity="App\Entity\City", inversedBy="territories", cascade={"persist"})
+     *
      * @ORM\JoinTable(name="territories_cities")
      */
     protected $cities;
-
 
     /**
      * Constructor.
@@ -274,9 +289,6 @@ class Territory
         return $this->level;
     }
 
-    /**
-     * @param Territory $parent
-     */
     public function setParent(Territory $parent = null)
     {
         $this->parent = $parent;
@@ -292,8 +304,6 @@ class Territory
 
     /**
      * Add city.
-     *
-     * @param City $city
      *
      * @return Territory
      */
@@ -311,8 +321,6 @@ class Territory
 
     /**
      * Remove city.
-     *
-     * @param City $city
      */
     public function removeCity(City $city)
     {
@@ -335,8 +343,6 @@ class Territory
     /**
      * Add child.
      *
-     * @param Territory $child
-     *
      * @return Territory
      */
     public function addChild(Territory $child)
@@ -348,8 +354,6 @@ class Territory
 
     /**
      * Remove child.
-     *
-     * @param Territory $child
      *
      * @return bool tRUE if this collection contained the specified element, FALSE otherwise
      */
@@ -367,8 +371,6 @@ class Territory
     {
         return $this->children;
     }
-
-
 
     /**
      * Set created.

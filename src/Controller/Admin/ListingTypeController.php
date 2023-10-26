@@ -3,14 +3,14 @@
 namespace App\Controller\Admin;
 
 use App\Entity\ListingType;
-use App\Form\ListingTypeFormType as ListingTypeFormType;
+use App\Form\ListingTypeFormType;
 use App\FormFilter\ListingTypeFilterType;
 use App\Repository\ListingTypeRepository;
+use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController as Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Knp\Component\Pager\PaginatorInterface;
 
 /**
  * @Route("/admin/listing-type")
@@ -120,6 +120,7 @@ class ListingTypeController extends Controller
      * Delete a listingType entity.
      *
      * @param int $id
+     *
      * @Route("/{id}/delete", name="listingType_delete",  methods="GET")
      *
      * @return Response
@@ -136,7 +137,6 @@ class ListingTypeController extends Controller
     /**
      * Batch action for BusinessState entity.
      *
-     * @param Request $request
      * @Route("/batch", name="listingType_batch",  methods="POST")
      *
      * @return Response

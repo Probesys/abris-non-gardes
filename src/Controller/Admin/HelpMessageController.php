@@ -3,14 +3,14 @@
 namespace App\Controller\Admin;
 
 use App\Entity\HelpMessage;
-use App\Form\HelpMessageFormType as HelpMessageFormType;
+use App\Form\HelpMessageFormType;
 use App\FormFilter\HelpMessageFilterType;
 use App\Repository\HelpMessageRepository;
+use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController as Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Knp\Component\Pager\PaginatorInterface;
 
 /**
  * @Route("/admin/helpMessage")
@@ -120,6 +120,7 @@ class HelpMessageController extends Controller
      * Delete a listingType entity.
      *
      * @param int $id
+     *
      * @Route("/{id}/delete", name="helpMessage_delete",  methods="GET")
      *
      * @return Response
@@ -136,7 +137,6 @@ class HelpMessageController extends Controller
     /**
      * Batch action for BusinessState entity.
      *
-     * @param Request $request
      * @Route("/batch", name="helpMessage_batch",  methods="POST")
      *
      * @return Response
@@ -156,8 +156,6 @@ class HelpMessageController extends Controller
 
     /**
      * Page.
-     *
-     * @param HelpMessage $helpMessage
      *
      * @return Resopnse
      *

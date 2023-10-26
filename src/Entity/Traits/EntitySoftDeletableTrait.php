@@ -15,6 +15,7 @@ trait EntitySoftDeletableTrait
 
     /**
      * @ORM\ManyToOne(targetEntity="User", cascade={"persist"})
+     *
      * @ORM\JoinColumn(referencedColumnName="id", onDelete="SET NULL")
      */
     protected $deletedBy;
@@ -45,8 +46,6 @@ trait EntitySoftDeletableTrait
 
     /**
      * Set deletedBy.
-     *
-     * @param \App\Entity\User $deletedBy
      *
      * @return DocumentTemplate
      */

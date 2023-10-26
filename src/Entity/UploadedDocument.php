@@ -16,13 +16,16 @@ class UploadedDocument
     use EntityTimestampableTrait;
     /**
      * @ORM\Id()
+     *
      * @ORM\GeneratedValue()
+     *
      * @ORM\Column(type="integer")
      */
     private $id;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
+     *
      * @Groups({"default", "abris", "dysfunction"})
      */
     private ?string $fileName = null;
@@ -39,24 +42,24 @@ class UploadedDocument
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Abris", inversedBy="photos")
+     *
      * @ORM\JoinColumn(onDelete="CASCADE")
      */
     private ?\App\Entity\Abris $abris = null;
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Dysfonctionnement", inversedBy="photos")
+     *
      * @ORM\JoinColumn(nullable=true, onDelete="CASCADE")
      */
     private ?\App\Entity\Dysfonctionnement $dysfonctionnement = null;
 
     /**
      * @ORM\OneToOne(targetEntity="App\Entity\User", inversedBy="photo")
-     * @ORM\JoinColumn(nullable=true, onDelete="SET NULL")
      *
+     * @ORM\JoinColumn(nullable=true, onDelete="SET NULL")
      */
     private ?\App\Entity\User $user = null;
-
-
 
     public function getId(): ?int
     {
@@ -134,6 +137,4 @@ class UploadedDocument
 
         return $this;
     }
-
-
 }

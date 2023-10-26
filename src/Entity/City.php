@@ -2,15 +2,16 @@
 
 namespace App\Entity;
 
+use App\Entity\Traits\EntityCommonTrait;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
-use Gedmo\Mapping\Annotation as Gedmo;
 use Doctrine\ORM\Mapping as ORM;
-use App\Entity\Traits\EntityCommonTrait;
+use Gedmo\Mapping\Annotation as Gedmo;
 use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\CityRepository")
+ *
  * @Gedmo\Loggable
  */
 class City
@@ -19,40 +20,46 @@ class City
 
     /**
      * @ORM\Id()
+     *
      * @ORM\GeneratedValue()
+     *
      * @ORM\Column(type="integer")
      */
     private $id;
 
     /**
      * @ORM\Column(type="string", length=255)
+     *
      * @Groups({"default","abris", "user"})
      */
     private ?string $name = null;
 
     /**
      * @ORM\Column(type="string", length=255)
+     *
      * @Groups({"default","abris", "user"})
      */
     private ?string $zipCode = null;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
+     *
      * @Groups({"default","abris", "user"})
      */
     private ?string $insee = null;
 
     /**
-     *
      * @ORM\Column(name="department", type="string", length=255, nullable=true)
+     *
      * @Gedmo\Versioned
+     *
      * @Groups({"default","abris"})
      */
     private ?string $department = null;
 
     /**
-     *
      * @ORM\Column(name="country", type="string", length=255, nullable=true)
+     *
      * @Gedmo\Versioned
      */
     private ?string $country = null;
@@ -64,12 +71,14 @@ class City
 
     /**
      * @Gedmo\Slug(fields={"name", "zipCode"})
+     *
      * @ORM\Column(length=128, unique=true)
      */
     private ?string $slug = null;
 
     /**
      * @Gedmo\Slug(fields={"department"})
+     *
      * @ORM\Column(length=128, unique=false)
      */
     private ?string $slugDepartment = null;

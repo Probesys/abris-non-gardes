@@ -3,9 +3,9 @@
 namespace App\Repository;
 
 use App\Entity\Abris;
+use Cocur\Slugify\Slugify;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
-use Cocur\Slugify\Slugify;
 
 /**
  * @method Abris|null find($id, $lockMode = null, $lockVersion = null)
@@ -24,7 +24,6 @@ class AbrisRepository extends ServiceEntityRepository
      *  autocomplete query.
      *
      * @param type $q
-     * @param type $all
      *
      * @return type
      */
@@ -62,22 +61,23 @@ class AbrisRepository extends ServiceEntityRepository
     {
         $dql = $this->createQueryBuilder('a')
           ->select('a')
-
         ;
-        $slugify = new Slugify();
+
         if ($filter && isset($filter['name']) && '' != $filter['name']) {
+            $slugify = new Slugify();
             $slug = $slugify->slugify($filter['name'], '-');
             $dql->andwhere('a.slug LIKE \'%'.$slug.'%\'');
         }
         if ($filter && isset($filter['type']) && '' != $filter['type']) {
-            $dql->andwhere('a.type = '.$filter['type']);
+            $dql->andwhere('a.type = :type');
+            $dql->setParameter('type', $filter['type']);
         }
         if ($filter && isset($filter['userID']) && '' != $filter['userID']) {
             $userID = $filter['userID'];
             $dql->leftJoin('a.createdBy', 'crea');
             $dql->leftJoin('a.proprietaires', 'proprios');
             $dql->leftJoin('a.gestionnaires', 'gests');
-            //$dql->andWhere('crea.id=\''.$userID.'\' OR proprios.id=\''.$userID.'\' OR gests.id=\''.$userID.'\'');
+            // $dql->andWhere('crea.id=\''.$userID.'\' OR proprios.id=\''.$userID.'\' OR gests.id=\''.$userID.'\'');
             $dql->andWhere('proprios.id=\''.$userID.'\' OR gests.id=\''.$userID.'\'');
         }
 
@@ -85,17 +85,17 @@ class AbrisRepository extends ServiceEntityRepository
     }
 
     /**
-    * massive delete function.
-    *
-    * @param type $ids
-    */
+     * massive delete function.
+     *
+     * @param type $ids
+     */
     public function batchDelete($ids = null)
     {
         if ($ids) {
             $queryBuilder = $this->createQueryBuilder('Abris')->delete('App\Entity\Abris Abris')->where('Abris.id IN (\''.implode('\',\'', $ids).'\')');
 
             $query = $queryBuilder->getQuery();
-            //queries execution
+            // queries execution
             $query->execute();
         }
     }

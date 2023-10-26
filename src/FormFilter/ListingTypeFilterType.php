@@ -2,7 +2,6 @@
 
 namespace App\FormFilter;
 
-use App\Entity\ListingType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -20,7 +19,7 @@ class ListingTypeFilterType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
-        'data_class' => ListingType::class,
+        'data_class' => null,
         ]);
     }
 

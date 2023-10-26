@@ -4,32 +4,38 @@ declare(strict_types=1);
 
 namespace App\Entity;
 
+use App\Annotations\ListingAnnotation;
 use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
-use Exception;
+use Gedmo\Mapping\Annotation as Gedmo;
 use Ramsey\Uuid\Uuid;
 use Ramsey\Uuid\UuidInterface;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
-use Symfony\Component\Validator\Constraints as Assert;
-use Gedmo\Mapping\Annotation as Gedmo;
-use App\Annotations\ListingAnnotation;
 use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\UserRepository")
+ *
  * @ORM\Table(name="users")
+ *
  * @ORM\HasLifecycleCallbacks
+ *
  * @UniqueEntity(fields={"email"}, message="Il existe déjà un compte ayant cette adresse email")
  */
-class User implements UserInterface
+class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
     /**
      * @ORM\Id
+     *
      * @ORM\Column(type="uuid", unique=true)
+     *
      * @Groups({"user"})
+     *
      * @var UuidInterface
      */
     private $id;
@@ -53,44 +59,53 @@ class User implements UserInterface
 
     /**
      * @ORM\Column(type="string", length=255, unique=true)
+     *
      * @Assert\Email()
+     *
      * @Groups({"user"})
      */
     private ?string $email = null;
 
     /**
      * @ORM\Column(name="roles", type="simple_array")
+     *
      * @Groups({"abris","dysfunction", "discussion" ,"user"})
+     *
      * @var string[]
      */
     private $roles = [];
 
     /**
      * @ORM\Column(name="created", type="datetime")
-     * @var DateTime
+     *
+     * @var \DateTime
      */
     private $created;
 
     /**
      * @ORM\Column(name="updated", type="datetime", nullable=true)
-     * @var DateTime
+     *
+     * @var \DateTime
      */
     private $updated;
 
     /**
      * @ORM\Column(type="string", length=255)
+     *
      * @Groups({"abris","dysfunction", "discussion" ,"user"})
      */
     private ?string $lastName = null;
 
     /**
      * @ORM\Column(type="string", length=255)
+     *
      * @Groups({"abris","dysfunction", "discussion" ,"user"})
      */
     private ?string $firstName = null;
 
     /**
      * @Gedmo\Slug(fields={"structureName","lastName", "firstName"})
+     *
      * @ORM\Column(type="string",length=500, unique=true)
      */
     private ?string $slug = null;
@@ -107,8 +122,11 @@ class User implements UserInterface
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\ListingValue")
+     *
      * @ORM\JoinColumn(nullable=true)
+     *
      * @ListingAnnotation(idListingUuid="77091221-21dd-48d8-8cad-075b47af69aa")
+     *
      * @Groups({"user"})
      */
     private ?\App\Entity\ListingValue $userType = null;
@@ -120,10 +138,10 @@ class User implements UserInterface
 
     /**
      * @ORM\ManyToMany(targetEntity="App\Entity\Abris", mappedBy="followers", cascade={"persist"})
+     *
      * @Groups({"user"})
      */
     public $abrisFavoris;
-
 
     /**
      * @ORM\OneToOne(targetEntity="App\Entity\UploadedDocument", mappedBy="user", cascade={"persist", "remove"})
@@ -132,16 +150,17 @@ class User implements UserInterface
 
     /**
      * @ORM\OneToMany(targetEntity=Dysfonctionnement::class, mappedBy="user", orphanRemoval=true)
+     *
      * @Groups({"user"})
      */
     private $dysfonctionnements;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
+     *
      * @Groups({"abris","dysfunction", "discussion" ,"user"})
      */
     private ?string $structureName = null;
-
 
     public function __construct()
     {
@@ -165,12 +184,12 @@ class User implements UserInterface
     /**
      * @ORM\PrePersist
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public function onPrePersist(): void
     {
         $this->id = Uuid::uuid4();
-        $this->created = new DateTime('NOW');
+        $this->created = new \DateTime('NOW');
     }
 
     public function onPostPersist(): void
@@ -183,7 +202,7 @@ class User implements UserInterface
      */
     public function onPreUpdate(): void
     {
-        $this->updated = new DateTime('NOW');
+        $this->updated = new \DateTime('NOW');
     }
 
     public function getId(): UuidInterface
@@ -204,6 +223,16 @@ class User implements UserInterface
     public function getUsername(): string
     {
         return $this->login;
+    }
+
+    /**
+     * A visual identifier that represents this user.
+     *
+     * @see UserInterface
+     */
+    public function getUserIdentifier(): string
+    {
+        return (string) $this->login;
     }
 
     public function getPlainPassword(): ?string
@@ -282,6 +311,7 @@ class User implements UserInterface
     public function hasRole($role)
     {
         $roles = $this->roles;
+
         return in_array($role, $roles);
     }
 
@@ -290,12 +320,12 @@ class User implements UserInterface
         $this->plainPassword = null;
     }
 
-    public function getCreated(): DateTime
+    public function getCreated(): \DateTime
     {
         return $this->created;
     }
 
-    public function getUpdated(): ?DateTime
+    public function getUpdated(): ?\DateTime
     {
         return $this->updated;
     }

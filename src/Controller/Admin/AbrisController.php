@@ -5,13 +5,12 @@ namespace App\Controller\Admin;
 use App\Entity\Abris;
 use App\Entity\UploadedDocument;
 use App\Entity\User;
-use App\Form\AbrisFormType as AbrisFormType;
+use App\Form\AbrisFormType;
 use App\FormFilter\AbrisFilterType;
 use App\Repository\AbrisRepository;
 use App\Service\FileUploader;
 use Doctrine\ORM\EntityManagerInterface;
 use Knp\Component\Pager\PaginatorInterface;
-use Swift_Message;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController as Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -49,7 +48,6 @@ class AbrisController extends Controller
             return $this->redirect($this->generateUrl('admin_abris_index'));
         }
 
-
         if ('filter' == $request->get('filter_action')) { // Filter action
             $filterForm->handleRequest($request); // Bind values from the request
             if ($filterForm->isSubmitted() && $filterForm->isValid()) {
@@ -64,12 +62,13 @@ class AbrisController extends Controller
             }
         } elseif ($session->has('abrisFilter')) {
             $filterData = $session->get('abrisFilter');
-            $filterForm = $this->createForm(AbrisFilterType::class, $filterData, ['data_class' => null]);
             if (array_key_exists('name', $filterData)) {
                 $filterForm->get('name')->setData($filterData['name']);
             }
-            if (array_key_exists('type', $filterData)) {
-                $filterForm->get('type')->setData($filterData['type']);
+            if (array_key_exists('type', $filterData) && '' != $filterData['type']) {
+                $type = $filterData['type'];
+                $type = $this->getDoctrine()->getManager()->merge($type);
+                $filterForm->get('type')->setData($type);
             }
         }
 
@@ -140,7 +139,7 @@ class AbrisController extends Controller
             $this->getDoctrine()->getManager()->flush();
             $this->addFlash('success', 'Generics.flash.editSuccess');
             // faire en sorte que les admin soient avertis par mail lors des mises à jour sur les abris par les gestionnaires/propriétaires
-            if($this->isGranted('ROLE_OWNER') || $this->isGranted('ROLE_MANAGER')) {
+            if ($this->isGranted('ROLE_OWNER') || $this->isGranted('ROLE_MANAGER')) {
                 $this->sendEditNotificationEmail($abris, $translator, $mailer);
             }
 
@@ -156,7 +155,6 @@ class AbrisController extends Controller
     /**
      * Delete a abris entity.
      *
-     * @param int $id
      * @Route("/{id}/delete", name="admin_abris_delete",  methods="GET")
      *
      * @return Response
@@ -164,7 +162,7 @@ class AbrisController extends Controller
     public function deleteAction(Abris $abris, TranslatorInterface $translator, Request $request)
     {
         $this->checkAccess($abris, $translator);
-        if ($this->isCsrfTokenValid('delete' . $abris->getId(), $request->query->get('_token'))) {
+        if ($this->isCsrfTokenValid('delete'.$abris->getId(), $request->query->get('_token'))) {
             $this->getDoctrine()->getManager()->remove($abris);
             $this->getDoctrine()->getManager()->flush();
             $this->addFlash('success', 'Suppression effectuée avec succès');
@@ -178,7 +176,6 @@ class AbrisController extends Controller
     /**
      * Delete a photo entity.
      *
-     * @param int $id
      * @Route("/photo/{id}/delete", name="admin_abris_delete_photo",  methods="GET")
      *
      * @return Response
@@ -186,10 +183,10 @@ class AbrisController extends Controller
     public function deletePhotoAction(UploadedDocument $photo, Request $request)
     {
         $abrisId = $photo->getAbris()->getId();
-        if ($this->isCsrfTokenValid('delete_photo' . $photo->getId(), $request->query->get('_token'))) {
+        if ($this->isCsrfTokenValid('delete_photo'.$photo->getId(), $request->query->get('_token'))) {
             $this->getDoctrine()->getManager()->remove($photo);
             $this->getDoctrine()->getManager()->flush();
-            $filename = $this->getParameter('picture_directory') . '/' . $abrisId . '/' . $photo->getFileName();
+            $filename = $this->getParameter('picture_directory').'/'.$abrisId.'/'.$photo->getFileName();
 
             if (file_exists($filename)) {
                 unlink($filename);
@@ -207,7 +204,6 @@ class AbrisController extends Controller
     /**
      * Batch action for BusinessState entity.
      *
-     * @param Request $request
      * @Route("/batch", name="admin_abris_batch",  methods="POST")
      *
      * @return Response
@@ -227,7 +223,7 @@ class AbrisController extends Controller
 
     private function checkAccess($abris, $translator)
     {
-        if (!$this->isGranted('ROLE_ADMIN') && !($this->getUser()->getGestionnaireAbris())->contains($abris) && !($this->getUser()->getProprietaireAbris())->contains($abris)) {
+        if (!$this->isGranted('ROLE_ADMIN') && !$this->getUser()->getGestionnaireAbris()->contains($abris) && !$this->getUser()->getProprietaireAbris()->contains($abris)) {
             throw new AccessDeniedException($translator->trans('Security.messages.accessDeniedException'));
         }
     }
@@ -235,23 +231,22 @@ class AbrisController extends Controller
     private function sendEditNotificationEmail($abris, $translator, $mailer)
     {
         // recherche des admins
-        $filter = ['role'=>'ROLE_ADMIN'];
+        $filter = ['role' => 'ROLE_ADMIN'];
         $admins = $this->em->getRepository(User::class)->search($filter);
 
         $destsMail = [];
-        foreach($admins as $admin) {
+        foreach ($admins as $admin) {
             $destsMail[] = $admin->getEmail();
         }
 
         $currentUser = $this->getUser();
-        $baseUrl = "https://abris.parc-du-vercors.fr";
+        $baseUrl = 'https://abris.parc-du-vercors.fr';
         $url = $baseUrl.$this->generateUrl('admin_abris_edit', [
             'id' => $abris->getId(),
         ]);
 
-
-        $subject = str_replace(['%id%','%abris%'], [$abris, $currentUser], $translator->trans('Emails.Abris.updateNotification.subject'));
-        $body = str_replace(['%id%','%abris%','%url%','%currentUser%'], [$abris->getId(), $abris, $url, $currentUser], $translator->trans('Emails.Abris.updateNotification.body'));
+        $subject = str_replace(['%id%', '%abris%'], [$abris, $currentUser], $translator->trans('Emails.Abris.updateNotification.subject'));
+        $body = str_replace(['%id%', '%abris%', '%url%', '%currentUser%'], [$abris->getId(), $abris, $url, $currentUser], $translator->trans('Emails.Abris.updateNotification.body'));
 
         try {
             $message = (new \Swift_Message($subject))
@@ -260,13 +255,13 @@ class AbrisController extends Controller
                 ->setBody(
                     $this->renderView(
                         'emails/generics.html.twig',
-                        ['subject'=>$subject, 'body' => $body]
+                        ['subject' => $subject, 'body' => $body]
                     ),
                     'text/html'
-                ) ;
+                );
             $mailer->send($message);
-        } catch (Exception $exc) {
-            echo "Imposssible d'envoyer le mail aux destinataires" . $exc->getTraceAsString();
+        } catch (\Exception $exc) {
+            echo "Imposssible d'envoyer le mail aux destinataires".$exc->getTraceAsString();
         }
     }
 }

@@ -2,22 +2,18 @@
 
 namespace App\Form;
 
+use App\Entity\City;
 use App\Entity\Coordinate;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\TelType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-
-
-use Symfony\Component\Form\Extension\Core\Type\TelType;
-use App\Entity\City;
-
 use Tetranz\Select2EntityBundle\Form\Type\Select2EntityType;
 
 class CoordinateType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-
         $builder
             ->add('addressLine1', null, ['label' => 'Entities.Coordinate.fields.addressLine1', 'required' => false])
             ->add('addressLine2', null, ['label' => 'Entities.Coordinate.fields.addressLine2', 'required' => false])
@@ -41,14 +37,14 @@ class CoordinateType extends AbstractType
               'cache_timeout' => 60000, // if 'cache' is true
               'language' => 'fr',
               'placeholder' => 'Entities.Coordinate.actions.select_one_city',
-                    //'attr' => array('class' => 'city-select2'),
+                    // 'attr' => array('class' => 'city-select2'),
                     // 'object_manager' => $objectManager, // inject a custom object / entity manager
             ])
 
             ->add('phone', TelType::class, [
                 'label' => 'Entities.Coordinate.fields.phone',
                 'required' => false,
-                //'help' => 'Format 000000000000',
+                // 'help' => 'Format 000000000000',
                 'attr' => ['class' => '', 'trim' => true],
             ])
             ->add('mobilePhone', TelType::class, ['label' => 'Entities.Coordinate.fields.mobilePhone', 'required' => false, 'trim' => true, 'attr' => ['class' => '', 'trim' => true]])
@@ -59,7 +55,6 @@ class CoordinateType extends AbstractType
     {
         $resolver->setDefaults([
         'data_class' => Coordinate::class,
-
         ]);
     }
 

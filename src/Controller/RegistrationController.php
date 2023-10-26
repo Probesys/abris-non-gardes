@@ -7,14 +7,11 @@ use App\Form\RegistrationFormType;
 use App\Repository\PageRepository;
 use App\Security\LoginFormAuthenticator;
 use Doctrine\ORM\EntityManagerInterface;
-use Swift_Mailer;
-use Swift_Message;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Bundle\MonologBundle\SwiftMailer;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 use Symfony\Component\Security\Guard\GuardAuthenticatorHandler;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
@@ -26,17 +23,17 @@ class RegistrationController extends AbstractController
     {
         $this->em = $em;
     }
-  
+
     /**
      * @Route("/register", name="app_register")
      */
     public function register(
         Request $request,
-        UserPasswordEncoderInterface $passwordEncoder,
+        UserPasswordHasherInterface $passwordEncoder,
         TranslatorInterface $translator,
         GuardAuthenticatorHandler $guardHandler,
         LoginFormAuthenticator $formAuthenticator,
-        Swift_Mailer $mailer,
+        \Swift_Mailer $mailer,
         PageRepository $pageRepository
     ): Response {
         $user = new User();
@@ -53,10 +50,9 @@ class RegistrationController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-
             // encode the plain password
             $user->setPassword(
-                $passwordEncoder->encodePassword(
+                $passwordEncoder->hashPassword(
                     $user,
                     $form->get('plainPassword')->getData()
                 )
@@ -69,11 +65,12 @@ class RegistrationController extends AbstractController
             // send email to admin
             // recherche des admins
             $destsMail = [];
-            $admins = $this->em->getRepository(User::class)->search(['role'=>'ROLE_ADMIN']);
-            foreach($admins as $admin) {
+            $admins = $this->em->getRepository(User::class)->search(['role' => 'ROLE_ADMIN'])->execute();
+            foreach ($admins as $admin) {
                 $destsMail[] = $admin->getEmail();
             }
-            $message = (new Swift_Message($translator->trans('Security.messages.newAccountWaitValidation')))
+            $subject = '['.$translator->trans('Generics.labels.appName').'] '.$translator->trans('Security.messages.newAccountWaitValidation');
+            $message = (new \Swift_Message($subject))
                     ->setFrom($this->getParameter('app.genericMail'))
                     ->setTo($destsMail)
                     ->setBody(

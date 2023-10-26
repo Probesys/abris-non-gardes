@@ -4,7 +4,7 @@ namespace App\Controller\Admin;
 
 use App\Entity\UploadedDocument;
 use App\Entity\User;
-use App\Form\UserFormType as UserFormType;
+use App\Form\UserFormType;
 use App\FormFilter\UserFilterType;
 use App\Repository\MessageRepository;
 use App\Repository\UserRepository;
@@ -27,20 +27,16 @@ class UserController extends Controller
     private $translator;
     private $em;
 
-
     public function __construct(TranslatorInterface $translator, EntityManagerInterface $em)
     {
         $this->translator = $translator;
         $this->em = $em;
-
     }
 
     /**
-     * My account page
-     *
+     * My account page.
      *
      * @Route("/myaccount", name="user_myaccount",  methods="GET")
-     *
      *
      * @return Response
      */
@@ -49,19 +45,19 @@ class UserController extends Controller
         $user = $this->getUser();
         $userMessages = $messageRepository->getUserMessages($user->getId());
         $userType = strtolower(str_replace('ROLE_', '', $this->getUser()->getRoles()[0]));
-        //dump($userType);die;
+        // dump($userType);die;
         $form = $this->createForm(UserFormType::class, $user, ['userType' => $userType, 'isNew' => false]);
+
         return $this->render('admin/user/show.html.twig', [
             'user' => $user,
             'userType' => $userType,
-            'form' =>  $form->createView(),
-            'userMessages' => $userMessages
+            'form' => $form->createView(),
+            'userMessages' => $userMessages,
         ]);
     }
 
     /**
      * @Route("/{userType}", name="user_index", methods="GET|POST", requirements={"userType": "waiting_validation|user|owner|manager|admin"})
-     *
      */
     public function indexAction(UserRepository $userRepository, $userType, Request $request, PaginatorInterface $paginator): Response
     {
@@ -74,7 +70,6 @@ class UserController extends Controller
 
             return $this->redirect($this->generateUrl('user_index', ['userType' => $userType]));
         }
-
 
         if ('filter' == $request->get('filter_action')) { // Filter action
             $filterForm->handleRequest($request); // Bind values from the request
@@ -93,7 +88,7 @@ class UserController extends Controller
             }
         }
 
-        //prise en compte type utiliateur
+        // prise en compte type utiliateur
         $filterData['role'] = $role = 'ROLE_'.strtoupper($userType);
 
         $per_page = $this->getParameter('app.per_page_global');
@@ -156,10 +151,7 @@ class UserController extends Controller
     /**
      * Finds and displays a User entity.
      *
-     *
-     * @param User $user
      * @Route("/{id}/validate", name="user_validate",  methods="GET")
-     *
      *
      * @return Response
      */
@@ -223,12 +215,9 @@ class UserController extends Controller
     }
 
     /**
-     * Change type and role of on user
+     * Change type and role of on user.
      *
-     *
-     * @param User $user
      * @Route("/{id}/change-role", name="user_changeRole",  methods="POST")
-     *
      *
      * @return Response
      */
@@ -248,13 +237,42 @@ class UserController extends Controller
 
         $userType = strtolower(str_replace('ROLE_', '', $new_role));
 
-        return $this->redirectToRoute('user_show', ['userType' => $userType, 'id' => $user-> getId()]);
+        return $this->redirectToRoute('user_show', ['userType' => $userType, 'id' => $user->getId()]);
+    }
+
+    /**
+     * Delete a photo entity.
+     *
+     * @Route("/photo/{id}/delete", name="admin_user_delete_photo",  methods="GET")
+     *
+     * @return Response
+     */
+    public function deletePhotoAction(UploadedDocument $photo, Request $request)
+    {
+        $userId = $photo->getUser()->getId();
+        if ($this->isCsrfTokenValid('delete_photo'.$photo->getId(), $request->query->get('_token'))) {
+            $this->getDoctrine()->getManager()->remove($photo);
+            $this->getDoctrine()->getManager()->flush();
+            $filename = $this->getParameter('picture_directory').'/users/'.$userId.'/'.$photo->getFileName();
+
+            if (file_exists($filename)) {
+                unlink($filename);
+            } else {
+                $this->addFlash('warning', 'Impossible de supprimer le fichier');
+            }
+            $this->addFlash('success', 'Suppression effectuée avec succès');
+        } else {
+            $this->addFlash('error', 'CSRF Token Invalid');
+        }
+
+        return $this->redirectToRoute('user_edit', ['id' => $userId]);
     }
 
     /**
      * Delete a user entity.
      *
      * @param int $id
+     *
      * @Route("/{userType}/{id}/delete", name="user_delete",  methods="GET")
      *
      * @return Response
@@ -271,10 +289,9 @@ class UserController extends Controller
     /**
      * Finds and displays a User entity.
      *
-     * @param String   $userType
-     * @param User $user
-     * @Route("/{userType}/{id}", name="user_show",  methods="GET")
+     * @param string $userType
      *
+     * @Route("/{userType}/{id}", name="user_show",  methods="GET")
      *
      * @return Response
      */
@@ -282,18 +299,18 @@ class UserController extends Controller
     {
         $userMessages = $messageRepository->getUserMessages($user->getId());
         $form = $this->createForm(UserFormType::class, $user, ['userType' => $userType, 'isNew' => false]);
+
         return $this->render('admin/user/show.html.twig', [
             'user' => $user,
             'userType' => $userType,
-            'form' =>  $form->createView(),
-            'userMessages' => $userMessages
+            'form' => $form->createView(),
+            'userMessages' => $userMessages,
         ]);
     }
 
     /**
      * Batch action for BusinessState entity.
      *
-     * @param Request $request
      * @Route("/batch", name="user_batch",  methods="POST")
      *
      * @return Response
@@ -316,48 +333,16 @@ class UserController extends Controller
         return $this->redirectToRoute('user_index', ['userType' => $userType]);
     }
 
-    /**
-     * Delete a photo entity.
-     *
-     * @param int $id
-     * @Route("/photo/{id}/delete", name="admin_user_delete_photo",  methods="GET")
-     *
-     * @return Response
-     */
-    public function deletePhotoAction(UploadedDocument $photo, Request $request)
-    {
-        $userId = $photo->getUser()->getId();
-        if ($this->isCsrfTokenValid('delete_photo' . $photo->getId(), $request->query->get('_token'))) {
-            $this->getDoctrine()->getManager()->remove($photo);
-            $this->getDoctrine()->getManager()->flush();
-            $filename = $this->getParameter('picture_directory') . '/users/' . $userId . '/' . $photo->getFileName();
-
-            if (file_exists($filename)) {
-                unlink($filename);
-            } else {
-                $this->addFlash('warning', 'Impossible de supprimer le fichier');
-            }
-            $this->addFlash('success', 'Suppression effectuée avec succès');
-        } else {
-            $this->addFlash('error', 'CSRF Token Invalid');
-        }
-
-
-
-        return $this->redirectToRoute('admin_user_edit', ['id' => $userId]);
-    }
-
     private function exportUsers(UserRepository $userRepository, $usersIds): Response
     {
-
-        $users = $userRepository->findBy(['id'=>$usersIds]);
+        $users = $userRepository->findBy(['id' => $usersIds]);
         $now = new \DateTime();
         $rows = ['Nom;Prénom;Rôles;Structure;Courriel;Tél fixe; Tél portable;Adresse;'];
-        /** @var Registration $registration */
-        foreach($users as $user) {
+        /* @var Registration $registration */
+        foreach ($users as $user) {
             $roleString = '';
             $separator = '';
-            foreach($user->getRoles() as $role) {
+            foreach ($user->getRoles() as $role) {
                 $roleString .= $separator.$this->translator->trans('Entities.User.roles.'.$role);
                 $separator = '-';
             }
@@ -371,7 +356,6 @@ class UserController extends Controller
                   $user->getCoordinate() ? $user->getCoordinate()->getPhone() : '',
                   $user->getCoordinate() ? $user->getCoordinate()->getMobilePhone() : '',
                   $user->getCoordinate() ? $user->getCoordinate()->getFormatedAddress() : '',
-
                 ];
             $rows[] = implode(';', $data);
         }
@@ -389,7 +373,6 @@ class UserController extends Controller
         ));
 
         return $response;
-
     }
 
     private function updateUserSlug(User $user)

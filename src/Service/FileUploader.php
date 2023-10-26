@@ -4,8 +4,8 @@ namespace App\Service;
 
 use App\Entity\Abris;
 use App\Entity\Dysfonctionnement;
-use App\Entity\User;
 use App\Entity\UploadedDocument;
+use App\Entity\User;
 use Cocur\Slugify\Slugify;
 use Doctrine\ORM\EntityManager;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
@@ -27,21 +27,21 @@ class FileUploader
         $slugger = new Slugify();
         $targetDirectory = null;
         $originalFilename = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME);
-        $fileName = $slugger->slugify($file->getClientOriginalName()) . '-' . uniqid() . '.' . $file->guessExtension();
+        $fileName = $slugger->slugify($file->getClientOriginalName()).'-'.uniqid().'.'.$file->guessExtension();
 
         $photo = new UploadedDocument();
         switch (true) {
             case $obj instanceof Abris:
                 $photo->setAbris($obj);
-                $targetDirectory = $this->targetDirectory . "/" . $obj->getId();
+                $targetDirectory = $this->targetDirectory.'/'.$obj->getId();
                 break;
             case $obj instanceof Dysfonctionnement:
-                $targetDirectory = $this->targetDirectory . "/" . $obj->getAbris()->getId();
+                $targetDirectory = $this->targetDirectory.'/'.$obj->getAbris()->getId();
                 $photo->setDysfonctionnement($obj);
                 break;
             case $obj instanceof User:
-                $targetDirectory = $this->targetDirectory . "/" . $obj->getId();
-                if($obj->getPhoto()) {
+                $targetDirectory = $this->targetDirectory.'/'.$obj->getId();
+                if ($obj->getPhoto()) {
                     // update photo
                     $photo = $obj->getPhoto();
                 } else {
@@ -59,20 +59,18 @@ class FileUploader
             $file->move($targetDirectory, $fileName);
             $this->em->persist($photo);
         } catch (FileException $e) {
-            //Todo
-            //dump($e);
-            //die;
+            // Todo
+            // dump($e);
+            // die;
         }
-
-
 
         return $fileName;
     }
 
     public function setTargetDirectory($dirname)
     {
-        $this->targetDirectory = $this->targetDirectory.$dirname;
+        $this->targetDirectory .= $dirname;
+
         return $this;
     }
-
 }

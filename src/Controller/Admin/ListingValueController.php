@@ -3,16 +3,16 @@
 namespace App\Controller\Admin;
 
 use App\Entity\ListingValue;
-use App\Form\ListingValueFormType as ListingValueFormType;
+use App\Form\ListingValueFormType;
 use App\FormFilter\ListingValueFilterType;
-use App\Repository\ListingValueRepository;
 use App\Repository\ListingTypeRepository;
+use App\Repository\ListingValueRepository;
+use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController as Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Contracts\Translation\TranslatorInterface;
-use Knp\Component\Pager\PaginatorInterface;
 
 /**
  * @Route("/admin/listing-value")
@@ -52,21 +52,23 @@ class ListingValueController extends Controller
                     $filterData['parent'] = $filterForm->get('parent')->getData();
                 }
 
-
                 $session->set('listingValueFilter', $filterData); // Save filter to session
             }
         } elseif ($session->has('listingValueFilter')) {
             $filterData = $session->get('listingValueFilter');
 
-            $filterForm = $this->createForm(ListingValueFilterType::class, $filterData, ['data_class' => null]);
             if (array_key_exists('name', $filterData)) {
                 $filterForm->get('name')->setData($filterData['name']);
             }
-            if (array_key_exists('listingType', $filterData)) {
-                $filterForm->get('listingType')->setData($filterData['listingType']);
+            if (array_key_exists('listingType', $filterData) && '' != $filterData['listingType']) {
+                $listingType = $filterData['listingType'];
+                $listingType = $this->getDoctrine()->getManager()->merge($listingType);
+                $filterForm->get('listingType')->setData($listingType);
             }
-            if (array_key_exists('parent', $filterData)) {
-                $filterForm->get('parent')->setData($filterData['parent']);
+            if (array_key_exists('parent', $filterData) && '' != $filterData['parent']) {
+                $parent = $filterData['parent'];
+                $parent = $this->getDoctrine()->getManager()->merge($parent);
+                $filterForm->get('parent')->setData($parent);
             }
         }
 
@@ -78,6 +80,7 @@ class ListingValueController extends Controller
             $request->query->getInt('per_page', $per_page), /* limit per page */
             ['defaultSortFieldName' => 'lt.slug', 'defaultSortDirection' => 'asc']
         );
+
         return $this->render('admin/listingValue/index.html.twig', ['pagination' => $pagination, 'search_form' => $filterForm->createView()]);
     }
 
@@ -143,6 +146,7 @@ class ListingValueController extends Controller
      * Delete a listingValue entity.
      *
      * @param int $id
+     *
      * @Route("/{id}/delete", name="listingValue_delete",  methods="GET")
      *
      * @return Response
@@ -155,7 +159,6 @@ class ListingValueController extends Controller
         } else {
             $this->addFlash('error', 'Une erreur s\'est produite lors de la suppression. Cette valeur est probalement utilisée');
         }
-        ;
 
         return $this->redirectToRoute('listingValue_index');
     }
@@ -163,7 +166,6 @@ class ListingValueController extends Controller
     /**
      * Batch action for BusinessState entity.
      *
-     * @param Request $request
      * @Route("/batch", name="listingValue_batch",  methods="POST")
      *
      * @return Response
@@ -183,5 +185,4 @@ class ListingValueController extends Controller
 
         return $this->redirectToRoute('listingValue_index');
     }
-
 }

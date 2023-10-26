@@ -111,12 +111,12 @@
                     <form class="form-horizontal" action="{{ path('user_edit', {'id': user.id, 'userType': userType}) }}" method="post">
 
                         {{ form_widget(form) }}
-                        {%   if object.photo %}
+                        {%   if user.photo %}
                            <div class="filtr-item col-sm-2" data-category="1" data-sort="">
                               <div>
                                  <span class="btn-delete-photo">
                                     <a class="btn btn-danger btn-sm"
-                                       href="{{ path('admin_user_delete_photo', {'id':object.photo.id }) }}?_token={{ csrf_token('delete_photo' ~ object.photo.id)}}"
+                                       href="{{ path('admin_user_delete_photo', {'id':user.photo.id }) }}?_token={{ csrf_token('delete_photo' ~ user.photo.id)}}"
                                        data-action="delete"
                                        title="{{ 'Generics.actions.remove'|trans }}"
                                        data-container="body"
@@ -124,8 +124,8 @@
                                        <i class="far fa-trash-alt "></i>
                                     </a>
                                  </span>
-                                 <a href="{{ asset('files/users/' ~ object.id ~ '/' ~ object.photo.fileName) }}" data-toggle="lightbox" data-title="{{ object.photo.fileName }}">
-                                    <img class="profile-user-img img-fluid img-circle" src="{{ asset('files/users/' ~ object.id ~ '/' ~ object.photo.fileName) }}" alt="{{object.photo.fileName}}"/>
+                                 <a href="{{ asset('files/users/' ~ user.id ~ '/' ~ user.photo.fileName) }}" data-toggle="lightbox" data-title="{{ user.photo.fileName }}">
+                                    <img class="profile-user-img img-fluid img-circle" src="{{ asset('files/users/' ~ user.id ~ '/' ~ user.photo.fileName) }}" alt="{{user.photo.fileName}}"/>
                                  </a>
                               </div>
 

@@ -7,7 +7,7 @@ parameters:
    locale: 'fr'
    app.per_page_global: '%env(DEFAULT_PER_PAGE)%'
    app.version: '%env(APP_VERSION)%'
-   picture_directory: '%kernel.root_dir%/../public/files/'
+   picture_directory: '%kernel.project_dir%/public/files/'
    app.genericMail: '%env(NO_REPLY_EMAIL)%'
 services:
     # default configuration for services in *this* file

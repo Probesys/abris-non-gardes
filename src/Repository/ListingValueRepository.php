@@ -32,19 +32,19 @@ class ListingValueRepository extends ServiceEntityRepository
         $slugify = new Slugify();
         if ($filter && isset($filter['name']) && '' != $filter['name']) {
             $slug = $slugify->slugify($filter['name'], '-');
-            $dql->andwhere('lv.slug LIKE \'%' . $slug . '%\'');
+            $dql->andwhere('lv.slug LIKE \'%'.$slug.'%\'');
         }
         if ($filter && isset($filter['listingType']) && '' != $filter['listingType']) {
-            $dql->andwhere('lt.id = ' . $filter['listingType']->getId());
+            $dql->andwhere('lt.id = '.$filter['listingType']->getId());
         }
         if ($filter && isset($filter['parent']) && '' != $filter['parent']) {
-            $dql->andwhere('lvp.id = ' . $filter['parent']->getId());
+            $dql->andwhere('lvp.id = '.$filter['parent']->getId());
         }
 
         return $dql->getQuery();
     }
 
-    /** Retourne la liste des items fils directs lié à l'item courant
+    /** Retourne la liste des items fils directs lié à l'item courant.
      * @return type
      */
     public function getChildren($parent_id)
@@ -52,7 +52,7 @@ class ListingValueRepository extends ServiceEntityRepository
         $dql = $this->createQueryBuilder('lv')
                 ->select('lv.id,lv.name,hm.id as id_help_msg')
                 ->leftJoin('lv.helpMessage', 'hm')
-                ->where('lv.parent=' . $parent_id)
+                ->where('lv.parent='.$parent_id)
         ;
 
         return $query = $this->_em->createQuery($dql)->getResult();
@@ -70,7 +70,7 @@ class ListingValueRepository extends ServiceEntityRepository
         $dql = $this->createQueryBuilder('lv')
                 ->select('hm.id')
                 ->join('lv.helpMessage', 'hm')
-                ->where('lv.id=' . $id_liste)
+                ->where('lv.id='.$id_liste)
         ;
 
         $query = $dql->getQuery();
@@ -92,16 +92,16 @@ class ListingValueRepository extends ServiceEntityRepository
         if ($ids) {
             $queryBuilder = $this->createQueryBuilder('ListingValue')
                     ->delete('App\Entity\ListingValue ListingValue')
-                    ->where('ListingValue.id IN (' . implode(',', $ids) . ')');
+                    ->where('ListingValue.id IN ('.implode(',', $ids).')');
             $query = $queryBuilder->getQuery();
 
             try {
                 $query->execute();
+
                 return true;
             } catch (ForeignKeyConstraintViolationException $exc) {
                 return false;
             }
         }
     }
-
 }

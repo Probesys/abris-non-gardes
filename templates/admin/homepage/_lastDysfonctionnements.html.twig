@@ -30,7 +30,7 @@
                      <td><a href="{{ path('dysfonctionnement_edit', {'id': dysfonctionnement.id}) }}">{{ dysfonctionnement.created|date('d-m-Y') }}</a></td>
                      <td><a href="{{ path('admin_abris_edit', {'id': dysfonctionnement.abris.id}) }}">{{ dysfonctionnement.abris }}</a></td>
                      <td>{{ dysfonctionnement.natureDys }}</td>
-                     <td><span class="badge badge-{{tabStatus[dysfonctionnement.statusDys.id]}}">{{ dysfonctionnement.statusDys }}</span></td>
+                     <td>{% if dysfonctionnement.statusDys %}<span class="badge badge-{{tabStatus[dysfonctionnement.statusDys.id]}}">{{ dysfonctionnement.statusDys }}</span>{% endif %}</td>
                   </tr>
                {%  endfor %}
             </tbody>

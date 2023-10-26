@@ -2,21 +2,18 @@
 
 namespace App\Entity;
 
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
-use Gedmo\Mapping\Annotation as Gedmo;
-
-use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\Serializer\Annotation\Groups;
 use App\Entity\Traits\EntityBlameableTrait;
-use App\Entity\Traits\EntityTimestampableTrait;
 use App\Entity\Traits\EntityCommonTrait;
 use App\Entity\Traits\EntityNameTrait;
+use App\Entity\Traits\EntityTimestampableTrait;
+use Doctrine\ORM\Mapping as ORM;
+use Gedmo\Mapping\Annotation as Gedmo;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\ListingValueRepository")
- * @Gedmo\Loggable
  *
+ * @Gedmo\Loggable
  */
 class ListingValue
 {
@@ -26,28 +23,34 @@ class ListingValue
     use EntityNameTrait;
     /**
      * @ORM\Id()
+     *
      * @ORM\GeneratedValue()
+     *
      * @ORM\Column(type="integer")
+     *
      * @Groups({"default","abris","dysfunction","user"})
      */
     private $id;
 
-
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\ListingType", inversedBy="listingValues")
+     *
      * @ORM\JoinColumn(nullable=false)
+     *
      * @Groups({"default"})
      */
     private ?\App\Entity\ListingType $listingType = null;
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\ListingValue")
+     *
      * @ORM\JoinColumn(name="parent_id", referencedColumnName="id",nullable=true, onDelete="SET NULL")
      */
     private ?\App\Entity\ListingValue $parent = null;
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\HelpMessage", cascade={"persist", "remove"})
+     *
      * @Groups({"default"})
      */
     private ?\App\Entity\HelpMessage $helpMessage = null;
@@ -56,7 +59,6 @@ class ListingValue
      * @ORM\Column(type="integer", nullable=true)
      */
     private ?int $orderInList = null;
-
 
     public function getId(): ?int
     {
@@ -136,8 +138,8 @@ class ListingValue
     }
 
     /**
-     * Retourne la liste des parents d'un item
-     * @param ListingValue $item
+     * Retourne la liste des parents d'un item.
+     *
      * @return type
      */
     public function getPath()
@@ -148,6 +150,7 @@ class ListingValue
             $return[] = $item;
             $item = $item->getParent();
         }
+
         //        $return[] = $item;
         return array_reverse($return);
     }

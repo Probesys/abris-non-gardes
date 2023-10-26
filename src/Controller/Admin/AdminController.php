@@ -4,19 +4,15 @@ declare(strict_types=1);
 
 namespace App\Controller\Admin;
 
+use App\Repository\DysfonctionnementRepository;
+use App\Repository\MessageRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Serializer\Encoder\JsonEncoder;
 use Symfony\Component\Serializer\SerializerInterface;
-use App\Repository\DysfonctionnementRepository;
-use App\Repository\MessageRepository;
-
-use function Safe\json_encode;
 
 /**
  * @Route("/admin")
- *
  */
 final class AdminController extends AbstractController
 {
@@ -29,8 +25,6 @@ final class AdminController extends AbstractController
     }
 
     /**
-     *
-     *
      * @Route("/", name="admin_index")
      */
     public function indexAction(DysfonctionnementRepository $dysfonctionnementRepository, MessageRepository $messageRepository): Response

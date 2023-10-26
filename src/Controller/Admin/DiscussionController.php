@@ -4,16 +4,18 @@ namespace App\Controller\Admin;
 
 use App\Entity\Discussion;
 use App\Entity\Message;
+use App\Entity\User;
 use App\FormFilter\DiscussionFilterType;
-use App\FormFilter\MessageFilterType;
 use App\Repository\DiscussionRepository;
-use App\Repository\MessageRepository;
 use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Symfony\Contracts\Translation\TranslatorInterface;
+
+use function Safe\json_encode;
 
 /**
  * @Route("/admin/discussion")
@@ -34,7 +36,6 @@ class DiscussionController extends AbstractController
 
             return $this->redirect($this->generateUrl('discussion_index'));
         }
-
 
         if ('filter' == $request->get('filter_action')) { // Filter action
             $filterForm->handleRequest($request); // Bind values from the request
@@ -67,11 +68,8 @@ class DiscussionController extends AbstractController
             []
         );
 
-
         return $this->render('admin/discussion/index.html.twig', ['pagination' => $pagination, 'search_form' => $filterForm->createView()]);
     }
-
-
 
     /**
      * @Route("/{id}/newMessage", name="message_new", methods={"POST"})
@@ -90,38 +88,33 @@ class DiscussionController extends AbstractController
             $this->sendMailNotification($message, $mailer, $translator);
         }
         $referer = $request->headers->get('referer');
+
         return $this->redirect($referer);
-        //$this->redirect($referer);
+        // $this->redirect($referer);
         // return $this->render('admin/dysfonctionnement/new.html.twig', [
         //             'dysfonctionnement' => $dysfonctionnement,
         //             'form' => $form->createView(),
         // ]);
     }
 
-
-
-
     /**
      * Finds and displays a Discussion entity.
      *
-     * @param String   $userType
-     * @param User $user
      * @Route("/{id}", name="admin_discussion_show",  methods="GET")
-     *
      *
      * @return Response
      */
     public function showAction(Discussion $discussion, TranslatorInterface $translator)
     {
-        //$this->checkAccess($discussion, $translator);
+        // $this->checkAccess($discussion, $translator);
         return $this->render('admin/discussion/show.html.twig', [
             'discussion' => $discussion,
-
         ]);
     }
 
     /**
-     * send email notification
+     * send email notification.
+     *
      * @param type $message
      */
     private function sendMailNotification(Message $message, $mailer, TranslatorInterface $translator)
@@ -129,7 +122,7 @@ class DiscussionController extends AbstractController
         // lorsqu'un nouveau message est ajouté concernant un abris, une notification est envoyée
         $dysfonctionnement = $message->getDiscussion();
         $abris = $dysfonctionnement->getAbris();
-        $currentUser =  $this->getUser();
+        $currentUser = $this->getUser();
         $destMail = [];
         $users = $abris->getGestionnaires() ?: $abris->getProprietaires();
         foreach ($users as $user) {
@@ -144,7 +137,7 @@ class DiscussionController extends AbstractController
             }
         }
 
-        $body = str_replace(['%id%','%abris%'], [$message->getId(), $abris], $translator->trans('Emails.Message.newMessageAboutAbris.body'));
+        $body = str_replace(['%id%', '%abris%'], [$message->getId(), $abris], $translator->trans('Emails.Message.newMessageAboutAbris.body'));
         $subject = str_replace('%id%', $message->getId(), $translator->trans('Emails.Message.newMessageAboutAbris.subject'));
         try {
             $email = (new \Swift_Message($subject))
@@ -153,13 +146,13 @@ class DiscussionController extends AbstractController
                 ->setBody(
                     $this->renderView(
                         'emails/generics.html.twig',
-                        ['subject'=>$subject, 'body' => $body]
+                        ['subject' => $subject, 'body' => $body]
                     ),
                     'text/html'
-                ) ;
+                );
             $mailer->send($email);
-        } catch (Exception $exc) {
-            echo "Imposssible d'envoyer le mail aux destinataires" . $exc->getTraceAsString();
+        } catch (\Exception $exc) {
+            echo "Imposssible d'envoyer le mail aux destinataires".$exc->getTraceAsString();
         }
     }
 
@@ -169,7 +162,7 @@ class DiscussionController extends AbstractController
     public function delete(Request $request, Discussion $discussion, TranslatorInterface $translator): Response
     {
         $this->checkAccess($discussion, $translator);
-        if ($this->isCsrfTokenValid('delete_discussion' . $discussion->getId(), $request->query->get('_token'))) {
+        if ($this->isCsrfTokenValid('delete_discussion'.$discussion->getId(), $request->query->get('_token'))) {
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->remove($discussion);
             $entityManager->flush();
@@ -184,13 +177,12 @@ class DiscussionController extends AbstractController
             ];
         }
 
-        return new Response(json_encode($return, JSON_THROW_ON_ERROR), \Symfony\Component\HttpFoundation\Response::HTTP_OK);
+        return new Response(json_encode($return, JSON_THROW_ON_ERROR), Response::HTTP_OK);
     }
 
     /**
      * Batch action for discussion entity.
      *
-     * @param Request $request
      * @Route("/batch", name="discussion_batch",  methods="POST")
      *
      * @return Response
@@ -211,7 +203,7 @@ class DiscussionController extends AbstractController
     private function checkAccess(Discussion $discussion, $translator)
     {
         $abris = $discussion->getAbris();
-        if (!$this->isGranted('ROLE_ADMIN') && !($this->getUser()->getGestionnaireAbris())->contains($abris) && !($this->getUser()->getProprietaireAbris())->contains($abris)) {
+        if (!$this->isGranted('ROLE_ADMIN') && !$this->getUser()->getGestionnaireAbris()->contains($abris) && !$this->getUser()->getProprietaireAbris()->contains($abris)) {
             throw new AccessDeniedException($translator->trans('Security.messages.accessDeniedException'));
         }
     }

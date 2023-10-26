@@ -12,19 +12,23 @@ class AttributesWithQty
 {
     /**
      * @ORM\Id()
+     *
      * @ORM\GeneratedValue()
+     *
      * @ORM\Column(type="integer")
      */
     private $id;
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Abris", inversedBy="mobiliers")
+     *
      * @ORM\JoinColumn(nullable=true)
      */
     private ?\App\Entity\Abris $abrisMobilier = null;
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\ListingValue")
+     *
      * @ORM\JoinColumn(onDelete="CASCADE", nullable=true)
      *
      * @Groups({"abris"})
@@ -33,12 +37,14 @@ class AttributesWithQty
 
     /**
      * @ORM\Column(type="integer")
+     *
      * @Groups({"abris"})
      */
     private ?int $qty = null;
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Abris", inversedBy="couchages")
+     *
      * @ORM\JoinColumn(nullable=true)
      */
     private ?\App\Entity\Abris $abrisCouchage = null;
@@ -57,8 +63,6 @@ class AttributesWithQty
      * @ORM\ManyToOne(targetEntity="App\Entity\Abris", inversedBy="materielDivers")
      */
     private ?\App\Entity\Abris $abrisMaterielDivers = null;
-
-
 
     public function getId(): ?int
     {
@@ -148,5 +152,4 @@ class AttributesWithQty
 
         return $this;
     }
-
 }

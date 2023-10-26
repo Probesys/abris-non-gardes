@@ -2,17 +2,16 @@
 
 namespace App\Controller;
 
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController as Controller;
-use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Translation\TranslatorInterface;
-use App\Repository\CityRepository;
-use App\Repository\TerritoryRepository;
-use App\Repository\ListingValueRepository;
-use App\Repository\HelpMessageRepository;
 use App\Repository\AbrisRepository;
+use App\Repository\CityRepository;
+use App\Repository\HelpMessageRepository;
+use App\Repository\ListingValueRepository;
 use App\Repository\PageRepository;
+use App\Repository\TerritoryRepository;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController as Controller;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\Annotation\Route;
 
 /**
  * Description of AjaxController.
@@ -126,8 +125,6 @@ class AjaxController extends Controller
         }
     }
 
-
-
     /**
      * @Route("/autocomplete-search-help-message", name="autocomplete_search_help_message", options={"expose"=true})
      */
@@ -172,7 +169,6 @@ class AjaxController extends Controller
         return new Response(json_encode($return, JSON_THROW_ON_ERROR), $return ? 200 : 404);
     }
 
-
     /**
      * @Route("/page/{id}", name="ajax_page", options={"expose"=true})
      */
@@ -180,7 +176,7 @@ class AjaxController extends Controller
     {
         $page = $pageRepository->find($id);
         $return = '';
-        if($page) {
+        if ($page) {
             $return = '<div class="modal-header">
         <h5 class="modal-title">'.$page->getName().'</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -191,8 +187,5 @@ class AjaxController extends Controller
         }
 
         return new Response($return, $return ? 200 : 404);
-
     }
-
-
 }

@@ -2,15 +2,11 @@
 
 namespace App\FormFilter;
 
-use App\Entity\Dysfonctionnement;
-use App\Entity\ListingValue;
 use App\Form\Traits\ListingValuesFormsTrait;
-use Symfony\Bridge\Doctrine\Form\Type\EntityType;
-use App\Repository\ListingValueRepository;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-use Doctrine\ORM\EntityManagerInterface;
 
 class DiscussionFilterType extends AbstractType
 {
@@ -25,7 +21,6 @@ class DiscussionFilterType extends AbstractType
 
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-
         $builder
               ->add('abris', null, ['label' => 'Entities.Dysfonctionnement.fields.abris', 'required' => false])
         ;

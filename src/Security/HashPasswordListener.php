@@ -7,16 +7,14 @@ namespace App\Security;
 use App\Entity\User;
 use Doctrine\Common\EventSubscriber;
 use Doctrine\ORM\Event\LifecycleEventArgs;
-use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
-
-use function get_class;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
 final class HashPasswordListener implements EventSubscriber
 {
-    /** @var UserPasswordEncoderInterface */
+    /** @var UserPasswordHasherInterface */
     private $passwordEncoder;
 
-    public function __construct(UserPasswordEncoderInterface $passwordEncoder)
+    public function __construct(UserPasswordHasherInterface $passwordEncoder)
     {
         $this->passwordEncoder = $passwordEncoder;
     }
@@ -24,7 +22,7 @@ final class HashPasswordListener implements EventSubscriber
     public function prePersist(LifecycleEventArgs $args): void
     {
         $entity = $args->getEntity();
-        if (! $entity instanceof User) {
+        if (!$entity instanceof User) {
             return;
         }
 
@@ -34,20 +32,17 @@ final class HashPasswordListener implements EventSubscriber
     public function preUpdate(LifecycleEventArgs $args): void
     {
         $entity = $args->getEntity();
-        if (! $entity instanceof User) {
+        if (!$entity instanceof User) {
             return;
         }
 
         $this->encodePassword($entity);
         // necessary to force the update to see the change
         $em = $args->getEntityManager();
-        $meta = $em->getClassMetadata(get_class($entity));
+        $meta = $em->getClassMetadata(\get_class($entity));
         $em->getUnitOfWork()->recomputeSingleEntityChangeSet($meta, $entity);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getSubscribedEvents()
     {
         return ['prePersist', 'preUpdate'];
@@ -56,7 +51,7 @@ final class HashPasswordListener implements EventSubscriber
     private function encodePassword(User $entity): void
     {
         $plainPassword = $entity->getPlainPassword();
-        if ($plainPassword === null) {
+        if (null === $plainPassword) {
             return;
         }
 

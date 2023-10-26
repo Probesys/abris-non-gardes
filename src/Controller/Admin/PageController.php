@@ -3,16 +3,14 @@
 namespace App\Controller\Admin;
 
 use App\Entity\Page;
-use App\Form\PageFormType as PageFormType;
+use App\Form\PageFormType;
 use App\FormFilter\PageFilterType;
 use App\Repository\PageRepository;
-
+use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController as Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Contracts\Translation\TranslatorInterface;
-use Knp\Component\Pager\PaginatorInterface;
 
 /**
  * @Route("/admin/pages")
@@ -34,7 +32,6 @@ class PageController extends Controller
             return $this->redirect($this->generateUrl('page_index'));
         }
 
-
         if ('filter' == $request->get('filter_action')) { // Filter action
             $filterForm->handleRequest($request); // Bind values from the request
             if ($filterForm->isSubmitted() && $filterForm->isValid()) {
@@ -50,7 +47,6 @@ class PageController extends Controller
             if (array_key_exists('name', $filterData)) {
                 $filterForm->get('name')->setData($filterData['name']);
             }
-
         }
 
         $per_page = $this->getParameter('app.per_page_global');
@@ -120,6 +116,7 @@ class PageController extends Controller
      * Delete a page entity.
      *
      * @param int $id
+     *
      * @Route("/{id}/delete", name="page_delete",  methods="GET")
      *
      * @return Response
@@ -136,7 +133,6 @@ class PageController extends Controller
     /**
      * Batch action for BusinessState entity.
      *
-     * @param Request $request
      * @Route("/batch", name="page_batch",  methods="POST")
      *
      * @return Response

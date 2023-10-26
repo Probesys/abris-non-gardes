@@ -3,9 +3,9 @@
 namespace App\Repository;
 
 use App\Entity\User;
+use Cocur\Slugify\Slugify;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
-use Cocur\Slugify\Slugify;
 
 /**
  * @method User|null find($id, $lockMode = null, $lockVersion = null)
@@ -60,9 +60,9 @@ class UserRepository extends ServiceEntityRepository
     public function batchDelete($ids = null)
     {
         if ($ids) {
-            $queryBuilder = $this->createQueryBuilder('u')->delete('App\Entity\User u')->where('u.id IN (\'' . implode('\',\'', $ids) . '\')');
+            $queryBuilder = $this->createQueryBuilder('u')->delete('App\Entity\User u')->where('u.id IN (\''.implode('\',\'', $ids).'\')');
             $query = $queryBuilder->getQuery();
-            //queries execution
+            // queries execution
             $query->execute();
         }
     }

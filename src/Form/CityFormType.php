@@ -3,11 +3,11 @@
 namespace App\Form;
 
 use App\Entity\City;
+use App\Entity\Territory;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Tetranz\Select2EntityBundle\Form\Type\Select2EntityType;
-use App\Entity\Territory;
 
 class CityFormType extends AbstractType
 {
@@ -37,7 +37,6 @@ class CityFormType extends AbstractType
                     'placeholder' => 'Entities.Territory.actions.selectOneOrManyTerritories',
                     'by_reference' => false,
                   ])
-
 
         ;
     }

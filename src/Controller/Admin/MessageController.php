@@ -3,16 +3,13 @@
 namespace App\Controller\Admin;
 
 use App\Entity\Message;
-use App\Form\MessageFormType as MessageFormType;
 use App\FormFilter\MessageFilterType;
 use App\Repository\MessageRepository;
-
+use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController as Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Contracts\Translation\TranslatorInterface;
-use Knp\Component\Pager\PaginatorInterface;
 
 /**
  * @Route("/admin/messages")
@@ -34,7 +31,6 @@ class MessageController extends Controller
             return $this->redirect($this->generateUrl('admin_message_index'));
         }
 
-
         if ('filter' == $request->get('filter_action')) { // Filter action
             $filterForm->handleRequest($request); // Bind values from the request
             if ($filterForm->isSubmitted() && $filterForm->isValid()) {
@@ -49,11 +45,10 @@ class MessageController extends Controller
             if (array_key_exists('abris', $filterData)) {
                 $filterForm->get('abris')->setData($filterData['abris']);
             }
-
         }
 
         // envoi du user logué si son rôle est autre que admin
-        if(!$this->getUser()->hasRole('ROLE_ADMIN')) {
+        if (!$this->getUser()->hasRole('ROLE_ADMIN')) {
             $filterData['userID'] = $this->getUser()->getId();
         }
 
@@ -69,12 +64,11 @@ class MessageController extends Controller
         return $this->render('admin/message/index.html.twig', ['pagination' => $pagination, 'search_form' => $filterForm->createView()]);
     }
 
-
-
     /**
      * Delete a message entity.
      *
      * @param int $id
+     *
      * @Route("/{id}/delete", name="admin_message_delete",  methods="GET")
      *
      * @return Response
@@ -91,7 +85,6 @@ class MessageController extends Controller
     /**
      * Batch action for mesage entity.
      *
-     * @param Request $request
      * @Route("/batch", name="admin_message_batch",  methods="POST")
      *
      * @return Response

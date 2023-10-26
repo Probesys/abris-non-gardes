@@ -2,20 +2,16 @@
 
 namespace App\Entity;
 
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
-use Gedmo\Mapping\Annotation as Gedmo;
-use Doctrine\ORM\Mapping as ORM;
-
 use App\Entity\Traits\EntityBlameableTrait;
-use App\Entity\Traits\EntityTimestampableTrait;
 use App\Entity\Traits\EntityCommonTrait;
 use App\Entity\Traits\EntityNameTrait;
+use App\Entity\Traits\EntityTimestampableTrait;
+use Doctrine\ORM\Mapping as ORM;
+use Gedmo\Mapping\Annotation as Gedmo;
 use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\PageRepository")
- *
  */
 class Page
 {
@@ -25,22 +21,25 @@ class Page
     use EntityNameTrait;
     /**
      * @ORM\Id()
+     *
      * @ORM\GeneratedValue()
+     *
      * @ORM\Column(type="integer")
+     *
      * @Groups({"default"})
      */
     private $id;
 
     /**
-     *
      * @ORM\Column(type="string", length=255)
+     *
      * @Groups({"default"})
      */
     private $name;
 
     /**
-     *
      * @ORM\Column(type="text", nullable=true)
+     *
      * @Groups({"default"})
      */
     private ?string $body = null;
@@ -57,12 +56,14 @@ class Page
 
     /**
      * @Gedmo\Slug(fields={"name"})
+     *
      * @ORM\Column(type="string",length=128, unique=true)
      */
     private $slug;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
+     *
      * @Groups({"default"})
      */
     private ?string $linkText = null;
@@ -119,8 +120,4 @@ class Page
 
         return $this;
     }
-
-
-
-
 }

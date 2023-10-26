@@ -12,13 +12,16 @@ use Ramsey\Uuid\UuidInterface;
 
 /**
  * @ORM\Entity
+ *
  * @ORM\Table(name="posts")
+ *
  * @ORM\HasLifecycleCallbacks
  */
 class Post
 {
     /**
      * @ORM\Id
+     *
      * @ORM\Column(type="uuid", unique=true)
      *
      * @var UuidInterface
@@ -48,7 +51,7 @@ class Post
     public function onPrePersist(): void
     {
         $this->id = Uuid::uuid4();
-        $this->created = new DateTime('NOW');
+        $this->created = new \DateTime('NOW');
     }
 
     /**
@@ -56,7 +59,7 @@ class Post
      */
     public function onPreUpdate(): void
     {
-        $this->updated = new DateTime('NOW');
+        $this->updated = new \DateTime('NOW');
     }
 
     public function getId(): UuidInterface
@@ -74,12 +77,12 @@ class Post
         $this->message = $message;
     }
 
-    public function getCreated(): DateTime
+    public function getCreated(): \DateTime
     {
         return $this->created;
     }
 
-    public function getUpdated(): ?DateTime
+    public function getUpdated(): ?\DateTime
     {
         return $this->updated;
     }

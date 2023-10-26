@@ -73,7 +73,8 @@
 {% macro recursiveNodes(node, parentId) %}
 
     {% import _self as macros %}
-    <tr data-tt-id="{{node['id']}}" data-tt-parent-id="{{parentId}}" data-entityid="{{node.entityId}}" class="{% if (app.user and (app.user.entity.id != node.entityId)) %}otherEntityGroups{% endif %}  {% if (app.user and (app.user.id == node.creatorId)) %}myGroups{% endif %} {% if node.level == 3 %}collapseOnLoad{%endif %}{% if node.level > 3 %}hideOnLoad{%endif %}">
+
+    <tr data-tt-id="{{node['id']}}" data-tt-parent-id="{{parentId}}" class="{% if node.level == 3 %}collapseOnLoad{%endif %}{% if node.level > 3 %}hideOnLoad{%endif %}">
         <td><input type="checkbox" name="ids[]" value="{{node['id']}}" class="sf_admin_batch_checkbox"></td>
         <td class="sf_admin_text sf_admin_list_td_id">
             {% for i in range (0, node['level'])%}&nbsp;&nbsp;{% endfor %}

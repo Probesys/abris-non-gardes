@@ -4,12 +4,11 @@ namespace App\Security;
 
 use App\Entity\User;
 use Doctrine\ORM\EntityManagerInterface;
-
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
-use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 use Symfony\Component\Security\Core\Exception\CustomUserMessageAuthenticationException;
 use Symfony\Component\Security\Core\Exception\InvalidCsrfTokenException;
 use Symfony\Component\Security\Core\Security;
@@ -32,8 +31,7 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator implements P
     private $csrfTokenManager;
     private $passwordEncoder;
 
-
-    public function __construct(EntityManagerInterface $entityManager, UrlGeneratorInterface $urlGenerator, CsrfTokenManagerInterface $csrfTokenManager, UserPasswordEncoderInterface $passwordEncoder)
+    public function __construct(EntityManagerInterface $entityManager, UrlGeneratorInterface $urlGenerator, CsrfTokenManagerInterface $csrfTokenManager, UserPasswordHasherInterface $passwordEncoder)
     {
         $this->entityManager = $entityManager;
         $this->urlGenerator = $urlGenerator;
@@ -81,7 +79,6 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator implements P
             throw new CustomUserMessageAuthenticationException('Email could not be found.');
         }
 
-
         return $user;
     }
 
@@ -95,19 +92,20 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator implements P
         return $this->passwordEncoder->isPasswordValid($user, $credentials['password']);
     }
 
+    /**
+     * Override to change what happens after a good username/password is submitted.
+     *
+     * @return Response
+     */
     public function onAuthenticationSuccess(Request $request, TokenInterface $token, $providerKey)
     {
         if (in_array('ROLE_USER', $token->getUser()->getRoles())) {
-            return new RedirectResponse($this->urlGenerator->generate('index', ['vueRouting'=> 'abris']));
+            return new RedirectResponse($this->urlGenerator->generate('index', ['vueRouting' => 'abris']));
         }
 
         if (in_array('ROLE_WAITING_VALIDATION', $token->getUser()->getRoles())) {
             return new RedirectResponse($this->urlGenerator->generate('app_registration-waiting-validation'));
         }
-
-        //        if ($targetPath = $this->getTargetPath($request->getSession(), $providerKey)) {
-        //            return new RedirectResponse($targetPath);
-        //        }
 
         return new RedirectResponse($this->urlGenerator->generate('admin_index'));
     }

@@ -2,9 +2,10 @@
 
 namespace App\Controller\Admin;
 
-use App\Entity\Dysfonctionnement;
 use App\Entity\Discussion;
+use App\Entity\Dysfonctionnement;
 use App\Entity\UploadedDocument;
+use App\Entity\User;
 use App\Form\DysfonctionnementType;
 use App\FormFilter\DysfonctionnementFilterType;
 use App\Repository\DysfonctionnementRepository;
@@ -15,7 +16,11 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Symfony\Contracts\Translation\TranslatorInterface;
+
+use function Safe\json_encode;
+use function Safe\unlink;
 
 /**
  * @Route("/admin/dysfonctionnement")
@@ -48,6 +53,7 @@ class DysfonctionnementController extends AbstractController
         }
         if ('filter' == $request->get('filter_action')) { // Filter action
             $filterForm->handleRequest($request); // Bind values from the request
+
             if ($filterForm->isSubmitted() && $filterForm->isValid()) {
                 if ($filterForm->has('abris')) {
                     $filterData['abris'] = $filterForm->get('abris')->getData();
@@ -55,17 +61,26 @@ class DysfonctionnementController extends AbstractController
                 if ($filterForm->has('natureDys')) {
                     $filterData['natureDys'] = $filterForm->get('natureDys')->getData();
                 }
+                if ($filterForm->has('statusDys')) {
+                    $filterData['statusDys'] = $filterForm->get('statusDys')->getData();
+                }
 
                 $session->set('dysfonctionnementFilter', $filterData); // Save filter to session
             }
         } elseif ($session->has('dysfonctionnementFilter')) {
             $filterData = $session->get('dysfonctionnementFilter');
-            $filterForm = $this->createForm(DysfonctionnementFilterType::class, $filterData, ['data_class' => null]);
             if (array_key_exists('abris', $filterData)) {
                 $filterForm->get('abris')->setData($filterData['abris']);
             }
-            if (array_key_exists('natureDys', $filterData)) {
-                $filterForm->get('natureDys')->setData($filterData['natureDys']);
+            if (array_key_exists('natureDys', $filterData) && '' != $filterData['natureDys']) {
+                $natureDys = $filterData['natureDys'];
+                $natureDys = $this->getDoctrine()->getManager()->merge($natureDys);
+                $filterForm->get('natureDys')->setData($natureDys);
+            }
+            if (array_key_exists('statusDys', $filterData) && '' != $filterData['statusDys']) {
+                $statusDys = $filterData['statusDys'];
+                $statusDys = $this->getDoctrine()->getManager()->merge($statusDys);
+                $filterForm->get('statusDys')->setData($statusDys);
             }
         }
 
@@ -82,7 +97,6 @@ class DysfonctionnementController extends AbstractController
             $request->query->getInt('per_page', $per_page), /* limit per user */
             []
         );
-
 
         return $this->render('admin/dysfonctionnement/index.html.twig', ['pagination' => $pagination, 'search_form' => $filterForm->createView()]);
     }
@@ -119,11 +133,11 @@ class DysfonctionnementController extends AbstractController
     {
         $abris = $dysfonctionnement->getAbris();
         $destMail = $dysfonctionnement->getCreatedBy()->getEmail();
-        $url = "https://abris.parc-du-vercors.fr/";
+        $url = 'https://abris.parc-du-vercors.fr/';
 
-        // ####  envoi du mail à la personne ayant ajouté le dysfonctionnement    
-        $body = str_replace(['%id%','%abris%','%url%'], [$dysfonctionnement->getId(), $abris, $url], $translator->trans('Emails.Dysfonctionnement.newDysfonctionnement.body'));
-        $subject = str_replace(['%id%','%abris%'], [$dysfonctionnement->getId(), $abris], $translator->trans('Emails.Dysfonctionnement.newDysfonctionnement.subject'));
+        // ####  envoi du mail à la personne ayant ajouté le dysfonctionnement
+        $body = str_replace(['%id%', '%abris%', '%url%'], [$dysfonctionnement->getId(), $abris, $url], $translator->trans('Emails.Dysfonctionnement.newDysfonctionnement.body'));
+        $subject = str_replace(['%id%', '%abris%'], [$dysfonctionnement->getId(), $abris], $translator->trans('Emails.Dysfonctionnement.newDysfonctionnement.subject'));
         try {
             $message = (new \Swift_Message($subject))
                 ->setFrom($this->getParameter('app.genericMail'))
@@ -131,18 +145,18 @@ class DysfonctionnementController extends AbstractController
                 ->setBody(
                     $this->renderView(
                         'emails/generics.html.twig',
-                        ['subject'=>$subject, 'body' => $body]
+                        ['subject' => $subject, 'body' => $body]
                     ),
                     'text/html'
-                ) ;
+                );
             $mailer->send($message);
-        } catch (Exception $exc) {
-            echo "Imposssible d'envoyer le mail aux destinataires" . $exc->getTraceAsString();
+        } catch (\Exception $exc) {
+            echo "Imposssible d'envoyer le mail aux destinataires".$exc->getTraceAsString();
         }
-        
+
         // ####  mail aux proprietaires / gestionnaires
         $destMails = [];
-        /** @var  User $user */
+        /** @var User $user */
         foreach ($abris->getGestionnaires() as $user) {
             if (filter_var($user->getEmail(), FILTER_VALIDATE_EMAIL)) {
                 $destMails[] = $user->getEmail();
@@ -156,21 +170,21 @@ class DysfonctionnementController extends AbstractController
 
         if (!empty($destMails)) {
             try {
-                $message = (new \Swift_Message($abris->getName() . ' ' . $translator->trans('Security.messages.newDysfunctionReported')))
-                    ->setFrom($this->getParameter('app.genericMail'))        
+                $message = (new \Swift_Message($abris->getName().' '.$translator->trans('Security.messages.newDysfunctionReported')))
+                    ->setFrom($this->getParameter('app.genericMail'))
                     ->setBody(
-                    $this->renderView(
+                        $this->renderView(
                             'emails/newDysfunction.html.twig',
                             ['dysfonctionnement' => $dysfonctionnement]
                         ),
                         'text/html'
                     );
-                foreach($destMails as $email){
-                   $message->addTo($email); 
+                foreach ($destMails as $email) {
+                    $message->addTo($email);
                 }
                 $mailer->send($message);
-            } catch (Exception $exc) {
-                echo "Imposssible d'envoyer le mail aux destinataires" . $exc->getTraceAsString();
+            } catch (\Exception $exc) {
+                echo "Imposssible d'envoyer le mail aux destinataires".$exc->getTraceAsString();
             }
         }
     }
@@ -189,7 +203,7 @@ class DysfonctionnementController extends AbstractController
         if (!$dysfonctionnement->getDiscussion()) {
             $discussion = new Discussion();
             $discussion->setAbris($dysfonctionnement->getAbris());
-            $discussion->setName($dysfonctionnement->getAbris()." ".$dysfonctionnement->getNatureDys()." ".$dysfonctionnement->getCreated()->format('d/m/Y'));
+            $discussion->setName($dysfonctionnement->getAbris().' '.$dysfonctionnement->getNatureDys().' '.$dysfonctionnement->getCreated()->format('d/m/Y'));
             $this->getDoctrine()->getManager()->persist($discussion);
             $dysfonctionnement->setDiscussion($discussion);
             $this->getDoctrine()->getManager()->flush();
@@ -204,7 +218,6 @@ class DysfonctionnementController extends AbstractController
 
             // test si passage a resolus
             $this->sendChangeStatusEmail($dysfonctionnement, $oldStatus, $translator, $mailer);
-
 
             return $this->redirectToRoute('dysfonctionnement_index');
         }
@@ -223,8 +236,8 @@ class DysfonctionnementController extends AbstractController
 
         if ((!$oldStatus || $newStatus->getId() !== $oldStatus->getId()) && $newStatus->getId() == $this::resolveStatusID) {
             // resolus : envoi d'un mail à l'auteur du dysfcontionnement
-            $body = str_replace(['%id%','%abris%'], [$dysfonctionnement->getId(), $abris], $translator->trans('Emails.Dysfonctionnement.dysfonctionnementResolved.body'));
-            $subject = str_replace(['%id%','%abris%'], [$dysfonctionnement->getId(), $abris], $translator->trans('Emails.Dysfonctionnement.dysfonctionnementResolved.subject'));
+            $body = str_replace(['%id%', '%abris%'], [$dysfonctionnement->getId(), $abris], $translator->trans('Emails.Dysfonctionnement.dysfonctionnementResolved.body'));
+            $subject = str_replace(['%id%', '%abris%'], [$dysfonctionnement->getId(), $abris], $translator->trans('Emails.Dysfonctionnement.dysfonctionnementResolved.subject'));
             try {
                 $message = (new \Swift_Message($subject))
                 ->setFrom($this->getParameter('app.genericMail'))
@@ -232,13 +245,13 @@ class DysfonctionnementController extends AbstractController
                 ->setBody(
                     $this->renderView(
                         'emails/generics.html.twig',
-                        ['subject'=>$subject, 'body' => $body]
+                        ['subject' => $subject, 'body' => $body]
                     ),
                     'text/html'
-                ) ;
+                );
                 $mailer->send($message);
-            } catch (Exception $exc) {
-                echo "Imposssible d'envoyer le mail aux destinataires" . $exc->getTraceAsString();
+            } catch (\Exception $exc) {
+                echo "Imposssible d'envoyer le mail aux destinataires".$exc->getTraceAsString();
             }
         }
     }
@@ -249,7 +262,7 @@ class DysfonctionnementController extends AbstractController
     public function delete(Request $request, Dysfonctionnement $dysfonctionnement, TranslatorInterface $translator): Response
     {
         $this->checkAccess($dysfonctionnement, $translator);
-        if ($this->isCsrfTokenValid('delete_dysfonctionnement' . $dysfonctionnement->getId(), $request->query->get('_token'))) {
+        if ($this->isCsrfTokenValid('delete_dysfonctionnement'.$dysfonctionnement->getId(), $request->query->get('_token'))) {
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->remove($dysfonctionnement);
             $entityManager->flush();
@@ -264,13 +277,12 @@ class DysfonctionnementController extends AbstractController
             ];
         }
 
-        return new Response(json_encode($return, JSON_THROW_ON_ERROR), \Symfony\Component\HttpFoundation\Response::HTTP_OK);
+        return new Response(json_encode($return, JSON_THROW_ON_ERROR), Response::HTTP_OK);
     }
 
     /**
      * Delete a photo entity.
      *
-     * @param int $id
      * @Route("/photo/{id}/delete", name="admin_dysfonctionnement_delete_photo",  methods="GET")
      *
      * @return Response
@@ -278,10 +290,10 @@ class DysfonctionnementController extends AbstractController
     public function deletePhotoAction(UploadedDocument $photo, Request $request)
     {
         $abrisId = $photo->getDysfonctionnement()->getAbris()->getId();
-        if ($this->isCsrfTokenValid('delete_photo' . $photo->getId(), $request->query->get('_token'))) {
+        if ($this->isCsrfTokenValid('delete_photo'.$photo->getId(), $request->query->get('_token'))) {
             $this->getDoctrine()->getManager()->remove($photo);
             $this->getDoctrine()->getManager()->flush();
-            $filename = $this->getParameter('picture_directory') . '/' . $abrisId . '/' . $photo->getFileName();
+            $filename = $this->getParameter('picture_directory').'/'.$abrisId.'/'.$photo->getFileName();
 
             if (file_exists($filename)) {
                 unlink($filename);
@@ -293,15 +305,12 @@ class DysfonctionnementController extends AbstractController
             $this->addFlash('error', 'CSRF Token Invalid');
         }
 
-
-
         return $this->redirectToRoute('dysfonctionnement_edit', ['id' => $photo->getDysfonctionnement()->getId()]);
     }
 
     /**
      * Batch action for Dysfonctionnement entity.
      *
-     * @param Request $request
      * @Route("/batch", name="dysfonctionnement_batch",  methods="POST")
      *
      * @return Response
@@ -340,7 +349,7 @@ class DysfonctionnementController extends AbstractController
     private function checkAccess(Dysfonctionnement $dysfonctionnement, $translator)
     {
         $abris = $dysfonctionnement->getAbris();
-        if (!$this->isGranted('ROLE_ADMIN') && !($this->getUser()->getGestionnaireAbris())->contains($abris) && !($this->getUser()->getProprietaireAbris())->contains($abris)) {
+        if (!$this->isGranted('ROLE_ADMIN') && !$this->getUser()->getGestionnaireAbris()->contains($abris) && !$this->getUser()->getProprietaireAbris()->contains($abris)) {
             throw new AccessDeniedException($translator->trans('Security.messages.accessDeniedException'));
         }
     }

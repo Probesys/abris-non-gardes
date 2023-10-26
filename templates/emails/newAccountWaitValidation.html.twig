@@ -1,12 +1,14 @@
 {% extends 'base-email.html.twig' %}
 
 {% block body %}
-{{ 'Generics.text.hello'|trans() }},
-{{ 'Security.messages.newAccountWaitValidation'|trans }} :
-{{ 'Entities.user.fields.name'|trans() }} : {{ user }}
-{{ 'Entities.user.fields.email'|trans() }} : {{ user.email }}
-{{ 'Entities.user.fields.login'|trans() }} : {{ user.login }}
-{{ 'Entities.user.fields.userType'|trans() }} : {{ user.userType }}
+{{ 'Generics.text.hello'|trans() }},<br/>
+<br/>{{ 'Security.messages.newAccountWaitValidation'|trans }} :
+<br/><br/>{{ 'Entities.User.fields.name'|trans() }} : {{ user }}
+<br/>{{ 'Entities.User.fields.email'|trans() }} : {{ user.email }}
+<br/>{{ 'Entities.User.fields.login'|trans() }} : {{ user.login }}
+<br/>{{ 'Entities.User.fields.userType'|trans() }} : {{ user.userType }}
+<br/>
+<br/>Pour consulter et valider ce compte, merci de vous connecter à l'application via ce lien : <a href="https://abris.parc-du-vercors.fr">{{ 'Generics.labels.appName'|trans() }}</a>
 
 {% endblock body %}
 

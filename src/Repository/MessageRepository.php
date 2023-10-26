@@ -38,7 +38,7 @@ class MessageRepository extends ServiceEntityRepository
             $dql->leftJoin('a.createdBy', 'crea');
             $dql->leftJoin('a.proprietaires', 'proprios');
             $dql->leftJoin('a.gestionnaires', 'gests');
-            //$dql->andWhere('crea.id=\''.$userID.'\' OR proprios.id=\''.$userID.'\' OR gests.id=\''.$userID.'\'');
+            // $dql->andWhere('crea.id=\''.$userID.'\' OR proprios.id=\''.$userID.'\' OR gests.id=\''.$userID.'\'');
             $dql->andWhere('proprios.id=\''.$userID.'\' OR gests.id=\''.$userID.'\'');
         }
 
@@ -98,9 +98,9 @@ class MessageRepository extends ServiceEntityRepository
     public function batchDelete($ids = null)
     {
         if ($ids) {
-            $queryBuilder = $this->createQueryBuilder('m')->delete('App\Entity\Message m')->where('m.id IN (' . implode(',', $ids) . ')');
+            $queryBuilder = $this->createQueryBuilder('m')->delete('App\Entity\Message m')->where('m.id IN ('.implode(',', $ids).')');
             $query = $queryBuilder->getQuery();
-            //queries execution
+            // queries execution
             $query->execute();
         }
     }

@@ -2,22 +2,23 @@
 
 namespace App\Entity;
 
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
-use Gedmo\Mapping\Annotation as Gedmo;
-use Doctrine\ORM\Mapping as ORM;
-use Ramsey\Uuid\Uuid;
-use Ramsey\Uuid\UuidInterface;
-
 use App\Entity\Traits\EntityBlameableTrait;
-use App\Entity\Traits\EntityTimestampableTrait;
 use App\Entity\Traits\EntityCommonTrait;
 use App\Entity\Traits\EntityNameTrait;
+use App\Entity\Traits\EntityTimestampableTrait;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
+use Doctrine\ORM\Mapping as ORM;
+use Gedmo\Mapping\Annotation as Gedmo;
+use Ramsey\Uuid\Uuid;
+use Ramsey\Uuid\UuidInterface;
 use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\ListingTypeRepository")
+ *
  * @ORM\HasLifecycleCallbacks
+ *
  * @Gedmo\Loggable
  */
 class ListingType
@@ -28,8 +29,11 @@ class ListingType
     use EntityNameTrait;
     /**
      * @ORM\Id()
+     *
      * @ORM\GeneratedValue()
+     *
      * @ORM\Column(type="integer")
+     *
      * @Groups({"default"})
      */
     private $id;
@@ -40,9 +44,10 @@ class ListingType
     private $listingValues;
 
     /**
-     *
      * @ORM\Column(type="uuid", unique=true)
+     *
      * @Groups({"default"})
+     *
      * @var UuidInterface
      */
     private $uuid;

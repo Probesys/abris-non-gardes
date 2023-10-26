@@ -2,7 +2,9 @@
 
 namespace App\FormFilter;
 
+use App\Entity\ListingType;
 use App\Entity\ListingValue;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -13,15 +15,31 @@ class ListingValueFilterType extends AbstractType
     {
         $builder
                 ->add('name', null, ['label' => 'Generics.fields.name', 'required' => false])
-                ->add('listingType', null, ['label' => 'Entities.ListingValue.fields.listingType', 'required' => false, 'attr' => ['class' => 'select2']])
-                ->add('parent', null, ['label' => 'Entities.ListingValue.fields.listingParent', 'required' => false, 'attr' => ['class' => 'select2']])
+                ->add('listingType', EntityType::class, [
+                    'label' => 'Entities.ListingValue.fields.listingType',
+                    'class' => ListingType::class,
+                    'expanded' => false,
+                    'multiple' => false,
+                    'required' => false,
+                    'placeholder' => '',
+                    'attr' => ['class' => 'select2'],
+                ])
+                ->add('parent', EntityType::class, [
+                    'label' => 'Entities.ListingValue.fields.listingParent',
+                    'class' => ListingValue::class,
+                    'expanded' => false,
+                    'multiple' => false,
+                    'required' => false,
+                    'placeholder' => '',
+                    'attr' => ['class' => 'select2'],
+                ])
         ;
     }
 
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
-            'data_class' => ListingValue::class,
+            'data_class' => null,
         ]);
     }
 

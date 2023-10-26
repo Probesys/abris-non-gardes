@@ -2,24 +2,27 @@
 
 namespace App\Entity;
 
+use App\Annotations\ListingAnnotation;
+use App\Entity\Traits\EntityBlameableTrait;
+use App\Entity\Traits\EntityCommonTrait;
+use App\Entity\Traits\EntityNameTrait;
+use App\Entity\Traits\EntityTimestampableTrait;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Gedmo\Mapping\Annotation as Gedmo;
 use Ramsey\Uuid\Uuid;
 use Ramsey\Uuid\UuidInterface;
-use App\Entity\Traits\EntityBlameableTrait;
-use App\Entity\Traits\EntityTimestampableTrait;
-use App\Entity\Traits\EntityCommonTrait;
-use App\Entity\Traits\EntityNameTrait;
-use App\Annotations\ListingAnnotation;
 use Symfony\Component\Serializer\Annotation\Groups;
-use Gedmo\Mapping\Annotation as Gedmo;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\AbrisRepository")
+ *
  * @ORM\Table(name="abris")
+ *
  * @ORM\HasLifecycleCallbacks
+ *
  * @Gedmo\Loggable
  */
 class Abris
@@ -31,7 +34,9 @@ class Abris
 
     /**
      * @ORM\Id
+     *
      * @ORM\Column(type="uuid", unique=true)
+     *
      * @Groups({"abris","dysfunction", "discussion" ,"user"})
      *
      * @var UuidInterface
@@ -39,17 +44,21 @@ class Abris
     private $id;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\ListingValue")
+     * @ORM\ManyToOne(targetEntity="ListingValue")
+     *
      * @ORM\JoinColumn(onDelete="SET NULL", nullable=true)
      *
      * @ListingAnnotation(idListingUuid="b0cc7b35-5bee-4823-a8e9-70508c91cd51")
+     *
      * @Groups({"abris","dysfunction"})
      */
-    private ?\App\Entity\ListingValue $type = null;
+    private ?ListingValue $type = null;
 
     /**
      * @ORM\Column(type="string", length=255)
+     *
      * @Groups({"abris","dysfunction"})
+     *
      * @Assert\Regex(
      *     pattern="/^((\-?|\+?)?\d+(\.\d+)?),\s*((\-?|\+?)?\d+(\.\d+)?)$/",
      *     match=true,
@@ -59,300 +68,379 @@ class Abris
     private ?string $coordinate = null;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\City", inversedBy="abris")
+     * @ORM\ManyToOne(targetEntity="City", inversedBy="abris")
+     *
      * @ORM\JoinColumn(nullable=false)
+     *
      * @Groups({"default", "abris","dysfunction","user"})
      */
-    private ?\App\Entity\City $city = null;
+    private ?City $city = null;
 
     /**
-     * @ORM\ManyToMany(targetEntity="App\Entity\User", inversedBy="proprietaireAbris")
+     * @ORM\ManyToMany(targetEntity="User", inversedBy="proprietaireAbris")
+     *
      * @ORM\JoinTable(name="abris_proprietaires")
+     *
      * @ORM\JoinColumn(onDelete="SET NULL")
+     *
      * @Groups({"abris","dysfunction"})
      */
     private $proprietaires;
 
     /**
-     * @ORM\ManyToMany(targetEntity="App\Entity\User", inversedBy="gestionnaireAbris")
+     * @ORM\ManyToMany(targetEntity="User", inversedBy="gestionnaireAbris")
+     *
      * @ORM\JoinTable(name="abris_gestionnaires")
+     *
      * @ORM\JoinColumn(onDelete="SET NULL")
      */
     private $gestionnaires;
 
     /**
      * @ORM\Column(type="integer")
+     *
      * @Groups({"abris"})
      */
     private ?int $capaciteAccueil = null;
 
     /**
      * @ORM\Column(type="text", nullable=true)
+     *
      * @Groups({"abris"})
      */
     private $description;
 
     /**
-     * @ORM\ManyToMany(targetEntity="App\Entity\ListingValue")
+     * @ORM\ManyToMany(targetEntity="ListingValue")
+     *
      * @ORM\JoinTable(name="abris_types_toit")
+     *
      * @ORM\JoinColumn(onDelete="SET NULL")
+     *
      * @ListingAnnotation(idListingUuid="d4543c60-7e7c-4df3-bc12-f8baae7ec0ae")
+     *
      * @Groups({"abris"})
      */
     private $toit;
 
     /**
      * @ORM\Column(type="boolean")
+     *
      * @Groups({"abris"})
      */
     private ?bool $chemineeEnPierreSurLeToit = null;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\ListingValue")
+     * @ORM\ManyToOne(targetEntity="ListingValue")
+     *
      * @ListingAnnotation(idListingUuid="1fe5ef1a-564e-45a1-8e18-77ba40521326")
+     *
      * @ORM\JoinColumn(onDelete="SET NULL")
+     *
      * @Groups({"abris"})
      */
-    private ?\App\Entity\ListingValue $sortieFumees = null;
+    private ?ListingValue $sortieFumees = null;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\ListingValue")
+     * @ORM\ManyToOne(targetEntity="ListingValue")
+     *
      * @ListingAnnotation(idListingUuid="3c6e74fe-f55d-4dfd-a8ed-612f41734c51")
+     *
      * @ORM\JoinColumn(onDelete="SET NULL")
+     *
      * @Groups({"abris"})
      */
-    private ?\App\Entity\ListingValue $materiauSortieFumees = null;
+    private ?ListingValue $materiauSortieFumees = null;
 
     /**
      * @ORM\Column(type="integer")
+     *
      * @Groups({"abris"})
      */
     private ?int $nbPortes = null;
 
     /**
      * @ORM\Column(type="integer")
+     *
      * @Groups({"abris"})
      */
     private ?int $nbFenetres = null;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\ListingValue")
+     * @ORM\ManyToOne(targetEntity="ListingValue")
+     *
      * @ORM\JoinColumn(onDelete="SET NULL")
+     *
      * @ListingAnnotation(idListingUuid="5456d32c-543f-4511-a6f6-1f2ce533cc68")
+     *
      * @Groups({"abris"})
      */
-    private ?\App\Entity\ListingValue $typeMur = null;
+    private ?ListingValue $typeMur = null;
 
     /**
      * @ORM\Column(type="boolean")
+     *
      * @Groups({"abris"})
      */
     private ?bool $etage = null;
 
     /**
-     * @ORM\ManyToMany(targetEntity="App\Entity\ListingValue")
+     * @ORM\ManyToMany(targetEntity="ListingValue")
+     *
      * @ORM\JoinTable(name="abris_accesEtages")
+     *
      * @ORM\JoinColumn(onDelete="SET NULL")
+     *
      * @ListingAnnotation(idListingUuid="65640c10-9c90-40e8-af5d-82f67f18e9be")
+     *
      * @Groups({"abris"})
      */
     private $accesEtage;
 
     /**
-     * @ORM\ManyToMany(targetEntity="App\Entity\ListingValue")
+     * @ORM\ManyToMany(targetEntity="ListingValue")
+     *
      * @ORM\JoinTable(name="abris_typeAccesEtages")
+     *
      * @ORM\JoinColumn(onDelete="SET NULL")
+     *
      * @ListingAnnotation(idListingUuid="ebea69ef-79fd-4ac5-bbd5-c9f5107918b2")
+     *
      * @Groups({"abris"})
      */
     private $typeAccesEtage;
 
     /**
-     * @ORM\ManyToMany(targetEntity="App\Entity\ListingValue")
+     * @ORM\ManyToMany(targetEntity="ListingValue")
+     *
      * @ORM\JoinTable(name="abris_typeSols")
+     *
      * @ORM\JoinColumn(onDelete="SET NULL")
+     *
      * @ListingAnnotation(idListingUuid="eb393982-56eb-457b-88db-0ed2599af93e")
+     *
      * @Groups({"abris"})
      */
     private $typeSol;
 
     /**
      * @ORM\Column(type="boolean")
+     *
      * @Groups({"abris"})
      */
     private ?bool $citerneExterieure = null;
 
     /**
      * @ORM\Column(type="boolean")
+     *
      * @Groups({"abris"})
      */
     private ?bool $appentisExterieur = null;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\AttributesWithQty",mappedBy="abrisMobilier", orphanRemoval=true, cascade={"persist"})
+     * @ORM\OneToMany(targetEntity="AttributesWithQty",mappedBy="abrisMobilier", orphanRemoval=true, cascade={"persist"})
+     *
      * @ListingAnnotation(idListingUuid="2412c70c-d215-4181-941b-82b8fe30f23c")
+     *
      * @ORM\JoinColumn(onDelete="SET NULL")
+     *
      * @Groups({"abris"})
      */
     private $mobiliers;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\AttributesWithQty",mappedBy="abrisCouchage", orphanRemoval=true, cascade={"persist"})
+     * @ORM\OneToMany(targetEntity="AttributesWithQty",mappedBy="abrisCouchage", orphanRemoval=true, cascade={"persist"})
+     *
      * @ListingAnnotation(idListingUuid="0cada1ad-1ee1-4d43-9808-e6e520401aa3")
+     *
      * @ORM\JoinColumn(onDelete="SET NULL")
+     *
      * @Groups({"abris"})
      */
     private $couchages;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\AttributesWithQty",mappedBy="abrisPlaceDeFeuInterieur", orphanRemoval=true, cascade={"persist"})
+     * @ORM\OneToMany(targetEntity="AttributesWithQty",mappedBy="abrisPlaceDeFeuInterieur", orphanRemoval=true, cascade={"persist"})
+     *
      * @ListingAnnotation(idListingUuid="d2c557e2-9c22-4491-a5de-55b33ea4d03c")
+     *
      * @ORM\JoinColumn(onDelete="SET NULL")
+     *
      * @Groups({"abris"})
      */
     private $placeDeFeuInterieur;
 
     /**
      * @ORM\Column(type="boolean")
+     *
      * @Groups({"abris"})
      */
     private ?bool $placeDeFeuExterieure = null;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\AttributesWithQty",mappedBy="abrisMobilierPiqueniqueExterieur", orphanRemoval=true, cascade={"persist"})
+     * @ORM\OneToMany(targetEntity="AttributesWithQty",mappedBy="abrisMobilierPiqueniqueExterieur", orphanRemoval=true, cascade={"persist"})
+     *
      * @ListingAnnotation(idListingUuid="451c7145-5e9d-49e3-a586-6f1bb312a37c")
+     *
      * @ORM\JoinColumn(onDelete="SET NULL")
+     *
      * @Groups({"abris"})
      */
     private $mobilierPiqueniqueExterieur;
 
     /**
      * @ORM\Column(type="boolean")
+     *
      * @Groups({"abris"})
      */
     private ?bool $emplacementInterieurReserveBois = null;
 
     /**
      * @ORM\Column(type="boolean")
+     *
      * @Groups({"abris"})
      */
     private ?bool $toilettesSeches = null;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\AttributesWithQty",mappedBy="abrisMaterielDivers", orphanRemoval=true, cascade={"persist"})
+     * @ORM\OneToMany(targetEntity="AttributesWithQty",mappedBy="abrisMaterielDivers", orphanRemoval=true, cascade={"persist"})
+     *
      * @ListingAnnotation(idListingUuid="2d007014-64fa-4e70-ae3e-f0119c2063d1")
+     *
      * @ORM\JoinColumn(onDelete="SET NULL")
+     *
      * @Groups({"abris"})
      */
     private $materielDivers;
 
     /**
      * @ORM\Column(type="boolean")
+     *
      * @Groups({"abris"})
      */
     private ?bool $source = null;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
+     *
      * @Groups({"abris"})
      */
     private ?string $nomSource = null;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
+     *
      * @Groups({"abris"})
      */
     private ?string $coordinateSource = null;
 
     /**
      * @ORM\Column(type="boolean")
+     *
      * @Groups({"abris"})
      */
     private ?bool $eauCourante = null;
 
     /**
      * @ORM\Column(type="boolean")
+     *
      * @Groups({"abris"})
      */
     private ?bool $cahierSuiviEtCrayon = null;
 
     /**
      * @ORM\Column(type="boolean")
+     *
      * @Groups({"abris"})
      */
     private ?bool $plaqueAbris = null;
 
     /**
      * @ORM\Column(type="boolean")
+     *
      * @Groups({"abris"})
      */
     private ?bool $panneauInfosBonnesPratiques = null;
 
     /**
      * @ORM\Column(type="boolean")
+     *
      * @Groups({"abris"})
      */
     private ?bool $signaletiqueSourceProche = null;
 
     /**
      * @ORM\Column(type="integer")
+     *
      * @Groups({"abris"})
      */
     private ?int $capaciteCouchage = null;
 
     /**
      * @ORM\Column(type="integer", nullable=true)
+     *
      * @Groups({"abris"})
      */
     private ?int $nbAncrageSol = null;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\ListingValue")
+     * @ORM\ManyToOne(targetEntity="ListingValue")
+     *
      * @ListingAnnotation(idListingUuid="716dfe77-bc73-40ec-aba8-85daed10e9af")
+     *
      * @ORM\JoinColumn(onDelete="SET NULL")
+     *
      * @Groups({"abris"})
      */
-    private ?\App\Entity\ListingValue $typeAncrageSol = null;
+    private ?ListingValue $typeAncrageSol = null;
 
     /**
      * @ORM\Column(type="text", nullable=true)
+     *
      * @Groups({"abris"})
      */
     private ?string $remarqueStructureBat = null;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\UploadedDocument", mappedBy="abris")
+     * @ORM\OneToMany(targetEntity="UploadedDocument", mappedBy="abris")
+     *
      * @Groups({"abris"})
      */
     private $photos;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\Dysfonctionnement", mappedBy="abris", orphanRemoval=true)
+     * @ORM\OneToMany(targetEntity="Dysfonctionnement", mappedBy="abris", orphanRemoval=true)
+     *
      * @Groups({"abris"})
+     *
      * @ORM\JoinColumn(onDelete="SET NULL")
+     *
      * @ORM\OrderBy({"updated" = "DESC"})
      */
     private $dysfonctionnements;
 
     /**
-     * @ORM\ManyToMany(targetEntity="App\Entity\User", inversedBy="abrisFavoris", cascade={"persist"})
+     * @ORM\ManyToMany(targetEntity="User", inversedBy="abrisFavoris", cascade={"persist"})
+     *
      * @ORM\JoinTable(name="abris_followers")
      */
     private $followers;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\Discussion", mappedBy="abris")
+     * @ORM\OneToMany(targetEntity="Discussion", mappedBy="abris")
+     *
      * @ORM\JoinColumn(onDelete="SET NULL")
+     *
      * @ORM\OrderBy({"updated" = "DESC"})
      */
     private $discussions;
 
     /**
      * @ORM\Column(type="string", length=255)
+     *
      * @Groups({"abris"})
      */
     private ?string $altitude = null;
-
 
     public function __construct()
     {
@@ -714,7 +802,6 @@ class Abris
 
         return $this;
     }
-
 
     public function getSortieFumees(): ?ListingValue
     {

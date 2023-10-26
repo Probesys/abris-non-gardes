@@ -2,20 +2,20 @@
 
 namespace App\Form;
 
+use App\Entity\ListingValue;
 use App\Entity\User;
+use App\Form\Traits\ListingValuesFormsTrait;
+use App\Repository\ListingValueRepository;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
-use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
-use Symfony\Bridge\Doctrine\Form\Type\EntityType;
+use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints\IsTrue;
 use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Validator\Constraints\NotBlank;
-use App\Entity\ListingValue;
-use App\Form\Traits\ListingValuesFormsTrait;
-use App\Repository\ListingValueRepository;
 
 class RegistrationFormType extends AbstractType
 {
@@ -29,7 +29,7 @@ class RegistrationFormType extends AbstractType
                 'label' => 'Entities.User.fields.lastName',
                 'attr' => [
                   'style' => 'text-transform: uppercase;',
-                ]
+                ],
               ])
             ->add('firstName', null, [
                 'label' => 'Entities.User.fields.firstName',
@@ -48,7 +48,6 @@ class RegistrationFormType extends AbstractType
                         'message' => $translator->trans('Security.messages.youShouldAgreeToOurTerms'),
                     ]),
                 ],
-
             ])
             ->add('plainPassword', PasswordType::class, [
                 'label' => 'Security.fields.password',

@@ -8,18 +8,14 @@ use App\Entity\Abris;
 use App\Entity\Discussion;
 use Doctrine\ORM\EntityManagerInterface;
 use FOS\RestBundle\Controller\Annotations as Rest;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
-use Symfony\Component\Serializer\Encoder\JsonEncoder;
 use Symfony\Component\Serializer\SerializerInterface;
 
 /**
  * @Rest\Route("/api/abris")
-
  */
 final class ApiAbrisController extends AbstractController
 {
@@ -51,7 +47,7 @@ final class ApiAbrisController extends AbstractController
      */
     public function search(Request $request): JsonResponse
     {
-        $searchFilter = ['name' => $request->query->get("keySearch")];
+        $searchFilter = ['name' => $request->query->get('keySearch')];
         $abris = $this->em->getRepository(Abris::class)->search($searchFilter)->getResult();
         $data = $this->serializer->serialize($abris, 'json', ['groups' => ['abris']]);
 

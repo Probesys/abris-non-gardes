@@ -24,15 +24,8 @@ class NestedTerritoryRepository extends NestedTreeRepository
             $dql->andwhere('t.slug LIKE \'%'.$slug.'%\'');
         }
 
-
         $query = $dql->getQuery();
 
         return $query;
     }
-
-
-
-
-
-
 }

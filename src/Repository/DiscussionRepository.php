@@ -31,8 +31,7 @@ class DiscussionRepository extends ServiceEntityRepository
         $slugify = new Slugify();
         if ($filter && isset($filter['abris']) && '' != $filter['abris']) {
             $slug = $slugify->slugify($filter['abris'], '-');
-            $dql->andwhere('a.slug LIKE \'%' . $slug . '%\'');
-
+            $dql->andwhere('a.slug LIKE \'%'.$slug.'%\'');
         }
 
         if ($filter && isset($filter['userID']) && '' != $filter['userID']) {
@@ -46,13 +45,13 @@ class DiscussionRepository extends ServiceEntityRepository
         return $dql->getQuery();
     }
 
-
     public function listForAbris(Abris $abris): array
     {
         $dql = $this->createQueryBuilder('d')
                 ->where('d.dysfonctionnement is null')
                 ->andWhere('d.abris =:abris')
                 ->setParameter('abris', $abris);
+
         return $dql->getQuery()->getResult();
     }
 
@@ -60,18 +59,16 @@ class DiscussionRepository extends ServiceEntityRepository
      * massive delete function.
      *
      * @param type $ids
-     *
      */
     public function batchDelete($ids = null)
     {
         if ($ids) {
             $queryBuilder = $this->createQueryBuilder('c')->delete('App\Entity\Discussion d')->where('d.id IN ('.implode(',', $ids).')');
             $query = $queryBuilder->getQuery();
-            //queries execution
+            // queries execution
             $query->execute();
         }
     }
-
 
     // /**
     //  * @return Discussion[] Returns an array of Discussion objects

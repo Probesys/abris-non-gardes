@@ -4,7 +4,6 @@ namespace App\EventListener;
 
 use App\Entity\Discussion;
 use App\Entity\Dysfonctionnement;
-use App\Entity\Message;
 use Doctrine\Persistence\Event\LifecycleEventArgs;
 use Psr\Log\LoggerInterface;
 
@@ -35,12 +34,12 @@ class DysfonctionnementListener
 
         if ($entity instanceof Dysfonctionnement && is_null($entity->getDiscussion())) {
             // $this->postUpdateConsultationFeedingInfos($entity, $em);
-            /**@var Dysfonctionnement $entity*/
+            /** @var Dysfonctionnement $entity */
             $abris = $entity->getAbris();
             $discussion = new Discussion();
             $discussion->setDysfonctionnement($entity);
             $discussion->setAbris($entity->getAbris());
-            $discussion->setName('Abris ' . $abris . " : Dysfonctionnement " . $discussion->getId());
+            $discussion->setName('Abris '.$abris.' : Dysfonctionnement '.$discussion->getId());
             $discussion->setDescription($entity->getDescription());
             $entity->setDiscussion($discussion);
             $em->persist($entity);
@@ -48,7 +47,5 @@ class DysfonctionnementListener
 
             $em->flush();
         }
-
     }
-
 }

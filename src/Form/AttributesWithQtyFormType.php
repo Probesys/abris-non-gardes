@@ -8,7 +8,6 @@ use App\Form\Traits\ListingValuesFormsTrait;
 use App\Repository\ListingValueRepository;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\Extension\Core\Type\NumberType;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -35,7 +34,7 @@ class AttributesWithQtyFormType extends AbstractType
                 }, 'query_builder' => fn (ListingValueRepository $rep) => $this->createListingValueBuilder($rep, $listingType)])
                 ->add('qty', null, [
                     'label' => false,
-                    'attr' => ['pattern' => '^\d+$']
+                    'attr' => ['pattern' => '^\d+$'],
 //                    'placeholder' => 'Generics.fields.qty',
                 ])
 
@@ -49,5 +48,4 @@ class AttributesWithQtyFormType extends AbstractType
         ]);
         $resolver->setRequired('listingType');
     }
-
 }

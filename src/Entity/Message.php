@@ -2,16 +2,13 @@
 
 namespace App\Entity;
 
-use App\Entity\Discussion;
+use App\Entity\Traits\EntityBlameableTrait;
+use App\Entity\Traits\EntityCommonTrait;
+use App\Entity\Traits\EntityTimestampableTrait;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
-
 use Gedmo\Mapping\Annotation as Gedmo;
-
-use App\Entity\Traits\EntityBlameableTrait;
-use App\Entity\Traits\EntityTimestampableTrait;
-use App\Entity\Traits\EntityCommonTrait;
 use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
@@ -24,50 +21,60 @@ class Message
     use EntityCommonTrait;
     /**
      * @ORM\Id()
+     *
      * @ORM\GeneratedValue()
+     *
      * @ORM\Column(type="integer")
      */
     private $id;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
+     *
      * @Groups({"abris","dysfunction","discussion"})
      */
     private ?string $subject = null;
 
     /**
      * @ORM\Column(type="text")
+     *
      * @Groups({"abris","dysfunction","discussion"})
      */
     private ?string $message = null;
 
     /**
      * @ORM\Column(type="boolean")
+     *
      * @Groups({"abris","dysfunction","discussion"})
      */
-    private $isPrivate=0;
+    private $isPrivate = 0;
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Discussion", inversedBy="messages")
+     *
      * @ORM\JoinColumn(nullable=false, onDelete="CASCADE")
      */
     private ?\App\Entity\Discussion $discussion = null;
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Message", inversedBy="childreens")
+     *
      * @ORM\JoinColumn(nullable=true)
+     *
      * @Groups({"abris","dysfunction"})
      */
     private ?\App\Entity\Message $parent = null;
 
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\Message", mappedBy="parent")
+     *
      * @Groups({"abris","dysfunction"})
      */
     private $childreens;
 
     /**
      * @Gedmo\Slug(fields={"subject"})
+     *
      * @ORM\Column(type="string",length=255, unique=true)
      */
     private ?string $slug = null;

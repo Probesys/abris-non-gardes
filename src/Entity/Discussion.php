@@ -2,16 +2,14 @@
 
 namespace App\Entity;
 
-use App\Entity\Message;
+use App\Entity\Traits\EntityBlameableTrait;
+use App\Entity\Traits\EntityCommonTrait;
+use App\Entity\Traits\EntityNameTrait;
+use App\Entity\Traits\EntityTimestampableTrait;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
-
-use App\Entity\Traits\EntityBlameableTrait;
-use App\Entity\Traits\EntityTimestampableTrait;
-use App\Entity\Traits\EntityCommonTrait;
-use App\Entity\Traits\EntityNameTrait;
 use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
@@ -25,40 +23,48 @@ class Discussion
     use EntityNameTrait;
     /**
      * @ORM\Id()
+     *
      * @ORM\GeneratedValue()
+     *
      * @ORM\Column(type="integer")
+     *
      * @Groups({"abris","dysfunction","discussion"})
      */
     private $id;
 
     /**
-     *
      * @ORM\Column(type="string", length=255)
+     *
      * @Groups({"abris", "discussion"})
      */
     private $name;
 
     /**
      * @ORM\OneToOne(targetEntity="App\Entity\Dysfonctionnement", inversedBy="discussion")
+     *
      * @ORM\JoinColumn(nullable=true, onDelete="CASCADE")
      */
     private ?\App\Entity\Dysfonctionnement $dysfonctionnement = null;
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Abris", inversedBy="discussions")
+     *
      * @ORM\JoinColumn(nullable=false, onDelete="CASCADE")
+     *
      * @Groups({"discussion"})
      */
     private ?\App\Entity\Abris $abris = null;
 
     /**
      * @Gedmo\Slug(fields={"name"})
+     *
      * @ORM\Column(type="string",length=255, unique=true)
      */
     private $slug;
 
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\Message", mappedBy="discussion")
+     *
      * @Groups({"abris","dysfunction","discussion"})
      */
     private $messages;
@@ -70,6 +76,7 @@ class Discussion
 
     /**
      * @ORM\Column(type="text", nullable=true)
+     *
      * @Groups({"discussion"})
      */
     private ?string $description = null;

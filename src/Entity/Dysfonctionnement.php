@@ -2,15 +2,14 @@
 
 namespace App\Entity;
 
+use App\Annotations\ListingAnnotation;
 use App\Entity\Traits\EntityBlameableTrait;
 use App\Entity\Traits\EntityTimestampableTrait;
-use App\Repository\DysfonctionnementRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
-use App\Annotations\ListingAnnotation;
-use Symfony\Component\Serializer\Annotation\Groups;
 use Gedmo\Mapping\Annotation as Gedmo;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\DysfonctionnementRepository")
@@ -22,65 +21,85 @@ class Dysfonctionnement
 
     /**
      * @ORM\Id()
+     *
      * @ORM\GeneratedValue()
+     *
      * @ORM\Column(type="integer")
+     *
      * @Groups({"abris","dysfunction","user"})
      */
     private $id;
 
     /**
      * @ORM\ManyToOne(targetEntity="ListingValue")
+     *
      * @ORM\JoinColumn(nullable=true, onDelete="SET NULL")
+     *
      * @ListingAnnotation(idListingUuid="da73e657-d6c3-420a-a6cf-a6f03dd8148c")
+     *
      * @Groups({"abris","dysfunction","user"})
      */
     private ?\App\Entity\ListingValue $natureDys = null;
 
     /**
      * @ORM\ManyToOne(targetEntity="ListingValue")
+     *
      * @ORM\JoinColumn(nullable=true, onDelete="SET NULL")
+     *
      * @ListingAnnotation(idListingUuid="da73e657-d6c3-420a-a6cf-a6f03dd8148c")
+     *
      * @Groups({"abris","dysfunction","user"})
      */
     private ?\App\Entity\ListingValue $elementDys = null;
 
     /**
      * @ORM\Column(type="text", nullable=true)
+     *
      * @Groups({"abris","dysfunction","user"})
      */
     private ?string $description = null;
 
     /**
      * @ORM\OneToMany(targetEntity="UploadedDocument", mappedBy="dysfonctionnement")
+     *
      * @Groups({"abris","dysfunction","user"})
      */
     private $photos;
 
     /**
      * @ORM\ManyToOne(targetEntity="ListingValue")
+     *
      * @ListingAnnotation(idListingUuid="36abf808-9f70-4a80-b388-78f89413a0ac")
+     *
      * @ORM\JoinColumn(onDelete="SET NULL")
+     *
      * @Groups({"abris","dysfunction","user"})
      */
     private ?\App\Entity\ListingValue $statusDys = null;
 
     /**
      * @ORM\ManyToOne(targetEntity="Abris", inversedBy="dysfonctionnements")
+     *
      * @ORM\JoinColumn(nullable=true, onDelete="SET NULL")
+     *
      * @Groups({"dysfunction","user"})
      */
     private ?\App\Entity\Abris $abris = null;
 
     /**
      * @ORM\OneToOne(targetEntity="App\Entity\Discussion", mappedBy="dysfonctionnement", cascade={"persist", "remove"})
+     *
      * @Groups({"abris","dysfunction","user"})
+     *
      * @ORM\JoinColumn(onDelete="SET NULL")
      */
     private ?\App\Entity\Discussion $discussion = null;
 
     /**
      * @ORM\ManyToOne(targetEntity=User::class, inversedBy="dysfonctionnements")
+     *
      * @ORM\JoinColumn(nullable=true, onDelete="SET NULL")
+     *
      * @Gedmo\Blameable(on="create")
      */
     private ?\App\Entity\User $user = null;
@@ -92,7 +111,7 @@ class Dysfonctionnement
 
     public function __toString()
     {
-        return $this->getAbris()." ".$this->getNatureDys().$this->getCreated()->format('d/m/Y');
+        return $this->getAbris().' '.$this->getNatureDys().$this->getCreated()->format('d/m/Y');
     }
 
     public function getId(): ?int

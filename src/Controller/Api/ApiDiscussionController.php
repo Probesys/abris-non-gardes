@@ -4,28 +4,21 @@ declare(strict_types=1);
 
 namespace App\Controller\Api;
 
-use App\Entity\Abris;
 use App\Entity\Discussion;
-use App\Service\FileUploader;
-use App\Entity\Dysfonctionnement;
 use App\Entity\Message;
 use App\Form\DiscussionType;
-use App\Form\DysfonctionnementType;
 use Doctrine\ORM\EntityManagerInterface;
+use FOS\RestBundle\Controller\Annotations as Rest;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use FOS\RestBundle\Controller\Annotations as Rest;
-use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\Serializer\Encoder\JsonEncoder;
+use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 
 /**
  * @Rest\Route("/api/discussion")
-
  */
 final class ApiDiscussionController extends AbstractController
 {
@@ -62,7 +55,6 @@ final class ApiDiscussionController extends AbstractController
      */
     public function createAction(Request $request, TranslatorInterface $translator, \Swift_Mailer $mailer): JsonResponse
     {
-
         $discussion = new Discussion();
         $form = $this->createForm(DiscussionType::class, $discussion);
         $form->handleRequest($request);
@@ -70,7 +62,7 @@ final class ApiDiscussionController extends AbstractController
         if ($form->isSubmitted()) {
             $this->em->persist($discussion);
             $this->em->flush();
-            if(!$discussion->getDysfonctionnement()) {
+            if (!$discussion->getDysfonctionnement()) {
                 $this->sendCreateEmail($discussion, $translator, $mailer);
             }
         }
@@ -93,7 +85,6 @@ final class ApiDiscussionController extends AbstractController
 
         $message = $request->request->get('message');
         if (empty($message)) {
-
             throw new BadRequestHttpException('message cannot be empty');
         }
 
@@ -123,7 +114,7 @@ final class ApiDiscussionController extends AbstractController
             }
         }
         if (!empty($destMail)) {
-            $url = "https://abris.parc-du-vercors.fr/";
+            $url = 'https://abris.parc-du-vercors.fr/';
 
             $body = str_replace(['%id%', '%abris%', '%url%'], [$discussion->getId(), $abris, $url], $translator->trans('Emails.Discussion.newDiscussion.body'));
             $subject = str_replace(['%id%', '%abris%'], [$discussion->getId(), $abris], $translator->trans('Emails.Discussion.newDiscussion.subject'));
@@ -139,10 +130,9 @@ final class ApiDiscussionController extends AbstractController
                             'text/html'
                         );
                 $mailer->send($message);
-            } catch (Exception $exc) {
-                echo "Imposssible d'envoyer le mail aux destinataires" . $exc->getTraceAsString();
+            } catch (\Exception $exc) {
+                echo "Imposssible d'envoyer le mail aux destinataires".$exc->getTraceAsString();
             }
         }
     }
-
 }

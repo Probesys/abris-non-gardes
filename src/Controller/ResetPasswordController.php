@@ -5,19 +5,16 @@ namespace App\Controller;
 use App\Entity\User;
 use App\Form\ChangePasswordFormType;
 use App\Form\ResetPasswordRequestFormType;
-use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Mailer\MailerInterface;
-use Symfony\Component\Mime\Address;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
+use Symfony\Contracts\Translation\TranslatorInterface;
 use SymfonyCasts\Bundle\ResetPassword\Controller\ResetPasswordControllerTrait;
 use SymfonyCasts\Bundle\ResetPassword\Exception\ResetPasswordExceptionInterface;
 use SymfonyCasts\Bundle\ResetPassword\ResetPasswordHelperInterface;
-use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * @Route("/reset-password")
@@ -78,7 +75,7 @@ class ResetPasswordController extends AbstractController
      *
      * @Route("/reset/{token}", name="app_reset_password")
      */
-    public function reset(Request $request, UserPasswordEncoderInterface $passwordEncoder, string $token = null, TranslatorInterface $translator): Response
+    public function reset(Request $request, UserPasswordHasherInterface $passwordEncoder, string $token = null, TranslatorInterface $translator): Response
     {
         if ($token) {
             // We store the token in session and remove it from the URL, to avoid the URL being
@@ -113,7 +110,7 @@ class ResetPasswordController extends AbstractController
             $this->resetPasswordHelper->removeResetRequest($token);
 
             // Encode the plain password, and set it.
-            $encodedPassword = $passwordEncoder->encodePassword(
+            $encodedPassword = $passwordEncoder->hashPassword(
                 $user,
                 $form->get('plainPassword')->getData()
             );
@@ -140,7 +137,6 @@ class ResetPasswordController extends AbstractController
             'email' => $emailFormData,
         ]);
 
-
         // Marks that you are allowed to see the app_check_email page.
         $this->setCanCheckEmailInSession();
 
@@ -162,7 +158,7 @@ class ResetPasswordController extends AbstractController
 
         try {
             $email = (new \Swift_Message($translator->trans('Security.labels.yourPasswordResetRequest')))
-                ->setFrom([$this->getParameter('app.genericMail')=>'Administrateur gestion abris non gardés du Vercors'])
+                ->setFrom([$this->getParameter('app.genericMail') => 'Administrateur gestion abris non gardés du Vercors'])
                 ->setTo($user->getEmail())
                 ->setBody(
                     $this->renderView(
@@ -170,24 +166,11 @@ class ResetPasswordController extends AbstractController
                         ['resetToken' => $resetToken, 'tokenLifetime' => $this->resetPasswordHelper->getTokenLifetime()]
                     ),
                     'text/html'
-                ) ;
+                );
             $mailer->send($email);
-        } catch (Exception $exc) {
-            echo "Imposssible d'envoyer le mail aux destinataires" . $exc->getTraceAsString();
+        } catch (\Exception $exc) {
+            echo "Imposssible d'envoyer le mail aux destinataires".$exc->getTraceAsString();
         }
-
-//        $email = (new TemplatedEmail())
-//            ->from(new Address($this->getParameter('app.genericMail'), 'Administrateur gestion abris non gardés du Vercors'))
-//            ->to($user->getEmail())
-//            ->subject($translator->trans('Security.labels.yourPasswordResetRequest'))
-//            ->htmlTemplate('reset_password/email.html.twig')
-//            ->context([
-//                'resetToken' => $resetToken,
-//                'tokenLifetime' => $this->resetPasswordHelper->getTokenLifetime(),
-//            ])
-//        ;
-//
-//        $mailer->send($email);
 
         return $this->redirectToRoute('app_check_email');
     }

@@ -10,23 +10,26 @@ trait EntityBlameableTrait
 {
     /**
      * @Gedmo\Blameable(on="create")
+     *
      * @ORM\ManyToOne(targetEntity="User")
+     *
      * @ORM\JoinColumn(referencedColumnName="id", onDelete="SET NULL")
+     *
      * @Groups({"abris","dysfunction", "discussion"})
      */
     protected $createdBy;
 
     /**
      * @Gedmo\Blameable(on="update")
+     *
      * @ORM\ManyToOne(targetEntity="User")
+     *
      * @ORM\JoinColumn(referencedColumnName="id", onDelete="SET NULL")
      */
     protected $updatedBy;
 
     /**
      * Set createdBy.
-     *
-     * @param \App\Entity\User $createdBy
      *
      * @return City
      */
@@ -49,8 +52,6 @@ trait EntityBlameableTrait
 
     /**
      * Set updatedBy.
-     *
-     * @param \App\Entity\User $updatedBy
      *
      * @return City
      */

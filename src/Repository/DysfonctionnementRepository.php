@@ -30,20 +30,26 @@ class DysfonctionnementRepository extends ServiceEntityRepository
                 ->leftJoin('d.elementDys', 'ed')
 
         ;
-        $slugify = new Slugify();
         if ($filter && isset($filter['abris']) && '' != $filter['abris']) {
+            $slugify = new Slugify();
             $slug = $slugify->slugify($filter['abris'], '-');
-            $dql->andwhere('a.slug LIKE \'%' . $slug . '%\'');
+            $dql->andwhere('a.slug LIKE \'%:slug%\'');
+            $dql->setParameter('slug', $slug);
         }
         if ($filter && isset($filter['natureDys']) && '' != $filter['natureDys']) {
-            $dql->andwhere('nd.id = '. $filter['natureDys']->getId());
+            $dql->andwhere('d.natureDys = :natureDys');
+            $dql->setParameter('natureDys', $filter['natureDys']);
+        }
+        if ($filter && isset($filter['statusDys']) && '' != $filter['statusDys']) {
+            $dql->andwhere('d.statusDys = :statusDys');
+            $dql->setParameter('statusDys', $filter['statusDys']);
         }
         if ($filter && isset($filter['userID']) && '' != $filter['userID']) {
             $userID = $filter['userID'];
             $dql->leftJoin('a.createdBy', 'crea');
             $dql->leftJoin('a.proprietaires', 'proprios');
             $dql->leftJoin('a.gestionnaires', 'gests');
-            //$dql->andWhere('crea.id=\''.$userID.'\' OR proprios.id=\''.$userID.'\' OR gests.id=\''.$userID.'\'');
+            // $dql->andWhere('crea.id=\''.$userID.'\' OR proprios.id=\''.$userID.'\' OR gests.id=\''.$userID.'\'');
             $dql->andWhere('proprios.id=\''.$userID.'\' OR gests.id=\''.$userID.'\'');
         }
 
@@ -82,14 +88,13 @@ class DysfonctionnementRepository extends ServiceEntityRepository
      * massive delete function.
      *
      * @param type $ids
-     *
      */
     public function batchDelete($ids = null)
     {
         if ($ids) {
             $queryBuilder = $this->createQueryBuilder('c')->delete('App\Entity\Dysfonctionnement d')->where('d.id IN ('.implode(',', $ids).')');
             $query = $queryBuilder->getQuery();
-            //queries execution
+            // queries execution
             $query->execute();
         }
     }

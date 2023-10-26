@@ -12,9 +12,10 @@ trait EntityTimestampableTrait
      * @var \DateTime
      *
      * @Gedmo\Timestampable(on="create")
-     * @ORM\Column(type="datetime")
-     * @Groups({"abris","dysfunction","discussion","user"})
      *
+     * @ORM\Column(type="datetime")
+     *
+     * @Groups({"abris","dysfunction","discussion","user"})
      */
     private $created;
 
@@ -22,7 +23,9 @@ trait EntityTimestampableTrait
      * @var \DateTime
      *
      * @Gedmo\Timestampable(on="update")
+     *
      * @ORM\Column(type="datetime")
+     *
      * @Groups({"abris","dysfunction","discussion","user"})
      */
     private $updated;

@@ -2,8 +2,8 @@
 
 namespace App\Entity;
 
-use Doctrine\ORM\Mapping as ORM;
 use App\Entity\Traits\EntityCommonTrait;
+use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\CoordinateRepository")
@@ -13,7 +13,9 @@ class Coordinate
     use EntityCommonTrait;
     /**
      * @ORM\Id()
+     *
      * @ORM\GeneratedValue()
+     *
      * @ORM\Column(type="integer")
      */
     private $id;
@@ -48,20 +50,17 @@ class Coordinate
      */
     private ?string $mobilePhone = null;
 
-
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\City")
+     *
      * @ORM\JoinColumn(nullable=true)
      */
     private ?\App\Entity\City $city = null;
-
 
     /**
      * @ORM\OneToOne(targetEntity="App\Entity\User", mappedBy="coordinate", cascade={"persist", "remove"})
      */
     private ?\App\Entity\User $user = null;
-
-
 
     public function getId(): ?int
     {
@@ -189,6 +188,4 @@ class Coordinate
 
         return $this;
     }
-
-
 }

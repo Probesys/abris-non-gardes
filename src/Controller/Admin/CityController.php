@@ -3,16 +3,14 @@
 namespace App\Controller\Admin;
 
 use App\Entity\City;
-use App\Form\CityFormType as CityFormType;
+use App\Form\CityFormType;
 use App\FormFilter\CityFilterType;
 use App\Repository\CityRepository;
-
+use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController as Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Contracts\Translation\TranslatorInterface;
-use Knp\Component\Pager\PaginatorInterface;
 
 /**
  * @Route("/admin/cities")
@@ -34,7 +32,6 @@ class CityController extends Controller
             return $this->redirect($this->generateUrl('city_index'));
         }
 
-
         if ('filter' == $request->get('filter_action')) { // Filter action
             $filterForm->handleRequest($request); // Bind values from the request
             if ($filterForm->isSubmitted() && $filterForm->isValid()) {
@@ -53,8 +50,8 @@ class CityController extends Controller
                 if ($filterForm->has('isActive')) {
                     $filterData['isActive'] = $filterForm->get('isActive')->getData();
                 }
-                if ($filterForm->has('territories')) {
-                    $filterData['territories'] = $filterForm->get('territories')->getData();
+                if ($filterForm->has('territory')) {
+                    $filterData['territory'] = $filterForm->get('territory')->getData();
                 }
                 if ($filterForm->has('id')) {
                     $filterData['id'] = $filterForm->get('id')->getData();
@@ -64,11 +61,20 @@ class CityController extends Controller
             }
         } elseif ($session->has('cityFilter')) {
             $filterData = $session->get('cityFilter');
-            $filterForm = $this->createForm(CityFilterType::class, $filterData, ['data_class' => null]);
             if (array_key_exists('name', $filterData)) {
                 $filterForm->get('name')->setData($filterData['name']);
             }
-
+            if (array_key_exists('department', $filterData)) {
+                $filterForm->get('department')->setData($filterData['department']);
+            }
+            if (array_key_exists('zipCode', $filterData)) {
+                $filterForm->get('zipCode')->setData($filterData['zipCode']);
+            }
+            if (array_key_exists('territory', $filterData) && '' != $filterData['territory']) {
+                $territory = $filterData['territory'];
+                $territory = $this->getDoctrine()->getManager()->merge($territory);
+                $filterForm->get('territories')->setData($territory);
+            }
         }
 
         $per_page = $this->getParameter('app.per_page_global');
@@ -138,6 +144,7 @@ class CityController extends Controller
      * Delete a city entity.
      *
      * @param int $id
+     *
      * @Route("/{id}/delete", name="city_delete",  methods="GET")
      *
      * @return Response
@@ -154,7 +161,6 @@ class CityController extends Controller
     /**
      * Batch action for BusinessState entity.
      *
-     * @param Request $request
      * @Route("/batch", name="city_batch",  methods="POST")
      *
      * @return Response

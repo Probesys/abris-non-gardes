@@ -3,9 +3,9 @@
 namespace App\Repository;
 
 use App\Entity\ListingType;
+use Cocur\Slugify\Slugify;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
-use Cocur\Slugify\Slugify;
 
 /**
  * @method ListingType|null find($id, $lockMode = null, $lockVersion = null)
@@ -46,16 +46,16 @@ class ListingTypeRepository extends ServiceEntityRepository
     }
 
     /**
-    * massive delete function.
-    *
-    * @param type $ids
-    */
+     * massive delete function.
+     *
+     * @param type $ids
+     */
     public function batchDelete($ids = null)
     {
         if ($ids) {
             $queryBuilder = $this->createQueryBuilder('ListingType')->delete('App\Entity\ListingType ListingType')->where('ListingType.id IN ('.implode(',', $ids).')');
             $query = $queryBuilder->getQuery();
-            //queries execution
+            // queries execution
             $query->execute();
         }
     }
