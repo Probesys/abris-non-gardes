@@ -11,26 +11,23 @@ use Doctrine\ORM\EntityManager;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
-//use Symfony\Component\String\Slugger\SluggerInterface;
-
 class FileUploader
 {
-    private $slugger;
     private $em;
     private $targetDirectory;
 
     public function __construct($targetDirectory, EntityManager $em)
     {
-        $this->slugger = new Slugify();
         $this->targetDirectory = $targetDirectory;
         $this->em = $em;
     }
 
     public function upload(UploadedFile $file, $obj)
     {
+        $slugger = new Slugify();
         $targetDirectory = null;
         $originalFilename = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME);
-        $fileName = $this->slugger->slugify($file->getClientOriginalName()) . '-' . uniqid() . '.' . $file->guessExtension();
+        $fileName = $slugger->slugify($file->getClientOriginalName()) . '-' . uniqid() . '.' . $file->guessExtension();
 
         $photo = new UploadedDocument();
         switch (true) {
